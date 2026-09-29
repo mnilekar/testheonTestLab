@@ -1,0 +1,755 @@
+---
+import ComponentLabPage from '../../../components/ComponentLabPage.astro';
+import FixtureSection from '../../../components/FixtureSection.astro';
+import CodeBlock from '../../../islands/CodeBlock';
+import {
+  enrichEmployee,
+  formatSalary,
+  seedEmployees,
+} from '../../../lib/table-data';
+
+const staticRows = seedEmployees.slice(0, 5).map(enrichEmployee);
+
+const rowExample = `const engineering = page.getByRole('row', {
+  name: /Rahul Sharma Engineering/,
+});
+await engineering.getByRole('button', { name: 'Edit' }).click();`;
+const columnExample = `const salaries = await page
+  .locator('#filter-table tbody tr:not([hidden]) td[data-column="salary"]')
+  .allTextContents();
+const total = salaries.reduce((sum, value) =>
+  sum + Number(value.replace(/[^0-9]/g, '')), 0);`;
+const paginationExample = `for (;;) {
+  const match = page.getByRole('row', { name: /Rahul.*Engineering/ });
+  if (await match.count()) break;
+  const next = page.getByRole('button', { name: 'Next server page' });
+  if (await next.isDisabled()) throw new Error('Employee not found');
+  await next.click();
+}`;
+const virtualExample = `const viewport = page.getByTestId('virtual-viewport');
+await viewport.evaluate((node) => { node.scrollTop = 47 * 9000; });
+await expect(page.getByRole('row', { name: /Virtual Tester 090/ })).toBeVisible();
+expect(await page.locator('#virtual-body [role="row"]').count()).toBeLessThan(40);`;
+---
+
+<ComponentLabPage
+  title="Table Lab"
+  eyebrow="Component Lab B · Data grids"
+  intro="Practice resilient Playwright strategies across realistic employee tables: sorting, search, filtering, two pagination models, sandboxed editing, row operations, virtualization, async state, and nested business data."
+  canonicalPath="/components/tables/"
+  fixtureId="FX-TABLE-001"
+  anchor="fixture-tables"
+  guideHref="https://testheon.com/playwright-locators/"
+  guideLabel="Read the locator guide"
+  tasks={[
+    'Find Rahul Sharma in Engineering among several Rahuls and open his editor.',
+    'Sort by department and salary, then assert the visible priority indicators.',
+    'Sum salaries for Active employees in Pune across every page.',
+    'Edit an employee role, reload to prove sandbox persistence, then reset.',
+    'Select the current page and all pages, then apply a bulk status action.',
+    'Reach a row near 10,000 while keeping fewer than 40 rows in the DOM.',
+    'Find Ananya Rao’s Wireless Mouse order and verify quantity 2.',
+  ]}
+  locatorHint="Scope locators to a table or row before selecting cells and actions. Prefer row accessible names plus filter({ has }) for duplicate names, and use visible page/range status instead of hard-coded row positions."
+>
+  <aside class="table-intro" aria-label="Employee data contract">
+    <p>
+      Every employee starts in the isolated Chunk 3 API. Salary and joining date
+      are deterministic display fields derived from the employee ID so the API
+      contract stays stable.
+    </p>
+    <p id="tables-load-status" class="result" role="status">
+      Loading synthetic employees from the Practice API…
+    </p>
+    <button
+      id="reset-table-sandbox"
+      class="fixture-button fixture-button--secondary"
+      type="button"
+    >
+      Reset employee sandbox
+    </button>
+  </aside>
+
+  <nav aria-label="Table fixture sections">
+    <ul class="fixture-nav">
+      <li>
+        <a href="#simple-table">Static</a>
+      </li>
+      <li>
+        <a href="#sortable-table">Sort</a>
+      </li>
+      <li>
+        <a href="#searchable-table">Search</a>
+      </li>
+      <li>
+        <a href="#filterable-table">Filter</a>
+      </li>
+      <li>
+        <a href="#pagination-tables">Pagination</a>
+      </li>
+      <li>
+        <a href="#editable-table">Edit</a>
+      </li>
+      <li>
+        <a href="#row-operations">Rows</a>
+      </li>
+      <li>
+        <a href="#virtual-table">Virtualize</a>
+      </li>
+      <li>
+        <a href="#nested-tables">Nested</a>
+      </li>
+    </ul>
+  </nav>
+
+  <FixtureSection
+    id="simple-table"
+    title="1. Simple static employee table"
+    description="A stable semantic baseline exposes every required employee column before interactive behavior is added."
+  >
+    <div class="table-scroll">
+      <table id="static-employee-table">
+        <caption>Five deterministic employees</caption>
+        <thead>
+          <tr>
+            <th scope="col">Employee ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Department</th>
+            <th scope="col">Location</th>
+            <th scope="col">Role</th>
+            <th scope="col">Salary ₹</th>
+            <th scope="col">Status</th>
+            <th scope="col">Joining Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {staticRows.map((employee) => (
+            <tr>
+              <th scope="row">{employee.id}</th>
+              <td>{employee.name}</td>
+              <td>{employee.department}</td>
+              <td>{employee.location}</td>
+              <td>{employee.title}</td>
+              <td>{formatSalary(employee.salary)}</td>
+              <td>{employee.active ? 'Active' : 'Inactive'}</td>
+              <td>{employee.joiningDate}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </FixtureSection>
+
+  <FixtureSection
+    id="sortable-table"
+    title="2. Multi-column sortable table"
+    description="Each header cycles ascending, descending, and unsorted while preserving other sort keys and exposing aria-sort plus a visible priority."
+  >
+    <div class="button-row">
+      <button
+        id="clear-table-sorts"
+        class="fixture-button fixture-button--secondary"
+        type="button"
+      >
+        Clear sorting
+      </button>
+      <p id="sort-result" class="result" role="status">
+        No columns sorted.
+      </p>
+    </div>
+    <div class="table-scroll">
+      <table id="sortable-employee-table">
+        <caption>Sortable API employees</caption>
+        <thead>
+          <tr>
+            <th scope="col" aria-sort="none">
+              <button type="button" data-sort-key="name">
+                Name <span data-sort-indicator></span>
+              </button>
+            </th>
+            <th scope="col" aria-sort="none">
+              <button type="button" data-sort-key="department">
+                Department <span data-sort-indicator></span>
+              </button>
+            </th>
+            <th scope="col" aria-sort="none">
+              <button type="button" data-sort-key="location">
+                Location <span data-sort-indicator></span>
+              </button>
+            </th>
+            <th scope="col" aria-sort="none">
+              <button type="button" data-sort-key="salary">
+                Salary ₹ <span data-sort-indicator></span>
+              </button>
+            </th>
+            <th scope="col" aria-sort="none">
+              <button type="button" data-sort-key="joiningDate">
+                Joining Date <span data-sort-indicator></span>
+              </button>
+            </th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </FixtureSection>
+
+  <FixtureSection
+    id="searchable-table"
+    title="3. Instant and debounced table search"
+    description="Instant search updates on every keystroke. Debounced search applies only after a visible 350 ms quiet period."
+  >
+    <div class="form-grid">
+      <div class="field">
+        <label for="table-instant-search">Instant employee search</label>
+        <input id="table-instant-search" type="search" autocomplete="off" />
+      </div>
+      <div class="field">
+        <label for="table-debounced-search">Debounced employee search</label>
+        <input id="table-debounced-search" type="search" autocomplete="off" />
+      </div>
+    </div>
+    <p id="table-search-result" class="result" role="status">
+      Search is ready.
+    </p>
+    <div class="table-scroll compact-table">
+      <table id="search-employee-table">
+        <caption>Search results</caption>
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Department</th>
+            <th scope="col">Location</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </FixtureSection>
+
+  <FixtureSection
+    id="filterable-table"
+    title="4. Combined filters and no-results state"
+    description="Department, location, and status filters combine predictably and render an explicit empty state."
+  >
+    <div class="form-grid form-grid--three">
+      <div class="field">
+        <label for="department-filter">Department</label>
+        <select id="department-filter">
+          <option value="">All departments</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="location-filter">Location</label>
+        <select id="location-filter">
+          <option value="">All locations</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="status-filter">Status</label>
+        <select id="status-filter">
+          <option value="">All statuses</option>
+          <option value="true">Active</option>
+          <option value="false">Inactive</option>
+        </select>
+      </div>
+    </div>
+    <p id="filter-result" class="result" role="status">
+      All employees shown.
+    </p>
+    <div class="table-scroll compact-table">
+      <table id="filter-table">
+        <caption>Filtered employees</caption>
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Department</th>
+            <th scope="col">Location</th>
+            <th scope="col">Status</th>
+            <th scope="col">Salary ₹</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </FixtureSection>
+
+  <FixtureSection
+    id="pagination-tables"
+    title="5. Client-side and server-side pagination"
+    description="Compare slicing an already-loaded collection with page/limit requests whose status reports the exact visible range."
+  >
+    <div class="pagination-grid">
+      <section class="table-panel" aria-labelledby="client-pagination-heading">
+        <h3 id="client-pagination-heading">Client-side pagination</h3>
+        <div class="inline-control">
+          <label for="client-page-size">Rows per page</label>
+          <select id="client-page-size">
+            <option>5</option>
+            <option selected>10</option>
+            <option>20</option>
+          </select>
+        </div>
+        <div class="table-scroll compact-table">
+          <table id="client-page-table">
+            <caption>Client page</caption>
+            <thead>
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Department</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="pagination-controls">
+          <button
+            id="client-previous"
+            class="fixture-button fixture-button--secondary"
+            type="button"
+          >
+            Previous client page
+          </button>
+          <p id="client-page-status" class="result" role="status"></p>
+          <button
+            id="client-next"
+            class="fixture-button fixture-button--secondary"
+            type="button"
+          >
+            Next client page
+          </button>
+        </div>
+      </section>
+      <section class="table-panel" aria-labelledby="server-pagination-heading">
+        <h3 id="server-pagination-heading">Server-side API pagination</h3>
+        <div class="inline-control">
+          <label for="server-page-size">Rows per API page</label>
+          <select id="server-page-size">
+            <option>5</option>
+            <option selected>10</option>
+            <option>20</option>
+          </select>
+        </div>
+        <div class="table-scroll compact-table">
+          <table id="server-page-table">
+            <caption>Server page</caption>
+            <thead>
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Department</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="pagination-controls">
+          <button
+            id="server-previous"
+            class="fixture-button fixture-button--secondary"
+            type="button"
+          >
+            Previous server page
+          </button>
+          <p id="server-page-status" class="result" role="status"></p>
+          <button
+            id="server-next"
+            class="fixture-button fixture-button--secondary"
+            type="button"
+          >
+            Next server page
+          </button>
+        </div>
+      </section>
+    </div>
+  </FixtureSection>
+
+  <FixtureSection
+    id="editable-table"
+    title="6. Inline editing with sandbox persistence"
+    description="Edit Role in place, validate it, save through PATCH, cancel without mutation, reload to prove persistence, or reset to seed."
+  >
+    <p id="edit-result" class="result" role="status">
+      Choose an employee to edit.
+    </p>
+    <div class="table-scroll">
+      <table id="editable-employee-table">
+        <caption>Editable employees</caption>
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Department</th>
+            <th scope="col">Role</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </FixtureSection>
+
+  <FixtureSection
+    id="row-operations"
+    title="7–9. Dynamic, selectable, and expandable rows"
+    description="Add/delete updates a count, selection distinguishes one page from every page, bulk action changes status, and details expand beside the owning row."
+  >
+    <div class="table-panel">
+      <h3>Dynamic rows</h3>
+      <button id="add-employee-row" class="fixture-button" type="button">
+        Add deterministic employee
+      </button>
+      <p id="dynamic-row-count" class="result" role="status"></p>
+      <div class="table-scroll compact-table">
+        <table id="dynamic-row-table">
+          <caption>Dynamic employees</caption>
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Name</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="table-panel">
+      <h3>Selectable rows and bulk action</h3>
+      <div class="button-row">
+        <label>
+          <input id="select-current-page" type="checkbox" /> Select all current
+          page
+        </label>
+        <button
+          id="select-all-pages"
+          class="fixture-button fixture-button--secondary"
+          type="button"
+        >
+          Select all pages
+        </button>
+        <button id="bulk-inactivate" class="fixture-button" type="button">
+          Mark selected inactive
+        </button>
+      </div>
+      <p id="selection-result" class="result" role="status">
+        0 employees selected.
+      </p>
+      <div class="table-scroll compact-table">
+        <table id="selectable-table">
+          <caption>Selectable employees</caption>
+          <thead>
+            <tr>
+              <th scope="col">Select</th>
+              <th scope="col">Name</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="pagination-controls">
+        <button
+          id="selection-previous"
+          class="fixture-button fixture-button--secondary"
+          type="button"
+        >
+          Previous selection page
+        </button>
+        <span id="selection-page-label">Page 1</span>
+        <button
+          id="selection-next"
+          class="fixture-button fixture-button--secondary"
+          type="button"
+        >
+          Next selection page
+        </button>
+      </div>
+    </div>
+    <div class="table-panel">
+      <h3>Expandable row details</h3>
+      <div class="table-scroll compact-table">
+        <table id="expandable-table">
+          <caption>Employee details</caption>
+          <thead>
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Department</th>
+              <th scope="col">Details</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </FixtureSection>
+
+  <FixtureSection
+    id="sticky-table"
+    title="10. Sticky header, first column, and horizontal scroll"
+    description="A constrained viewport keeps context visible while both axes move across the wide table."
+  >
+    <div
+      class="table-scroll table-scroll--sticky"
+      tabindex="0"
+      aria-label="Scrollable sticky employee table"
+    >
+      <table id="sticky-employee-table">
+        <caption>Wide employee view</caption>
+        <thead>
+          <tr>
+            <th scope="col">Employee ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Department</th>
+            <th scope="col">Location</th>
+            <th scope="col">Role</th>
+            <th scope="col">Salary ₹</th>
+            <th scope="col">Status</th>
+            <th scope="col">Joining Date</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </FixtureSection>
+
+  <FixtureSection
+    id="virtual-table"
+    title="11. Virtualized 10,000-row table"
+    description="The viewport calculates deterministic records but mounts only a small visible window, including buffer rows."
+  >
+    <p id="virtual-result" class="result" role="status">
+      Preparing 10,000 deterministic rows.
+    </p>
+    <div
+      class="virtual-table"
+      role="table"
+      aria-rowcount="10001"
+      aria-colcount="4"
+      aria-label="Virtual employees"
+    >
+      <div class="virtual-header" role="row">
+        <span role="columnheader">Employee ID</span>
+        <span role="columnheader">Name</span>
+        <span role="columnheader">Department</span>
+        <span role="columnheader">Status</span>
+      </div>
+      <div
+        id="virtual-viewport"
+        class="virtual-viewport"
+        role="rowgroup"
+        data-testid="virtual-viewport"
+        tabindex="0"
+      >
+        <div id="virtual-spacer">
+          <div id="virtual-body"></div>
+        </div>
+      </div>
+    </div>
+  </FixtureSection>
+
+  <FixtureSection
+    id="async-table"
+    title="12. Deterministic asynchronous row update"
+    description="A bounded delay changes one row from Updating to Active and announces both states through a live region."
+  >
+    <div class="button-row">
+      <div class="field">
+        <label for="async-delay">Update delay</label>
+        <select id="async-delay">
+          <option value="150">150 ms</option>
+          <option value="400">400 ms</option>
+          <option value="800">800 ms</option>
+        </select>
+      </div>
+      <button id="start-async-update" class="fixture-button" type="button">
+        Update employee status
+      </button>
+    </div>
+    <p id="async-result" class="result" role="status">
+      Employee emp-009 is Pending.
+    </p>
+    <div class="table-scroll compact-table">
+      <table>
+        <caption>Async employee</caption>
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">emp-009</th>
+            <td>Ishaan Khan</td>
+            <td id="async-status">Pending</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </FixtureSection>
+
+  <FixtureSection
+    id="nested-tables"
+    title="13. Nested business tables"
+    description="Customer orders expose line items, while departments expose employees and projects without losing the parent context."
+  >
+    <div class="nested-grid">
+      <section class="table-panel" aria-labelledby="customer-orders-heading">
+        <h3 id="customer-orders-heading">Customer → Orders → Order Items</h3>
+        <div class="table-scroll">
+          <table>
+            <caption>Synthetic customer orders</caption>
+            <thead>
+              <tr>
+                <th scope="col">Customer</th>
+                <th scope="col">City</th>
+                <th scope="col">Orders</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Ananya Rao</th>
+                <td>Pune</td>
+                <td>
+                  <details>
+                    <summary>View 2 orders</summary>
+                    <table>
+                      <caption>Ananya Rao orders</caption>
+                      <thead>
+                        <tr>
+                          <th scope="col">Order</th>
+                          <th scope="col">Status</th>
+                          <th scope="col">Items</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <th scope="row">ORD-4803</th>
+                          <td>Paid</td>
+                          <td>
+                            <table>
+                              <caption>ORD-4803 items</caption>
+                              <thead>
+                                <tr>
+                                  <th scope="col">Product</th>
+                                  <th scope="col">Quantity</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <th scope="row">Wireless Mouse</th>
+                                  <td>2</td>
+                                </tr>
+                                <tr>
+                                  <th scope="row">USB-C Cable</th>
+                                  <td>1</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </td>
+                        </tr>
+                        <tr>
+                          <th scope="row">ORD-4804</th>
+                          <td>Shipped</td>
+                          <td>Keyboard × 1</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </details>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Priya Iyer</th>
+                <td>Bengaluru</td>
+                <td>1 order</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section
+        class="table-panel"
+        aria-labelledby="department-projects-heading"
+      >
+        <h3 id="department-projects-heading">
+          Department → Employees → Projects
+        </h3>
+        <div class="table-scroll">
+          <table>
+            <caption>Department projects</caption>
+            <thead>
+              <tr>
+                <th scope="col">Department</th>
+                <th scope="col">Employees</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Engineering</th>
+                <td>
+                  <details>
+                    <summary>View employees</summary>
+                    <table>
+                      <caption>Engineering employees and projects</caption>
+                      <thead>
+                        <tr>
+                          <th scope="col">Employee</th>
+                          <th scope="col">Projects</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <th scope="row">Rahul Sharma</th>
+                          <td>Checkout reliability, Trace triage</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">Ishaan Khan</th>
+                          <td>API observability</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </details>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Quality Assurance</th>
+                <td>18 employees</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </FixtureSection>
+
+  <div slot="examples" class="example-stack">
+    <CodeBlock
+      client:idle
+      code={rowExample}
+      label="Find a row with scoped content"
+    />
+    <CodeBlock
+      client:idle
+      code={columnExample}
+      label="Read a column into an array"
+    />
+    <CodeBlock
+      client:idle
+      code={paginationExample}
+      label="Paginate until found"
+    />
+    <CodeBlock
+      client:idle
+      code={virtualExample}
+      label="Handle virtualization"
+    />
+  </div>
+</ComponentLabPage>
+
+<script>
+  import '../../../scripts/tables';
+</script>

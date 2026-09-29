@@ -1,0 +1,11 @@
+{
+  "published_posts": 26,
+  "published_pages": 3,
+  "playwright_posts": 20,
+  "sitemap_url_count": 29,
+  "post_collisions": [],
+  "page_collisions": [],
+  "sitemap_collisions": [],
+  "practice_http_status": 404,
+  "limitations": "Public published post/page inventories and sitemap only; draft/private URLs, custom routes, physical directories and server mappings are not exhausted."
+}

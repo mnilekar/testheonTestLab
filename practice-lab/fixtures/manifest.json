@@ -1,0 +1,581 @@
+{
+  "$schema": "./manifest.schema.json",
+  "manifestVersion": "1.6.0",
+  "updatedAt": "2026-09-29",
+  "fixtures": [
+    {
+      "id": "FX-INPUT-001",
+      "version": "1.0.0",
+      "url": "/practice/components/inputs/",
+      "anchor": "#fixture-inputs",
+      "title": "Input components",
+      "area": "Inputs",
+      "difficulty": "Beginner",
+      "component": "InputFixtures",
+      "behavior": "Native, masked, disabled, readonly, dynamic, validated, debounced, autosuggest and keyboard autocomplete inputs expose deterministic visible state.",
+      "defaults": { "debounceMs": 300, "dynamicEnabled": false },
+      "controls": { "phoneDigits": 10, "cardDigits": 16 },
+      "seedVersion": "1.0.0",
+      "intentionalDefects": [
+        "The placeholder-only input has no associated label."
+      ],
+      "expectedOutcomes": [
+        "Labelled inputs retain values and dynamic controls expose visible results.",
+        "Keyboard autocomplete selects the active option."
+      ],
+      "tests": [
+        "tests/e2e/component-lab.spec.ts",
+        "examples/playwright-ts/inputs.spec.ts"
+      ],
+      "guideLinks": ["https://testheon.com/playwright-locators/"],
+      "challengeLinks": []
+    },
+    {
+      "id": "FX-BUTTON-001",
+      "version": "1.0.0",
+      "url": "/practice/components/buttons/",
+      "anchor": "#fixture-buttons",
+      "title": "Button components",
+      "area": "Buttons",
+      "difficulty": "Intermediate",
+      "component": "ButtonFixtures",
+      "behavior": "Native actions, form buttons, enabled conditions, gestures, bounded delay, DOM replacement, duplicate labels, nested scope and delayed appearance report visible outcomes.",
+      "defaults": { "delayMs": 100, "longPressMs": 650 },
+      "controls": { "delayOptions": [100, 500, 1000] },
+      "seedVersion": "1.0.0",
+      "intentionalDefects": ["One icon-only button has no accessible name."],
+      "expectedOutcomes": [
+        "Each enabled action produces an assertion-ready status message.",
+        "The replacement button detaches the original DOM node."
+      ],
+      "tests": [
+        "tests/e2e/component-lab.spec.ts",
+        "examples/playwright-ts/buttons.spec.ts"
+      ],
+      "guideLinks": ["https://testheon.com/playwright-locators/"],
+      "challengeLinks": []
+    },
+    {
+      "id": "FX-CHOICE-001",
+      "version": "1.0.0",
+      "url": "/practice/components/checkboxes-radios/",
+      "anchor": "#fixture-choices",
+      "title": "Checkboxes and radio buttons",
+      "area": "Choices",
+      "difficulty": "Intermediate",
+      "component": "ChoiceFixtures",
+      "behavior": "Native single, grouped, disabled, dynamic, indeterminate, hierarchical, generated, conditional and duplicate-label choices expose deterministic state.",
+      "defaults": { "selected": [] },
+      "controls": { "generatedSuites": ["Smoke", "Regression", "Visual"] },
+      "seedVersion": "1.0.0",
+      "intentionalDefects": [],
+      "expectedOutcomes": [
+        "Partial selection sets the parent indeterminate state.",
+        "Parent choices propagate to children and radio selections reveal visible results."
+      ],
+      "tests": [
+        "tests/e2e/component-lab.spec.ts",
+        "examples/playwright-ts/choices.spec.ts"
+      ],
+      "guideLinks": ["https://testheon.com/playwright-locators/"],
+      "challengeLinks": []
+    },
+    {
+      "id": "FX-DROPDOWN-001",
+      "version": "1.0.0",
+      "url": "/practice/components/dropdowns/",
+      "anchor": "#fixture-dropdowns",
+      "title": "Dropdown components",
+      "area": "Dropdowns",
+      "difficulty": "Intermediate",
+      "component": "DropdownFixtures",
+      "behavior": "Native, multi, grouped, searchable and ARIA listboxes support selection while dependent locations and infinite products load from the isolated API.",
+      "defaults": { "dynamicDelayMs": 400, "productPageSize": 15 },
+      "controls": { "maxProductPages": 4 },
+      "seedVersion": "1.0.0",
+      "intentionalDefects": [],
+      "expectedOutcomes": [
+        "ARIA options support keyboard selection.",
+        "API-backed options enable in dependency order and paged products append on scroll."
+      ],
+      "tests": [
+        "tests/e2e/component-lab.spec.ts",
+        "examples/playwright-ts/dropdowns.spec.ts"
+      ],
+      "guideLinks": ["https://testheon.com/playwright-api-testing/"],
+      "challengeLinks": []
+    },
+    {
+      "id": "FX-FORM-001",
+      "version": "1.0.0",
+      "url": "/practice/components/forms/",
+      "anchor": "#fixture-forms",
+      "title": "Realistic forms",
+      "area": "Forms",
+      "difficulty": "Advanced",
+      "component": "ApiBackedForms",
+      "behavior": "Six realistic forms expose required and conditional client validation, inline and summary errors, API success, simulated server errors and duplicate-data conflict behavior.",
+      "defaults": { "serverSimulation": "success" },
+      "controls": { "simulatedStatuses": [409, 422, 500, 503] },
+      "seedVersion": "1.0.0",
+      "intentionalDefects": [
+        "The login form validates UI only; real authentication is reserved for Chunk 8."
+      ],
+      "expectedOutcomes": [
+        "Invalid input is blocked with inline and summary errors.",
+        "Valid API-backed forms show a created record ID and duplicate email returns 409."
+      ],
+      "tests": [
+        "tests/e2e/component-lab.spec.ts",
+        "tests/e2e/forms-live.spec.ts",
+        "examples/playwright-ts/forms.spec.ts"
+      ],
+      "guideLinks": [
+        "https://testheon.com/playwright-api-testing/",
+        "https://testheon.com/playwright-authentication/"
+      ],
+      "challengeLinks": []
+    },
+    {
+      "id": "FX-LOCATOR-001",
+      "version": "1.0.0",
+      "url": "/practice/playwright/locators/",
+      "anchor": "#fixture-locators",
+      "title": "Playwright Locator Lab",
+      "area": "Locators",
+      "difficulty": "Beginner",
+      "component": "LocatorComparisons",
+      "behavior": "Fourteen semantic, fallback, filtering, position, chaining and scoping topics pair accessible Good DOM with visibly marked Awkward DOM.",
+      "defaults": { "comparisonMode": "side-by-side" },
+      "controls": {},
+      "seedVersion": "1.0.0",
+      "intentionalDefects": [
+        "Awkward DOM examples contain missing labels, missing roles, duplicate text, missing alt text and implementation-coupled markup."
+      ],
+      "expectedOutcomes": [
+        "Every topic contains Good DOM and Awkward DOM examples.",
+        "Awkward regions remain excluded from the general accessibility scan and their exact defects are asserted separately."
+      ],
+      "tests": [
+        "tests/e2e/component-lab.spec.ts",
+        "examples/playwright-ts/locators.spec.ts"
+      ],
+      "guideLinks": ["https://testheon.com/playwright-locators/"],
+      "challengeLinks": []
+    },
+    {
+      "id": "FX-TABLE-001",
+      "version": "1.0.0",
+      "url": "/practice/components/tables/",
+      "anchor": "#fixture-tables",
+      "title": "Table Lab",
+      "area": "Tables",
+      "difficulty": "Advanced",
+      "component": "EmployeeTableFixtures",
+      "behavior": "API employee data powers static, sortable, searchable, filterable, client/server paginated, editable, dynamic, selectable, expandable, sticky, virtualized, asynchronous and nested table exercises.",
+      "defaults": {
+        "clientPageSize": 10,
+        "serverPageSize": 10,
+        "virtualRowCount": 10000,
+        "virtualDomWindow": 18,
+        "asyncDelayMs": 150
+      },
+      "controls": {
+        "pageSizes": [5, 10, 20],
+        "asyncDelayOptions": [150, 400, 800]
+      },
+      "seedVersion": "1.0.0",
+      "intentionalDefects": [],
+      "expectedOutcomes": [
+        "Multi-column sorting exposes visible priorities and aria-sort state.",
+        "API edits persist in the current sandbox and reset restores seed data.",
+        "The 10,000-row view keeps fewer than 40 data rows mounted in the DOM."
+      ],
+      "tests": [
+        "tests/e2e/table-lab.spec.ts",
+        "tests/live/table-lab-live.spec.ts",
+        "examples/playwright-ts/tables.spec.ts"
+      ],
+      "guideLinks": [
+        "https://testheon.com/playwright-locators/",
+        "https://testheon.com/playwright-api-testing/"
+      ],
+      "challengeLinks": []
+    },
+    {
+      "id": "FX-LIST-001",
+      "version": "1.0.0",
+      "url": "/practice/components/search-and-lists/",
+      "anchor": "#fixture-search-lists",
+      "title": "Search and Lists Lab",
+      "area": "Search and lists",
+      "difficulty": "Intermediate",
+      "component": "SearchListFixtures",
+      "behavior": "Synthetic employee and product data powers instant, controlled-delay and debounced search, keyboard autocomplete, combined filters, explicit empty state, load-more pagination and cursor-backed infinite scrolling.",
+      "defaults": {
+        "debounceMs": 350,
+        "delayedSearchMs": 400,
+        "productPageSize": 20
+      },
+      "controls": {
+        "loadMorePageSize": 8,
+        "infinitePageSize": 20
+      },
+      "seedVersion": "1.0.0",
+      "intentionalDefects": [],
+      "expectedOutcomes": [
+        "Each search timing model reports its applied state and result count.",
+        "API pages append without duplicates and end with an explicit end-of-list state."
+      ],
+      "tests": [
+        "tests/e2e/table-lab.spec.ts",
+        "tests/live/table-lab-live.spec.ts",
+        "examples/playwright-ts/search-lists.spec.ts"
+      ],
+      "guideLinks": ["https://testheon.com/playwright-e2e/"],
+      "challengeLinks": []
+    },
+    {
+      "id": "FX-WAIT-001",
+      "version": "1.0.0",
+      "url": "/practice/playwright/waits/",
+      "anchor": "#fixture-waits",
+      "title": "Playwright Waits Lab",
+      "area": "Waits",
+      "difficulty": "Intermediate",
+      "component": "DeterministicWaitFixtures",
+      "behavior": "Bounded delay controls drive appearance, enabled, text, loading, progress, network, dropdown, lazy-content and infinite-scroll synchronization exercises.",
+      "defaults": { "delayMs": 1000, "seed": 4803 },
+      "controls": {
+        "delayOptions": [1000, 2000, 5000, 10000, "random"],
+        "urlDelayRange": [0, 10000]
+      },
+      "seedVersion": "1.0.0",
+      "intentionalDefects": [],
+      "expectedOutcomes": [
+        "The same seed produces the same bounded random delay.",
+        "Every asynchronous state exposes a visible assertion target without fixed test sleeps."
+      ],
+      "tests": [
+        "tests/e2e/chunk-06-labs.spec.ts",
+        "examples/playwright-ts/waits-dialogs.spec.ts"
+      ],
+      "guideLinks": ["https://testheon.com/playwright-e2e/"],
+      "challengeLinks": []
+    },
+    {
+      "id": "FX-DOM-001",
+      "version": "1.0.0",
+      "url": "/practice/components/dynamic-dom/",
+      "anchor": "#fixture-dynamic-dom",
+      "title": "Dynamic DOM Lab",
+      "area": "Dynamic DOM",
+      "difficulty": "Advanced",
+      "component": "DynamicDomFixtures",
+      "behavior": "A marked practice fixture deterministically rotates IDs, classes and order while preserving semantic contracts across duplicate, replacement and API-rendered DOM.",
+      "defaults": { "seed": 4803 },
+      "controls": { "urlSeed": true },
+      "seedVersion": "1.0.0",
+      "intentionalDefects": [
+        "Generated IDs and classes change on each controlled render.",
+        "Repeated text and a hidden duplicate deliberately make unscoped text and position selectors ambiguous."
+      ],
+      "expectedOutcomes": [
+        "Semantic scoped locators survive generated selector and order changes.",
+        "The original card detaches when a replacement node is rendered."
+      ],
+      "tests": ["tests/e2e/chunk-06-labs.spec.ts"],
+      "guideLinks": ["https://testheon.com/playwright-locators/"],
+      "challengeLinks": []
+    },
+    {
+      "id": "FX-DIALOG-001",
+      "version": "1.0.0",
+      "url": "/practice/components/dialogs/",
+      "anchor": "#fixture-dialogs",
+      "title": "Dialogs, Modals, and Toasts",
+      "area": "Dialogs",
+      "difficulty": "Advanced",
+      "component": "DialogModalToastFixtures",
+      "behavior": "Native alerts, confirms and prompts pair with focus-contained application dialogs and role-correct configurable toast notifications.",
+      "defaults": { "dialogDelayMs": 0, "toastDismissMs": 0 },
+      "controls": {
+        "delayOptions": [0, 1000],
+        "dismissOptions": [0, 1000, 3000]
+      },
+      "seedVersion": "1.0.0",
+      "intentionalDefects": [],
+      "expectedOutcomes": [
+        "Every browser dialog writes its accepted or dismissed result visibly.",
+        "Application dialogs trap focus and close with Escape; toast roles match urgency."
+      ],
+      "tests": [
+        "tests/e2e/chunk-06-labs.spec.ts",
+        "examples/playwright-ts/waits-dialogs.spec.ts"
+      ],
+      "guideLinks": ["https://testheon.com/playwright-e2e/"],
+      "challengeLinks": []
+    },
+    {
+      "id": "FX-INTERACT-001",
+      "version": "1.0.0",
+      "url": "/practice/components/interactions/",
+      "anchor": "#fixture-interactions",
+      "title": "Interaction Lab",
+      "area": "Interactions",
+      "difficulty": "Advanced",
+      "component": "PointerKeyboardFixtures",
+      "behavior": "Hover, tooltip, pointer gestures, scrolling, Enter, Tab, Escape, command shortcut, arrow navigation and autocomplete all append to one visible log.",
+      "defaults": { "listboxOption": "Chromium" },
+      "controls": { "commandShortcut": "ControlOrMeta+K" },
+      "seedVersion": "1.0.0",
+      "intentionalDefects": [],
+      "expectedOutcomes": [
+        "Every interaction appends a stable human-readable log entry.",
+        "Listbox and autocomplete selections work with keyboard-only input."
+      ],
+      "tests": [
+        "tests/e2e/chunk-06-labs.spec.ts",
+        "examples/playwright-ts/interactions-controls.spec.ts"
+      ],
+      "guideLinks": ["https://testheon.com/playwright-e2e/"],
+      "challengeLinks": []
+    },
+    {
+      "id": "FX-DATETIME-001",
+      "version": "1.0.0",
+      "url": "/practice/components/date-time-and-ranges/",
+      "anchor": "#fixture-date-time-ranges",
+      "title": "Date, Time, and Range Controls",
+      "area": "Date and time",
+      "difficulty": "Advanced",
+      "component": "DateTimeRangeFixtures",
+      "behavior": "Native and custom calendar controls, ranges, fixed timezone output, sliders, linked numeric values, a stepper and async progress expose normalized results.",
+      "defaults": { "now": "2026-10-15T09:30:00+05:30", "jobDurationMs": 0 },
+      "controls": {
+        "urlNowOverride": true,
+        "jobDurationOptions": [0, 1000, 2000]
+      },
+      "seedVersion": "1.0.0",
+      "intentionalDefects": [],
+      "expectedOutcomes": [
+        "Date selections and timezone output are deterministic and normalized.",
+        "Numeric controls keep linked visible values synchronized and async progress reaches 100 percent."
+      ],
+      "tests": [
+        "tests/e2e/chunk-06-labs.spec.ts",
+        "examples/playwright-ts/interactions-controls.spec.ts"
+      ],
+      "guideLinks": ["https://testheon.com/playwright-e2e/"],
+      "challengeLinks": []
+    },
+    {
+      "id": "FX-FRAME-001",
+      "version": "1.0.0",
+      "url": "/practice/components/frames-and-windows/",
+      "anchor": "#fixture-frames-windows",
+      "title": "Frames and Windows Lab",
+      "area": "Frames and windows",
+      "difficulty": "Advanced",
+      "component": "SameOriginBrowsingContexts",
+      "behavior": "Single, form, nested, multiple and dynamic same-origin frames pair with tabs, popups and validated postMessage parent updates.",
+      "defaults": { "dynamicDelayMs": 0 },
+      "controls": { "dynamicDelayOptions": [0, 500] },
+      "seedVersion": "1.0.0",
+      "intentionalDefects": [],
+      "expectedOutcomes": [
+        "Every frame stays under /practice/ and is scoped by a stable accessible title.",
+        "Tabs and popups return deterministic results without third-party content."
+      ],
+      "tests": [
+        "tests/e2e/chunk-07-labs.spec.ts",
+        "examples/playwright-ts/frames-windows.spec.ts"
+      ],
+      "guideLinks": ["https://testheon.com/playwright-e2e/"],
+      "challengeLinks": []
+    },
+    {
+      "id": "FX-FILE-001",
+      "version": "1.0.0",
+      "url": "/practice/components/files/",
+      "anchor": "#fixture-files",
+      "title": "Files Lab",
+      "area": "Files",
+      "difficulty": "Expert",
+      "component": "PrivateUploadDownloadFixtures",
+      "behavior": "Native and dropzone uploads enforce extension, MIME, content, size, quota, private random storage and TTL controls; deterministic downloads expose attachment filenames.",
+      "defaults": { "downloadDelayMs": 0, "uploadTtlSeconds": 600 },
+      "controls": {
+        "allowedExtensions": ["png", "jpg", "jpeg", "csv", "txt", "pdf"],
+        "maxFileBytes": 2097152,
+        "maxFilesPerSession": 5,
+        "maxSessionBytes": 6291456,
+        "downloadDelayOptions": [0, 1000]
+      },
+      "seedVersion": "1.0.0",
+      "intentionalDefects": [],
+      "expectedOutcomes": [
+        "Only content-matched allowlisted files receive opaque non-executable private storage names.",
+        "Rejected active content and traversal attempts never reach storage; downloads expose deterministic suggested filenames."
+      ],
+      "tests": [
+        "tests/e2e/chunk-07-labs.spec.ts",
+        "tests/api/files-api.spec.ts",
+        "examples/playwright-ts/files-drag.spec.ts"
+      ],
+      "guideLinks": ["https://testheon.com/playwright-e2e/"],
+      "challengeLinks": []
+    },
+    {
+      "id": "FX-DRAG-001",
+      "version": "1.0.0",
+      "url": "/practice/components/drag-and-drop/",
+      "anchor": "#fixture-drag-drop",
+      "title": "Drag and Drop Lab",
+      "area": "Drag and drop",
+      "difficulty": "Advanced",
+      "component": "DragSortKanbanFixtures",
+      "behavior": "Cards and sortable items support HTML5, pointer and keyboard movement; a shared file dropzone and tasks-API Kanban expose visible persisted outcomes.",
+      "defaults": { "kanbanTaskLimit": 6 },
+      "controls": { "kanbanStatuses": ["todo", "in-progress", "done"] },
+      "seedVersion": "1.0.0",
+      "intentionalDefects": [],
+      "expectedOutcomes": [
+        "Card and sort order changes are visible and keyboard-reachable.",
+        "A Kanban drop persists the task status only in the current sandbox."
+      ],
+      "tests": [
+        "tests/e2e/chunk-07-labs.spec.ts",
+        "tests/live/chunk-07-live.spec.ts",
+        "examples/playwright-ts/files-drag.spec.ts"
+      ],
+      "guideLinks": ["https://testheon.com/playwright-e2e/"],
+      "challengeLinks": []
+    },
+    {
+      "id": "FX-CONTEXT-001",
+      "version": "1.0.0",
+      "url": "/practice/components/browser-context/",
+      "anchor": "#fixture-browser-context",
+      "title": "Browser Context Lab",
+      "area": "Browser context",
+      "difficulty": "Advanced",
+      "component": "BrowserContextFixtures",
+      "behavior": "Fixture cookies, storage, secure-context permissions, offline requests and fixed responsive breakpoints expose named visible states for BrowserContext automation.",
+      "defaults": { "fictionalLocation": "Pune QA Campus" },
+      "controls": {
+        "breakpoints": {
+          "mobileMax": 699,
+          "tabletMin": 700,
+          "desktopMin": 1024
+        }
+      },
+      "seedVersion": "1.0.0",
+      "intentionalDefects": [],
+      "expectedOutcomes": [
+        "Cookie and storage operations remain fixture-local and visible while the Lab session cookie stays HttpOnly.",
+        "Granted, denied, offline and responsive states are deterministic and assertion-ready."
+      ],
+      "tests": [
+        "tests/e2e/chunk-07-labs.spec.ts",
+        "examples/playwright-ts/browser-context.spec.ts"
+      ],
+      "guideLinks": ["https://testheon.com/playwright-e2e/"],
+      "challengeLinks": []
+    },
+    {
+      "id": "FX-AUTH-001",
+      "version": "1.0.0",
+      "url": "/practice/apps/auth/",
+      "anchor": "#login-panel",
+      "title": "Practice Authentication Sandbox",
+      "area": "Authentication",
+      "difficulty": "Advanced",
+      "component": "SandboxAuthenticationApplication",
+      "behavior": "Public synthetic accounts exercise registration, non-enumerating login and reset, HttpOnly sessions, deterministic lockout and expiry, roles, bearer tokens, refresh tokens and API keys without WordPress identity access.",
+      "defaults": {
+        "sharedDemoPassword": "Practice@123",
+        "idleTtlSeconds": 300,
+        "accessTokenTtlSeconds": 120
+      },
+      "controls": {
+        "idleTtlRange": [5, 1800],
+        "lockAttempts": 3,
+        "lockSeconds": 300,
+        "slowLoginMs": 3000,
+        "fastDelayOverride": 0,
+        "roles": ["Customer", "Employee", "Manager", "Admin", "Read-only"]
+      },
+      "seedVersion": "1.0.0",
+      "intentionalDefects": [],
+      "expectedOutcomes": [
+        "Missing authentication returns 401 while authenticated roles without permission return 403.",
+        "Logout, idle expiry, token expiry, refresh rotation, lockout and password reset are deterministic and server-enforced.",
+        "Passwords remain hashed, cookie mutations require CSRF, and authentication data stays inside the Lab sandbox."
+      ],
+      "tests": [
+        "tests/e2e/chunk-08-auth.spec.ts",
+        "tests/api/auth-api.spec.ts",
+        "tests/live/chunk-08-live.spec.ts",
+        "examples/playwright-ts/authentication.spec.ts"
+      ],
+      "guideLinks": ["https://testheon.com/playwright-authentication/"],
+      "challengeLinks": []
+    },
+    {
+      "id": "FX-STORE-001",
+      "version": "1.0.0",
+      "url": "/practice/apps/ecommerce/",
+      "anchor": "#integration-scenarios",
+      "title": "Testheon Store",
+      "area": "Ecommerce",
+      "difficulty": "Advanced",
+      "component": "SandboxEcommerceApplication",
+      "behavior": "A session-scoped shop connects catalogue search and filters, product variants, guest cart, Chunk 8 login, deterministic coupons, fake checkout, order history, API setup and verification, one-shot network errors, and stable visual mode.",
+      "defaults": {
+        "pageSize": 12,
+        "currency": "INR",
+        "visualDate": "2026-10-15T09:30:00+05:30"
+      },
+      "controls": {
+        "validCoupon": "TESTHEON10",
+        "expiredCoupon": "EXPIRED20",
+        "successfulTestCard": "4242424242424242",
+        "declinedTestCard": "4000000000000002",
+        "nextRequestScenarios": [
+          "401",
+          "403",
+          "404",
+          "409",
+          "422",
+          "429",
+          "500",
+          "503",
+          "timeout",
+          "malformed",
+          "empty"
+        ]
+      },
+      "seedVersion": "1.0.0",
+      "intentionalDefects": [],
+      "expectedOutcomes": [
+        "The guest cart survives the authenticated checkout handoff and the resulting order is readable through the Practice API.",
+        "Search, category, price, rating, sort and pagination produce deterministic catalogue results.",
+        "Every one-shot failure, malformed payload and empty array renders an assertion-ready UI state without a real vulnerability or external payment call."
+      ],
+      "tests": [
+        "tests/e2e/chunk-09-store.spec.ts",
+        "tests/api/store-api.spec.ts",
+        "tests/live/chunk-09-live.spec.ts",
+        "examples/playwright-ts/ecommerce.spec.ts"
+      ],
+      "guideLinks": [
+        "https://testheon.com/playwright-e2e/",
+        "https://testheon.com/playwright-api-testing/",
+        "https://testheon.com/playwright-authentication/",
+        "https://testheon.com/playwright-visual-testing/"
+      ],
+      "challengeLinks": []
+    }
+  ]
+}

@@ -1,0 +1,210 @@
+---
+import Button from '../../../components/Button.astro';
+import Callout from '../../../components/Callout.astro';
+import CodeBlock from '../../../islands/CodeBlock';
+import LabLayout from '../../../layouts/LabLayout.astro';
+
+const globalSetup = `// auth.setup.ts
+import { test as setup, expect } from '@playwright/test';
+
+setup('authenticate manager', async ({ page }) => {
+  await page.goto('/practice/apps/auth/?delay=0');
+  const login = page.locator('#login-form');
+  await login.getByLabel('Username').fill('manager_user');
+  await login.getByLabel('Password').fill('Practice@123');
+  await page.getByRole('button', { name: 'Sign in to Practice' }).click();
+  await expect(page.getByTestId('signed-in-user')).toContainText('manager_user');
+  await page.context().storageState({ path: 'playwright/.auth/manager.json' });
+});`;
+const projects = `projects: [
+  { name: 'setup', testMatch: /auth[.]setup[.]ts/ },
+  {
+    name: 'manager',
+    use: { storageState: 'playwright/.auth/manager.json' },
+    dependencies: ['setup'],
+  },
+  {
+    name: 'readonly',
+    use: { storageState: 'playwright/.auth/readonly.json' },
+    dependencies: ['setup'],
+  },
+]`;
+const apiLogin = `const session = await request.get('/practice/api/v1/lab/session');
+const csrf = (await session.json()).data.csrfToken;
+const login = await request.post('/practice/api/v1/auth/login', {
+  headers: { 'X-Lab-CSRF': csrf },
+  data: { username: 'manager_user', password: 'Practice@123', idleSeconds: 300 },
+});
+expect(login.status()).toBe(200);
+await page.goto('/practice/apps/auth/');
+await expect(page.getByTestId('signed-in-user')).toContainText('manager_user');`;
+const expiry = `await page.getByRole('button', { name: 'Expire current session' }).click();
+await page.getByRole('button', { name: 'Inspect session' }).click();
+await expect(page.locator('#session-result')).toContainText('AUTH_SESSION_EXPIRED');`;
+---
+
+<LabLayout
+  title="Playwright Authentication Testing"
+  description="Learn global setup, storageState, per-role projects, API login, logout and deterministic expiry testing with the Testheon Practice Authentication Sandbox."
+  canonicalPath="/playwright/authentication/"
+  robots="index,follow"
+  breadcrumbs={[
+    { label: 'Practice Lab', href: '/practice/' },
+    { label: 'Playwright', href: '/practice/playwright/' },
+    { label: 'Authentication' },
+  ]}
+>
+  <section class="hero hero--compact">
+    <div class="container hero__grid">
+      <div>
+        <p class="eyebrow">Playwright · Authentication and state reuse</p>
+        <h1>Test login once, reuse state safely</h1>
+        <p class="lede">
+          Build fast authentication suites by separating sign-in setup from
+          role-specific tests, while still testing logout, lockout and expiry as
+          first-class behavior.
+        </p>
+        <div class="hero__actions">
+          <Button href="/practice/apps/auth/">Open the Auth sandbox</Button>
+          <Button
+            href="https://testheon.com/playwright-authentication/"
+            variant="secondary"
+          >
+            Read the Testheon authentication guide
+          </Button>
+        </div>
+      </div>
+      <aside class="hero-note" aria-label="Lesson outcome">
+        <strong>Outcome</strong>
+        <p>
+          You will save an authenticated browser state, reuse it by role, skip
+          UI login through the API, and prove invalidation and expiry.
+        </p>
+      </aside>
+    </div>
+  </section>
+
+  <article class="section auth-lesson">
+    <div class="container lesson-stack">
+      <Callout title="Use only the public practice identities" tone="warning">
+        <p>
+          The Auth sandbox is independent from WordPress and contains no real
+          accounts. The password <code>Practice@123</code> and API key are
+          public synthetic fixtures. Never copy production cookies into test
+          artifacts.
+        </p>
+      </Callout>
+
+      <section aria-labelledby="setup-heading">
+        <p class="eyebrow">1 · Global setup</p>
+        <h2 id="setup-heading">Create state through one observable login</h2>
+        <p>
+          A setup project signs in before dependent browser projects begin. Wait
+          for the visible identity result, then save <code>storageState</code>.
+          The state includes the secure session cookie even though JavaScript
+          cannot read that HttpOnly value. Keep generated state files ignored
+          because even synthetic session tokens grant temporary access to the
+          current sandbox.
+        </p>
+        <CodeBlock
+          client:idle
+          code={globalSetup}
+          language="typescript"
+          label="Global setup and storageState"
+        />
+      </section>
+
+      <section aria-labelledby="roles-heading">
+        <p class="eyebrow">2 · Per-role projects</p>
+        <h2 id="roles-heading">
+          Model permissions in Playwright configuration
+        </h2>
+        <p>
+          Separate state files make the actor explicit. A Manager project can
+          assert reports and ticket updates, while a Read-only project expects
+          mutation controls to be disabled and protected API mutations to return
+          403. The same unauthenticated request should return 401, proving the
+          application distinguishes identity from authorization.
+        </p>
+        <CodeBlock
+          client:idle
+          code={projects}
+          language="typescript"
+          label="Role-specific projects"
+        />
+      </section>
+
+      <section aria-labelledby="api-login-heading">
+        <p class="eyebrow">3 · API login</p>
+        <h2 id="api-login-heading">
+          Skip repeated UI login without skipping behavior
+        </h2>
+        <p>
+          API login is useful when authentication is a prerequisite rather than
+          the subject of a test. Create the isolated Lab session, include its
+          CSRF token in the same-origin login mutation, and reuse the cookie jar
+          when navigating the UI. Keep one focused UI login test so selectors,
+          validation and visible error behavior remain covered.
+        </p>
+        <CodeBlock
+          client:idle
+          code={apiLogin}
+          language="typescript"
+          label="API login then UI"
+        />
+      </section>
+
+      <section aria-labelledby="logout-heading">
+        <p class="eyebrow">4 · Logout and expiry</p>
+        <h2 id="logout-heading">
+          Assert server invalidation, not only navigation
+        </h2>
+        <p>
+          Logout revokes the server-side session and clears its cookie. Prove it
+          by requesting the identity endpoint after logout and expecting 401.
+          Idle expiry is configurable from five seconds to thirty minutes, and
+          the dedicated expiry control advances the fixture deterministically so
+          the suite does not sleep. Bearer-token tests can request an already
+          expired access token and assert <code>TOKEN_EXPIRED</code>{' '}
+          immediately.
+        </p>
+        <CodeBlock
+          client:idle
+          code={expiry}
+          language="typescript"
+          label="Deterministic session expiry"
+        />
+      </section>
+
+      <section aria-labelledby="matrix-heading">
+        <p class="eyebrow">5 · Complete exercise</p>
+        <h2 id="matrix-heading">
+          Cover identity, permissions and storage boundaries
+        </h2>
+        <ol class="strategy-list">
+          <li>Sign in each public role and save a distinct storage state.</li>
+          <li>
+            Assert the Admin-only control is hidden for Customer and Manager.
+          </li>
+          <li>
+            Assert the Read-only mutation control is disabled and the API
+            returns 403.
+          </li>
+          <li>Call a protected endpoint without credentials and assert 401.</li>
+          <li>
+            Issue, refresh and expire bearer tokens; verify the access token
+            lives in localStorage.
+          </li>
+          <li>
+            Use the public demo API key once, then prove an invalid key returns
+            401.
+          </li>
+          <li>
+            Log out and verify the previously saved session cannot reach the
+            identity endpoint.
+          </li>
+        </ol>
+      </section>
+    </div>
+  </article>
+</LabLayout>

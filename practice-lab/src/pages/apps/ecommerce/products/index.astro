@@ -1,0 +1,109 @@
+---
+import StoreShell from '../../../../components/StoreShell.astro';
+---
+
+<StoreShell
+  title="Store products"
+  description="Search, filter, sort, and paginate synthetic Testheon Store products."
+  canonicalPath="/apps/ecommerce/products/"
+  page="products"
+>
+  <section class="store-page section">
+    <div class="container">
+      <p class="eyebrow">Catalogue UI</p>
+      <h1>Find a practice product</h1>
+      <p class="lede">
+        Every control maps to a documented query parameter on{' '}
+        <code>GET /store/catalog</code>.
+      </p>
+      <form id="store-filter-form" class="store-filter-panel">
+        <div>
+          <label for="store-search">Search</label>
+          <input
+            id="store-search"
+            name="q"
+            type="search"
+            placeholder="Name or SKU"
+          />
+        </div>
+        <div>
+          <label for="store-category">Category</label>
+          <select id="store-category" name="category">
+            <option value="">All categories</option>
+          </select>
+        </div>
+        <div>
+          <label for="store-min-price">Minimum price</label>
+          <input
+            id="store-min-price"
+            name="minPrice"
+            type="number"
+            min="0"
+            value="0"
+          />
+        </div>
+        <div>
+          <label for="store-max-price">
+            Maximum price: ₹<output id="store-max-output">25000</output>
+          </label>
+          <input
+            id="store-max-price"
+            name="maxPrice"
+            type="range"
+            min="500"
+            max="25000"
+            step="500"
+            value="25000"
+          />
+        </div>
+        <div>
+          <label for="store-rating">Minimum rating</label>
+          <select id="store-rating" name="rating">
+            <option value="0">Any rating</option>
+            <option value="3">3+ stars</option>
+            <option value="4">4+ stars</option>
+            <option value="5">5 stars</option>
+          </select>
+        </div>
+        <div>
+          <label for="store-sort">Sort</label>
+          <select id="store-sort" name="sort">
+            <option value="featured">Featured</option>
+            <option value="price-asc">Price low to high</option>
+            <option value="price-desc">Price high to low</option>
+            <option value="rating-desc">Rating</option>
+            <option value="name-asc">Name</option>
+          </select>
+        </div>
+        <button class="button button--primary" type="submit">
+          Apply filters
+        </button>
+      </form>
+      <p id="store-list-status" class="result" role="status">
+        Loading catalogue…
+      </p>
+      <div
+        id="store-product-list"
+        class="store-product-grid"
+        aria-live="polite"
+      ></div>
+      <nav class="store-pagination" aria-label="Product pages">
+        <button
+          id="store-prev-page"
+          class="button button--secondary"
+          type="button"
+        >
+          Previous
+        </button>
+        <span id="store-page-label">Page 1</span>
+        <button
+          id="store-next-page"
+          class="button button--secondary"
+          type="button"
+        >
+          Next
+        </button>
+      </nav>
+    </div>
+  </section>
+</StoreShell>

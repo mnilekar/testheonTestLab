@@ -1,0 +1,329 @@
+---
+import ComponentLabPage from '../../../components/ComponentLabPage.astro';
+import FixtureSection from '../../../components/FixtureSection.astro';
+import CodeBlock from '../../../islands/CodeBlock';
+
+const browserExample = `page.on('dialog', async (dialog) => {
+  expect(dialog.type()).toBe('prompt');
+  expect(dialog.message()).toBe('Name this synthetic run');
+  await dialog.accept('Nightly 4803');
+});
+await page.getByRole('button', { name: 'Open prompt' }).click();
+await expect(page.getByTestId('browser-dialog-result')).toContainText('Nightly 4803');`;
+const toastExample = `await page.getByRole('button', { name: 'Show success toast' }).click();
+await expect(page.getByRole('status').filter({ hasText: 'Saved successfully' })).toBeVisible();`;
+---
+
+<ComponentLabPage
+  title="Dialogs, Modals, and Toasts"
+  eyebrow="Component Lab D · Interruptions and feedback"
+  intro="Handle native browser dialogs, accessible application modals, and deterministic toast notifications with visible captured outcomes."
+  canonicalPath="/components/dialogs/"
+  fixtureId="FX-DIALOG-001"
+  anchor="fixture-dialogs"
+  guideHref="https://testheon.com/playwright-e2e/"
+  guideLabel="Read the E2E guide"
+  tasks={[
+    'Attach dialog handlers before triggering alert, confirm, prompt, delayed, and chained dialogs.',
+    'Complete, cancel, and Escape from accessible modal workflows.',
+    'Verify focus remains inside an open modal while tabbing.',
+    'Wait for API and delayed modal content by visible state.',
+    'Assert toast role, message, stack order, delay, and dismissal.',
+  ]}
+  locatorHint="Register page.on('dialog') before the click that opens a browser dialog. For application dialogs use getByRole('dialog', { name }), and assert toast semantics through role=status or role=alert."
+>
+  <FixtureSection
+    id="browser-dialogs"
+    title="Native browser dialogs"
+    description="Each browser-owned dialog writes its accepted or dismissed result into the page after Playwright handles it."
+  >
+    <div class="inline-control">
+      <label for="browser-dialog-delay">Delayed alert timer</label>
+      <select id="browser-dialog-delay">
+        <option value="0">0 ms</option>
+        <option value="1000">1 second</option>
+      </select>
+    </div>
+    <div class="button-row">
+      <button id="open-alert" class="fixture-button" type="button">
+        Open alert
+      </button>
+      <button id="open-confirm" class="fixture-button" type="button">
+        Open confirm
+      </button>
+      <button id="open-prompt" class="fixture-button" type="button">
+        Open prompt
+      </button>
+      <button id="open-delayed-alert" class="fixture-button" type="button">
+        Open delayed alert
+      </button>
+      <button id="open-chained-alerts" class="fixture-button" type="button">
+        Open chained alerts
+      </button>
+    </div>
+    <p
+      id="browser-dialog-result"
+      data-testid="browser-dialog-result"
+      class="result"
+      role="status"
+    >
+      No browser dialog handled.
+    </p>
+  </FixtureSection>
+
+  <FixtureSection
+    id="application-modals"
+    title="Accessible application modals"
+    description="Native dialog primitives provide a focus boundary and Escape behavior; every close path reports visibly."
+  >
+    <div class="button-row">
+      <button
+        class="fixture-button"
+        data-open-dialog="simple-modal"
+        type="button"
+      >
+        Open simple modal
+      </button>
+      <button
+        class="fixture-button"
+        data-open-dialog="confirmation-modal"
+        type="button"
+      >
+        Open confirmation modal
+      </button>
+      <button
+        class="fixture-button"
+        data-open-dialog="form-modal"
+        type="button"
+      >
+        Open form modal
+      </button>
+      <button
+        class="fixture-button"
+        data-open-dialog="nested-parent-modal"
+        type="button"
+      >
+        Open nested modal
+      </button>
+      <button id="open-api-modal" class="fixture-button" type="button">
+        Open modal after API response
+      </button>
+      <button
+        class="fixture-button"
+        data-open-dialog="delayed-modal"
+        type="button"
+      >
+        Open delayed-content modal
+      </button>
+      <button
+        class="fixture-button"
+        data-open-dialog="scroll-modal"
+        type="button"
+      >
+        Open scrolling modal
+      </button>
+    </div>
+    <p id="modal-result" class="result" role="status">
+      No application modal completed.
+    </p>
+
+    <dialog id="simple-modal" aria-labelledby="simple-modal-title">
+      <div class="modal-card">
+        <h3 id="simple-modal-title">Simple status modal</h3>
+        <p>The synthetic run is ready.</p>
+        <button class="fixture-button" data-close-dialog type="button">
+          Close simple modal
+        </button>
+      </div>
+    </dialog>
+    <dialog id="confirmation-modal" aria-labelledby="confirmation-modal-title">
+      <div class="modal-card">
+        <h3 id="confirmation-modal-title">Archive synthetic run?</h3>
+        <p>This changes only visible fixture state.</p>
+        <div class="button-row">
+          <button
+            class="fixture-button fixture-button--secondary"
+            data-modal-outcome="Archive cancelled"
+            type="button"
+          >
+            Cancel archive
+          </button>
+          <button
+            class="fixture-button"
+            data-modal-outcome="Synthetic run archived"
+            type="button"
+          >
+            Confirm archive
+          </button>
+        </div>
+      </div>
+    </dialog>
+    <dialog id="form-modal" aria-labelledby="form-modal-title">
+      <form id="modal-form" class="modal-card">
+        <h3 id="form-modal-title">Create practice note</h3>
+        <div class="field">
+          <label for="modal-note">Note</label>
+          <input id="modal-note" name="note" required />
+        </div>
+        <div class="button-row">
+          <button class="fixture-button" type="submit">
+            Save practice note
+          </button>
+          <button
+            class="fixture-button fixture-button--secondary"
+            data-close-dialog
+            type="button"
+          >
+            Cancel note
+          </button>
+        </div>
+      </form>
+    </dialog>
+    <dialog id="nested-parent-modal" aria-labelledby="nested-parent-title">
+      <div class="modal-card">
+        <h3 id="nested-parent-title">Parent modal</h3>
+        <p>Open a second modal above this one.</p>
+        <div class="button-row">
+          <button
+            class="fixture-button"
+            data-open-dialog="nested-child-modal"
+            type="button"
+          >
+            Open child modal
+          </button>
+          <button
+            class="fixture-button fixture-button--secondary"
+            data-close-dialog
+            type="button"
+          >
+            Close parent modal
+          </button>
+        </div>
+      </div>
+    </dialog>
+    <dialog id="nested-child-modal" aria-labelledby="nested-child-title">
+      <div class="modal-card">
+        <h3 id="nested-child-title">Child modal</h3>
+        <p>This is the active nested layer.</p>
+        <button class="fixture-button" data-close-dialog type="button">
+          Close child modal
+        </button>
+      </div>
+    </dialog>
+    <dialog id="api-modal" aria-labelledby="api-modal-title">
+      <div class="modal-card">
+        <h3 id="api-modal-title">API response modal</h3>
+        <p id="api-modal-content">Response not loaded.</p>
+        <button class="fixture-button" data-close-dialog type="button">
+          Close API modal
+        </button>
+      </div>
+    </dialog>
+    <dialog id="delayed-modal" aria-labelledby="delayed-modal-title">
+      <div class="modal-card">
+        <h3 id="delayed-modal-title">Delayed modal content</h3>
+        <div class="field">
+          <label for="modal-content-delay">Content delay</label>
+          <select id="modal-content-delay">
+            <option value="0">0 ms</option>
+            <option value="1000">1 second</option>
+          </select>
+        </div>
+        <p id="delayed-modal-content" role="status">
+          Choose Load delayed content.
+        </p>
+        <button
+          id="load-delayed-modal-content"
+          class="fixture-button"
+          type="button"
+        >
+          Load delayed content
+        </button>
+        <button
+          class="fixture-button fixture-button--secondary"
+          data-close-dialog
+          type="button"
+        >
+          Close delayed modal
+        </button>
+      </div>
+    </dialog>
+    <dialog id="scroll-modal" aria-labelledby="scroll-modal-title">
+      <div class="modal-card">
+        <h3 id="scroll-modal-title">Scrollable release notes</h3>
+        <div
+          class="modal-scroll"
+          tabindex="0"
+          aria-label="Release note content"
+        >
+          {Array.from({ length: 12 }, (_, index) => (
+            <p>
+              <strong>Check {index + 1}:</strong> deterministic practice content
+              remains inside the modal scroll region.
+            </p>
+          ))}
+        </div>
+        <button class="fixture-button" data-close-dialog type="button">
+          Close scrolling modal
+        </button>
+      </div>
+    </dialog>
+  </FixtureSection>
+
+  <FixtureSection
+    id="toast-notifications"
+    title="Toast notifications"
+    description="Success and info use status semantics; error and warning use alert semantics. Delay and dismissal are controlled."
+  >
+    <div class="inline-control">
+      <label for="toast-dismiss">Auto-dismiss</label>
+      <select id="toast-dismiss">
+        <option value="0">Keep visible</option>
+        <option value="1000">1 second</option>
+        <option value="3000">3 seconds</option>
+      </select>
+      <label for="toast-delay">Delayed toast</label>
+      <select id="toast-delay">
+        <option value="0">0 ms</option>
+        <option value="1000">1 second</option>
+      </select>
+    </div>
+    <div class="button-row">
+      <button class="fixture-button" data-toast-type="success" type="button">
+        Show success toast
+      </button>
+      <button class="fixture-button" data-toast-type="error" type="button">
+        Show error toast
+      </button>
+      <button class="fixture-button" data-toast-type="warning" type="button">
+        Show warning toast
+      </button>
+      <button class="fixture-button" data-toast-type="info" type="button">
+        Show info toast
+      </button>
+      <button id="show-stacked-toasts" class="fixture-button" type="button">
+        Show stacked toasts
+      </button>
+      <button id="show-delayed-toast" class="fixture-button" type="button">
+        Show delayed toast
+      </button>
+    </div>
+    <div id="toast-stack" class="toast-stack" aria-label="Notifications"></div>
+    <p id="toast-result" class="result" role="status">
+      No toast shown.
+    </p>
+  </FixtureSection>
+
+  <div slot="examples" class="example-stack">
+    <CodeBlock
+      client:idle
+      code={browserExample}
+      label="Handle a browser prompt"
+    />
+    <CodeBlock client:idle code={toastExample} label="Assert toast semantics" />
+  </div>
+</ComponentLabPage>
+
+<script>
+  import '../../../scripts/dialogs';
+</script>

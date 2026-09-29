@@ -1,0 +1,158 @@
+---
+import StoreShell from '../../../../components/StoreShell.astro';
+---
+
+<StoreShell
+  title="Store checkout"
+  description="Practise login-at-checkout, dependent addresses, shipping, payload assertions, and fake payment outcomes."
+  canonicalPath="/apps/ecommerce/checkout/"
+  page="cart"
+>
+  <section class="store-page section">
+    <div class="container store-checkout-grid">
+      <div>
+        <p class="eyebrow">Authentication handoff</p>
+        <h1>Checkout</h1>
+        <section
+          id="checkout-login-panel"
+          class="store-panel"
+          aria-labelledby="checkout-login-title"
+        >
+          <h2 id="checkout-login-title">Sign in to place the practice order</h2>
+          <p>Your guest cart remains in the current Lab sandbox.</p>
+          <form id="checkout-login-form" class="auth-form">
+            <label for="checkout-username">Username</label>
+            <input
+              id="checkout-username"
+              name="username"
+              value="standard_user"
+              autocomplete="username"
+            />
+            <label for="checkout-password">Password</label>
+            <input
+              id="checkout-password"
+              name="password"
+              type="password"
+              value="Practice@123"
+              autocomplete="current-password"
+            />
+            <button class="button button--primary" type="submit" disabled>
+              Sign in and continue
+            </button>
+          </form>
+          <p id="checkout-login-result" class="result" role="status">
+            Checking authentication…
+          </p>
+        </section>
+        <form
+          id="store-checkout-form"
+          class="store-panel store-checkout-form"
+          hidden
+        >
+          <h2>Delivery address</h2>
+          <label for="checkout-name">Full name</label>
+          <input
+            id="checkout-name"
+            name="fullName"
+            value="Asha Tester"
+            required
+          />
+          <label for="checkout-line1">Address line</label>
+          <input
+            id="checkout-line1"
+            name="line1"
+            value="48 Practice Avenue"
+            required
+          />
+          <label for="checkout-country">Country</label>
+          <select id="checkout-country" name="country" required>
+            <option value="">Select country</option>
+          </select>
+          <label for="checkout-state">State</label>
+          <select id="checkout-state" name="state" required disabled>
+            <option value="">Select state</option>
+          </select>
+          <label for="checkout-city">City</label>
+          <select id="checkout-city" name="city" required disabled>
+            <option value="">Select city</option>
+          </select>
+          <label for="checkout-postal">Postal code</label>
+          <input
+            id="checkout-postal"
+            name="postalCode"
+            value="411001"
+            required
+          />
+          <fieldset>
+            <legend>Shipping method</legend>
+            <label class="choice-row">
+              <input
+                type="radio"
+                name="shippingMethod"
+                value="standard"
+                checked
+              />{' '}
+              Standard · ₹99
+            </label>
+            <label class="choice-row">
+              <input type="radio" name="shippingMethod" value="express" />{' '}
+              Express · ₹249
+            </label>
+          </fieldset>
+          <h2>Fake payment details</h2>
+          <div class="callout callout--warning">
+            <strong>Practice cards only.</strong> No processor is connected and
+            no charge can occur. Success: <code>4242 4242 4242 4242</code>.
+            Decline: <code>4000 0000 0000 0002</code>.
+          </div>
+          <label for="checkout-card">Fake test card number</label>
+          <input
+            id="checkout-card"
+            name="cardNumber"
+            inputmode="numeric"
+            value="4242 4242 4242 4242"
+            autocomplete="off"
+            required
+          />
+          <div class="store-form-row">
+            <div>
+              <label for="checkout-expiry">Expiry</label>
+              <input
+                id="checkout-expiry"
+                name="expiry"
+                value="12/30"
+                autocomplete="off"
+                required
+              />
+            </div>
+            <div>
+              <label for="checkout-cvc">CVC</label>
+              <input
+                id="checkout-cvc"
+                name="cvc"
+                value="123"
+                inputmode="numeric"
+                autocomplete="off"
+                required
+              />
+            </div>
+          </div>
+          <button class="button button--primary" type="submit" disabled>
+            Place fake order
+          </button>
+          <p id="checkout-result" class="result" role="status">
+            No payment or order has been attempted.
+          </p>
+        </form>
+      </div>
+      <aside
+        id="checkout-summary"
+        class="store-panel"
+        aria-label="Order summary"
+      >
+        <h2>Order summary</h2>
+        <p>Loading cart…</p>
+      </aside>
+    </div>
+  </section>
+</StoreShell>

@@ -1,0 +1,31 @@
+---
+import StoreShell from '../../../../components/StoreShell.astro';
+---
+
+<StoreShell
+  title="Store profile"
+  description="Inspect the Chunk 8 practice identity used by Testheon Store."
+  canonicalPath="/apps/ecommerce/profile/"
+  page="profile"
+>
+  <section class="store-page section">
+    <div class="container">
+      <p class="eyebrow">Chunk 8 authentication reused</p>
+      <h1>Practice customer profile</h1>
+      <div id="store-profile" class="store-panel" aria-live="polite">
+        <p>Loading profile…</p>
+      </div>
+      <div class="hero__actions">
+        <a class="button button--secondary" href="/practice/apps/auth/">
+          Open authentication sandbox
+        </a>
+        <a
+          class="button button--primary"
+          href="/practice/apps/ecommerce/checkout/"
+        >
+          Return to checkout
+        </a>
+      </div>
+    </div>
+  </section>
+</StoreShell>

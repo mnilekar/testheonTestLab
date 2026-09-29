@@ -1,0 +1,44 @@
+{
+  "capturedAt": "2026-09-28T04:36:47.1233470Z",
+  "configs": [
+    {
+      "label": "production-root",
+      "path": ".htaccess",
+      "sizeBytes": 1466,
+      "sha256": "3f9689ed4759a5a35a33c4f7ccfb40613310fbc1b0f98387bfdc76f21ce00d24",
+      "source": "Hostinger file-content API; final LF restored because response content length was one byte shorter than server size"
+    },
+    {
+      "label": "staging-root",
+      "path": ".htaccess",
+      "sizeBytes": 413,
+      "sha256": "9186269b669a6a1ab7bc26d52b66c633e1ae616460974cd60ff394c45bcacaf6",
+      "source": "Hostinger file-content API"
+    },
+    {
+      "label": "staging-practice",
+      "path": "practice/.htaccess",
+      "sizeBytes": 894,
+      "sha256": null,
+      "localSourceSha256": "2d58ee3e0335ccd75eb75be940868c1273bb39996560cb1734e55e7591e9bc62",
+      "source": "Hostinger directory API; content API returned Cloudflare challenge"
+    }
+  ],
+  "activeRelease": "20260928T041825Z-ec1209",
+  "retainedReleases": [
+    "20260927T180347Z-00ae7b",
+    "20260927T180429Z-5c1f66",
+    "20260928T041825Z-ec1209"
+  ],
+  "rollbackRelease": "20260927T180429Z-5c1f66",
+  "cleanupCron": {
+    "uid": "HlQ6wzt0s8",
+    "schedule": "*/5 * * * *",
+    "command": "php /home/u652010987/domains/testheon.com/public_html/practice-staging/practice/_api-maintenance/cleanup.php"
+  },
+  "notes": [
+    "Production root and staging root sizes and hashes are identical to the Chunk 4 pre-deploy evidence.",
+    "Nested staging .htaccess remains 894 bytes; its content endpoint still triggers a Cloudflare challenge, so the unchanged server size and local source hash are recorded.",
+    "The previous compatible release is retained for the one-command rollback path."
+  ]
+}

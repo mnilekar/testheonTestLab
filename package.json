@@ -1,0 +1,16 @@
+{
+  "name": "testheon-content-automation",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Deterministic orchestration support for Testheon article-to-WordPress-draft production.",
+  "scripts": {
+    "test": "node --test",
+    "validate:setup": "node scripts/testheon.mjs validate-setup",
+    "testheon": "node scripts/testheon.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
+

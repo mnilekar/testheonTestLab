@@ -1,0 +1,33 @@
+{
+  "capturedAt": "2026-09-28T14:49:31.000Z",
+  "account": "u652010987",
+  "production": {
+    "domain": "testheon.com",
+    "rootHtaccessBytes": 1466,
+    "rootHtaccessSha256": "3f9689ed4759a5a35a33c4f7ccfb40613310fbc1b0f98387bfdc76f21ce00d24",
+    "wordpressMarkersPresent": true
+  },
+  "staging": {
+    "domain": "practice-staging.testheon.com",
+    "rootHtaccessBytes": 413,
+    "rootHtaccessSha256": "9186269b669a6a1ab7bc26d52b66c633e1ae616460974cd60ff394c45bcacaf6",
+    "activeRelease": "20260928T130939Z-f8497f",
+    "retainedReleases": [
+      "20260928T074543Z-85f90b",
+      "20260928T105922Z-fb846d",
+      "20260928T130939Z-f8497f"
+    ],
+    "nestedPracticeHtaccessBytes": 894,
+    "nestedPracticeHtaccessRead": "Hostinger developer API returned its known Cloudflare challenge for this nested file",
+    "releaseControllerBytes": 3086,
+    "releaseControllerSha256": "00ebe9d6888c27d4d5e57bce22ad5fa36e13333ee96f49089e5cafc0aab67416",
+    "cleanupCron": "*/5 * * * *",
+    "preparedStagingBuild": {
+      "releaseMarker": "prepared-cre52",
+      "fileCount": 62,
+      "artifactSha256": "79f9af5f396a6ac12db235919cad2f71f95502f28ba1b59bb8f3b571660d7982"
+    },
+    "preparedPracticeHtaccessSha256": "c5d30d9405a292cc9eba1d41b512a5aa5e1176addfe30b0834b7cb800fe68141",
+    "preparedApiRuntimeSha256": "205523c057d005bbcf4d0ce57f47c8b6a2f9b4d69c43f25354fe2d32a4c30111"
+  }
+}

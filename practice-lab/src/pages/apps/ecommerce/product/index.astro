@@ -1,0 +1,24 @@
+---
+import StoreShell from '../../../../components/StoreShell.astro';
+---
+
+<StoreShell
+  title="Product details"
+  description="Inspect images, variants, stock, quantity, and fictional reviews for one practice product."
+  canonicalPath="/apps/ecommerce/product/"
+  page="products"
+>
+  <section class="store-page section">
+    <div class="container">
+      <a class="back-link" href="/practice/apps/ecommerce/products/">
+        ← Back to products
+      </a>
+      <div id="store-product-detail" class="store-detail" aria-live="polite">
+        <div>
+          <p class="eyebrow">Product details</p>
+          <h1>Loading practice product…</h1>
+        </div>
+      </div>
+    </div>
+  </section>
+</StoreShell>

@@ -1,0 +1,187 @@
+---
+import ComponentLabPage from '../../../components/ComponentLabPage.astro';
+import FixtureSection from '../../../components/FixtureSection.astro';
+import CodeBlock from '../../../islands/CodeBlock';
+
+const dragExample = `const source = page.getByRole('listitem', { name: /Accessibility review/ });
+const target = page.getByRole('region', { name: 'Done card zone' });
+await source.dragTo(target);
+await expect(page.getByTestId('drag-result')).toContainText('Done');`;
+---
+
+<ComponentLabPage
+  title="Drag and Drop Lab"
+  eyebrow="Component Lab I · Reordering and persistence"
+  intro="Move cards with HTML5 or pointer input, sort with drag or keyboard, share the safe file dropzone, and persist a Kanban transition through the tasks API."
+  canonicalPath="/components/drag-and-drop/"
+  fixtureId="FX-DRAG-001"
+  anchor="fixture-drag-drop"
+  guideHref="https://testheon.com/playwright-e2e/"
+  guideLabel="Read the E2E guide"
+  tasks={[
+    'Move cards between named zones through HTML5 drag events.',
+    'Repeat the card move with pointer coordinates.',
+    'Reorder a list with drag and with the keyboard-accessible Move up/Move down controls.',
+    'Drop an allowed file into the same safe dropzone contract used by the Files Lab.',
+    'Move a synthetic task across the Kanban board and verify the tasks API persisted its status.',
+  ]}
+  locatorHint="Prefer locator.dragTo for HTML5 exercises, mouse move/down/up when the exercise targets pointer geometry, and named Move up/Move down buttons for the accessible alternative. Assert the visible log and API-backed task state."
+>
+  <FixtureSection
+    id="cards-between-zones"
+    title="Cards between zones"
+    description="Cards support native HTML5 drag events and pointer-based dragging; each destination has a stable region name."
+  >
+    <div class="drag-zone-grid">
+      <section
+        class="drag-zone"
+        data-card-zone="backlog"
+        aria-label="Backlog card zone"
+      >
+        <h3>Backlog</h3>
+        <ul class="drag-list">
+          <li
+            draggable="true"
+            data-drag-card="accessibility-review"
+            aria-label="Accessibility review"
+            tabindex="0"
+          >
+            Accessibility review
+          </li>
+          <li
+            draggable="true"
+            data-drag-card="checkout-smoke"
+            aria-label="Checkout smoke"
+            tabindex="0"
+          >
+            Checkout smoke
+          </li>
+        </ul>
+      </section>
+      <section
+        class="drag-zone"
+        data-card-zone="done"
+        aria-label="Done card zone"
+      >
+        <h3>Done</h3>
+        <ul class="drag-list"></ul>
+      </section>
+    </div>
+    <p id="drag-result" data-testid="drag-result" class="result" role="status">
+      No card moved.
+    </p>
+  </FixtureSection>
+
+  <FixtureSection
+    id="sortable-list"
+    title="Sortable list with keyboard alternative"
+    description="Drag rows into order or use the named buttons; both paths update the same visible order."
+  >
+    <ol
+      id="sortable-list-items"
+      class="sortable-list"
+      aria-label="Release checks"
+    >
+      {[
+        'API contract',
+        'Desktop smoke',
+        'Mobile smoke',
+        'Accessibility scan',
+      ].map((label) => (
+        <li draggable="true" data-sort-item={label} tabindex="0">
+          <span>{label}</span>
+          <span class="button-row">
+            <button
+              type="button"
+              data-move="up"
+              aria-label={`Move ${label} up`}
+            >
+              ↑
+            </button>
+            <button
+              type="button"
+              data-move="down"
+              aria-label={`Move ${label} down`}
+            >
+              ↓
+            </button>
+          </span>
+        </li>
+      ))}
+    </ol>
+    <p id="sort-drag-result" class="result" role="status">
+      Order: API contract, Desktop smoke, Mobile smoke, Accessibility scan.
+    </p>
+  </FixtureSection>
+
+  <FixtureSection
+    id="shared-file-dropzone-fixture"
+    title="Shared safe file dropzone"
+    description="This uses the Files Lab allowlist and size cap; it validates the drop locally without exposing uploaded bytes."
+  >
+    <div
+      id="drag-page-file-dropzone"
+      class="file-dropzone"
+      role="button"
+      tabindex="0"
+      aria-label="Drop files for drag practice"
+    >
+      Drop PNG, JPEG, CSV, TXT, or PDF files here
+    </div>
+    <input
+      id="drag-page-file-input"
+      class="visually-hidden"
+      type="file"
+      aria-label="Choose files for drag practice"
+      accept=".png,.jpg,.jpeg,.csv,.txt,.pdf"
+      multiple
+    />
+    <p id="drag-file-result" class="result" role="status">
+      No files dropped.
+    </p>
+  </FixtureSection>
+
+  <FixtureSection
+    id="kanban-board"
+    title="API-backed Kanban board"
+    description="Six synthetic tasks load from the current sandbox; dropping a task PATCHes its status before the card moves."
+  >
+    <div id="kanban-task-board" class="kanban-board" aria-busy="true">
+      {[
+        ['todo', 'To Do'],
+        ['in-progress', 'In Progress'],
+        ['done', 'Done'],
+      ].map(([status, label]) => (
+        <section
+          class="kanban-column"
+          data-kanban-status={status}
+          aria-label={`${label} tasks`}
+        >
+          <h3>{label}</h3>
+          <ul class="drag-list"></ul>
+        </section>
+      ))}
+    </div>
+    <p
+      id="kanban-result"
+      data-testid="kanban-result"
+      class="result"
+      role="status"
+    >
+      Loading sandbox tasks.
+    </p>
+  </FixtureSection>
+
+  <div slot="examples" class="example-stack">
+    <CodeBlock
+      client:load
+      code={dragExample}
+      language="typescript"
+      label="Drag-to example"
+    />
+  </div>
+</ComponentLabPage>
+
+<script>
+  import '../../../scripts/drag-drop';
+</script>

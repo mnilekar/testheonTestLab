@@ -1,0 +1,470 @@
+---
+import ComponentLabPage from '../../../components/ComponentLabPage.astro';
+import FixtureSection from '../../../components/FixtureSection.astro';
+import CodeBlock from '../../../islands/CodeBlock';
+
+const clientExample = `await page.getByRole('button', { name: 'Create learner account' }).click();
+await expect(page.getByRole('alert')).toContainText('Fix');
+await expect(page.getByLabel('First name')).toHaveAttribute('aria-invalid', 'true');`;
+const successExample = `await page.getByLabel('First name').fill('Asha');
+await page.getByLabel('Last name').fill('Tester');
+await page.getByLabel('Registration email').fill('asha.4803@example.test');
+// fill remaining required fields, then submit
+await expect(page.getByTestId('registration-result')).toContainText('Created users record');`;
+const conflictExample = `await page.getByRole('button', { name: 'Use an existing synthetic email' }).click();
+await page.getByRole('button', { name: 'Create learner account' }).click();
+await expect(page.getByTestId('registration-result')).toContainText('DUPLICATE_RECORD');`;
+const serverExample = `await page.getByLabel('Server response simulation').selectOption('503');
+await page.getByRole('button', { name: 'Send support ticket' }).click();
+await expect(page.getByTestId('support-result')).toContainText('503');`;
+---
+
+<ComponentLabPage
+  title="Realistic Forms"
+  eyebrow="Component Lab A · Workflows"
+  intro="Automate realistic registration, login, contact, job, support, and feedback forms with client validation, conditional fields, accessible error summaries, and isolated server responses from the Practice API."
+  canonicalPath="/components/forms/"
+  fixtureId="FX-FORM-001"
+  anchor="fixture-forms"
+  guideHref="https://testheon.com/playwright-api-testing/"
+  guideLabel="Read the API testing guide"
+  tasks={[
+    'Trigger and assert inline plus summary client errors.',
+    'Submit every API-backed form and assert the created record ID.',
+    'Reveal conditional experience fields in the job application.',
+    'Load an existing synthetic email and prove the 409 conflict.',
+    'Select a simulated 500 or 503 response and assert the server error state.',
+    'Reset the isolated API sandbox and repeat the workflow.',
+  ]}
+  locatorHint="Use labels for fields, role=alert for validation summaries, and role=status for asynchronous results. Wait for the final API outcome rather than network-idle or arbitrary timeouts."
+>
+  <aside class="locator-example" aria-label="Form scenario controls">
+    <div class="form-grid">
+      <div class="field">
+        <label for="form-server-simulation">Server response simulation</label>
+        <select id="form-server-simulation">
+          <option value="">Normal success</option>
+          <option value="409">409 conflict</option>
+          <option value="422">422 validation error</option>
+          <option value="500">500 server error</option>
+          <option value="503">503 unavailable</option>
+        </select>
+      </div>
+      <div class="field">
+        <span class="control-label">Sandbox controls</span>
+        <button
+          id="reset-form-sandbox"
+          class="fixture-button fixture-button--secondary"
+          type="button"
+        >
+          Reset form sandbox
+        </button>
+      </div>
+    </div>
+    <p id="sandbox-result" class="result" role="status">
+      Sandbox uses seed version 1.0.0.
+    </p>
+  </aside>
+
+  <FixtureSection
+    id="registration-form-section"
+    title="Learner registration"
+    description="Client rules cover required, matching, conditional, strength, date, choice, dependent location, and terms fields; valid data creates an isolated API user."
+  >
+    <form
+      id="registration-form"
+      data-api-form
+      data-result-id="registration-result"
+      class="control-stack"
+      novalidate
+    >
+      <div class="form-summary" data-error-summary role="alert" hidden></div>
+      <div class="form-grid">
+        <div class="field">
+          <label for="registration-first-name">First name</label>
+          <input id="registration-first-name" name="firstName" required />
+          <p class="field-error" data-field-error="firstName"></p>
+        </div>
+        <div class="field">
+          <label for="registration-last-name">Last name</label>
+          <input id="registration-last-name" name="lastName" required />
+          <p class="field-error" data-field-error="lastName"></p>
+        </div>
+        <div class="field">
+          <label for="registration-email">Registration email</label>
+          <input id="registration-email" name="email" type="email" required />
+          <p class="field-error" data-field-error="email"></p>
+        </div>
+        <div class="field">
+          <label for="registration-phone">Phone</label>
+          <input
+            id="registration-phone"
+            name="phone"
+            type="tel"
+            pattern="[0-9 ]{10,12}"
+            required
+          />
+          <p class="field-error" data-field-error="phone"></p>
+        </div>
+        <div class="field">
+          <label for="registration-password">Password</label>
+          <input
+            id="registration-password"
+            name="password"
+            type="password"
+            required
+          />
+          <div class="strength-meter" aria-hidden="true">
+            <span id="password-strength-value"></span>
+          </div>
+          <p id="password-strength-label" class="field-hint" role="status">
+            Weak
+          </p>
+          <p class="field-error" data-field-error="password"></p>
+        </div>
+        <div class="field">
+          <label for="registration-password-confirmation">
+            Confirm password
+          </label>
+          <input
+            id="registration-password-confirmation"
+            name="passwordConfirmation"
+            type="password"
+            required
+          />
+          <p class="field-error" data-field-error="passwordConfirmation"></p>
+        </div>
+        <div class="field">
+          <label for="registration-dob">Date of birth</label>
+          <input id="registration-dob" name="dob" type="date" required />
+          <p class="field-error" data-field-error="dob"></p>
+        </div>
+        <fieldset class="choice-group">
+          <legend>Gender</legend>
+          <label>
+            <input type="radio" name="gender" value="Woman" required /> Woman
+          </label>
+          <label>
+            <input type="radio" name="gender" value="Man" /> Man
+          </label>
+          <label>
+            <input type="radio" name="gender" value="Non-binary" /> Non-binary
+          </label>
+          <label>
+            <input type="radio" name="gender" value="Prefer not to say" />{' '}
+            Prefer not to say
+          </label>
+          <p class="field-error" data-field-error="gender"></p>
+        </fieldset>
+        <div class="field">
+          <label for="registration-country">Country</label>
+          <select id="registration-country" name="country" required>
+            <option value="">Choose country</option>
+            <option>India</option>
+            <option>United Kingdom</option>
+          </select>
+          <p class="field-error" data-field-error="country"></p>
+        </div>
+        <div class="field">
+          <label for="registration-state">State</label>
+          <select id="registration-state" name="state" required disabled>
+            <option value="">Choose country first</option>
+          </select>
+          <p class="field-error" data-field-error="state"></p>
+        </div>
+        <div class="field">
+          <label for="registration-city">City</label>
+          <select id="registration-city" name="city" required disabled>
+            <option value="">Choose state first</option>
+          </select>
+          <p class="field-error" data-field-error="city"></p>
+        </div>
+        <div class="field">
+          <label>
+            <input name="terms" type="checkbox" required /> I accept the
+            practice terms
+          </label>
+          <p class="field-error" data-field-error="terms"></p>
+        </div>
+      </div>
+      <div class="button-row">
+        <button class="fixture-button" type="submit">
+          Create learner account
+        </button>
+        <button
+          id="use-duplicate-email"
+          class="fixture-button fixture-button--secondary"
+          type="button"
+        >
+          Use an existing synthetic email
+        </button>
+      </div>
+      <p
+        id="registration-result"
+        class="result"
+        data-testid="registration-result"
+        role="status"
+      >
+        Registration not submitted.
+      </p>
+    </form>
+  </FixtureSection>
+
+  <FixtureSection
+    id="login-form-section"
+    title="Login UI only"
+    description="This chunk validates the form interface only. Authentication and real session behavior intentionally arrive in Chunk 8."
+  >
+    <form id="login-form" class="control-stack" novalidate>
+      <div class="form-summary" data-error-summary role="alert" hidden></div>
+      <div class="form-grid">
+        <div class="field">
+          <label for="login-email">Login email</label>
+          <input id="login-email" name="email" type="email" required />
+          <p class="field-error" data-field-error="email"></p>
+        </div>
+        <div class="field">
+          <label for="login-password">Login password</label>
+          <input id="login-password" name="password" type="password" required />
+          <p class="field-error" data-field-error="password"></p>
+        </div>
+      </div>
+      <button class="fixture-button" type="submit">
+        Validate login UI
+      </button>
+      <p id="login-result" class="result" role="status">
+        No login attempt.
+      </p>
+    </form>
+  </FixtureSection>
+
+  <FixtureSection
+    id="contact-form-section"
+    title="Contact form"
+    description="A successful submission maps fictional contact data to an isolated customer record."
+  >
+    <form
+      id="contact-form"
+      data-api-form
+      data-result-id="contact-result"
+      class="control-stack"
+      novalidate
+    >
+      <div class="form-summary" data-error-summary role="alert" hidden></div>
+      <div class="form-grid">
+        <div class="field">
+          <label for="contact-name">Contact name</label>
+          <input id="contact-name" name="name" required />
+          <p class="field-error" data-field-error="name"></p>
+        </div>
+        <div class="field">
+          <label for="contact-email">Contact email</label>
+          <input id="contact-email" name="email" type="email" required />
+          <p class="field-error" data-field-error="email"></p>
+        </div>
+        <div class="field">
+          <label for="contact-city">City</label>
+          <input id="contact-city" name="city" required />
+          <p class="field-error" data-field-error="city"></p>
+        </div>
+        <div class="field span-2">
+          <label for="contact-message">Message</label>
+          <textarea id="contact-message" name="message" required></textarea>
+          <p class="field-error" data-field-error="message"></p>
+        </div>
+      </div>
+      <button class="fixture-button" type="submit">
+        Send contact request
+      </button>
+      <p id="contact-result" class="result" role="status">
+        Contact request not submitted.
+      </p>
+    </form>
+  </FixtureSection>
+
+  <FixtureSection
+    id="job-form-section"
+    title="Job application"
+    description="Selecting experienced reveals and requires years of experience before the employee record can be created."
+  >
+    <form
+      id="job-form"
+      data-api-form
+      data-result-id="job-result"
+      class="control-stack"
+      novalidate
+    >
+      <div class="form-summary" data-error-summary role="alert" hidden></div>
+      <div class="form-grid">
+        <div class="field">
+          <label for="job-name">Applicant name</label>
+          <input id="job-name" name="name" required />
+        </div>
+        <div class="field">
+          <label for="job-email">Applicant email</label>
+          <input id="job-email" name="email" type="email" required />
+        </div>
+        <div class="field">
+          <label for="job-department">Department</label>
+          <select id="job-department" name="department" required>
+            <option value="">Choose department</option>
+            <option>Quality Engineering</option>
+            <option>Platform</option>
+            <option>Product</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="job-location">Location</label>
+          <select id="job-location" name="location" required>
+            <option value="">Choose location</option>
+            <option>Bengaluru</option>
+            <option>Mumbai</option>
+            <option>Remote</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="job-role">Role</label>
+          <input id="job-role" name="role" required />
+        </div>
+        <div class="field">
+          <label for="job-experience">Experience level</label>
+          <select id="job-experience" name="experience" required>
+            <option value="">Choose level</option>
+            <option value="entry">Entry level</option>
+            <option value="experienced">Experienced</option>
+          </select>
+        </div>
+        <div id="experience-details" class="field" hidden>
+          <label for="job-years">Years of experience</label>
+          <input id="job-years" name="years" type="number" min="1" max="40" />
+        </div>
+        <div class="field span-2">
+          <label for="job-cover">Cover note</label>
+          <textarea id="job-cover" name="cover" required></textarea>
+        </div>
+      </div>
+      <button class="fixture-button" type="submit">
+        Submit job application
+      </button>
+      <p id="job-result" class="result" role="status">
+        Application not submitted.
+      </p>
+    </form>
+  </FixtureSection>
+
+  <FixtureSection
+    id="support-form-section"
+    title="Support ticket"
+    description="The form maps priority and subject into a ticket and exposes simulated server failures for assertion practice."
+  >
+    <form
+      id="support-form"
+      data-api-form
+      data-result-id="support-result"
+      class="control-stack"
+      novalidate
+    >
+      <div class="form-summary" data-error-summary role="alert" hidden></div>
+      <div class="form-grid">
+        <div class="field">
+          <label for="support-subject">Ticket subject</label>
+          <input id="support-subject" name="subject" required />
+        </div>
+        <div class="field">
+          <label for="support-priority">Priority</label>
+          <select id="support-priority" name="priority" required>
+            <option value="">Choose priority</option>
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="support-category">Category</label>
+          <select id="support-category" name="category" required>
+            <option value="">Choose category</option>
+            <option>API</option>
+            <option>Browser</option>
+            <option>Account</option>
+          </select>
+        </div>
+        <div class="field span-2">
+          <label for="support-details">Details</label>
+          <textarea id="support-details" name="details" required></textarea>
+        </div>
+      </div>
+      <button class="fixture-button" type="submit">
+        Send support ticket
+      </button>
+      <p
+        id="support-result"
+        class="result"
+        data-testid="support-result"
+        role="status"
+      >
+        Ticket not submitted.
+      </p>
+    </form>
+  </FixtureSection>
+
+  <FixtureSection
+    id="feedback-form-section"
+    title="Feedback form"
+    description="A labelled rating group and required comments create a synthetic follow-up task."
+  >
+    <form
+      id="feedback-form"
+      data-api-form
+      data-result-id="feedback-result"
+      class="control-stack"
+      novalidate
+    >
+      <div class="form-summary" data-error-summary role="alert" hidden></div>
+      <fieldset class="choice-group">
+        <legend>Rating</legend>
+        <div class="choice-row">
+          <label>
+            <input type="radio" name="rating" value="1" required /> 1
+          </label>
+          <label>
+            <input type="radio" name="rating" value="2" /> 2
+          </label>
+          <label>
+            <input type="radio" name="rating" value="3" /> 3
+          </label>
+          <label>
+            <input type="radio" name="rating" value="4" /> 4
+          </label>
+          <label>
+            <input type="radio" name="rating" value="5" /> 5
+          </label>
+        </div>
+      </fieldset>
+      <div class="field">
+        <label for="feedback-comments">Feedback comments</label>
+        <textarea id="feedback-comments" name="comments" required></textarea>
+      </div>
+      <button class="fixture-button" type="submit">
+        Send feedback
+      </button>
+      <p id="feedback-result" class="result" role="status">
+        Feedback not submitted.
+      </p>
+    </form>
+  </FixtureSection>
+
+  <div slot="examples" class="example-stack">
+    <CodeBlock client:idle code={clientExample} label="Client validation" />
+    <CodeBlock client:idle code={successExample} label="API success" />
+    <CodeBlock client:idle code={conflictExample} label="Duplicate-data 409" />
+    <CodeBlock
+      client:idle
+      code={serverExample}
+      label="Simulated server error"
+    />
+  </div>
+</ComponentLabPage>
+
+<script>
+  import '../../../scripts/forms';
+</script>

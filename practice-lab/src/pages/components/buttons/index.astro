@@ -1,0 +1,286 @@
+---
+import ComponentLabPage from '../../../components/ComponentLabPage.astro';
+import FixtureSection from '../../../components/FixtureSection.astro';
+import CodeBlock from '../../../islands/CodeBlock';
+
+const roleExample = `await page.getByRole('button', { name: 'Run smoke test' }).click();
+await expect(page.getByRole('status')).toContainText('Smoke test queued');`;
+const scopedExample = `const dangerZone = page.getByRole('region', { name: 'Danger zone' });
+await dangerZone.getByRole('button', { name: 'Save' }).click();
+await expect(page.getByTestId('duplicate-result')).toHaveText('Saved danger section.');`;
+const replaceExample = `const original = page.getByRole('button', { name: 'Replace this button' });
+await original.click();
+await expect(original).not.toBeAttached();
+await page.getByRole('button', { name: 'Replacement button' }).click();`;
+---
+
+<ComponentLabPage
+  title="Button Components"
+  eyebrow="Component Lab A · Actions"
+  intro="Exercise native button semantics, forms, enabled states, pointer gestures, deterministic delays, DOM replacement, duplicate names, scoped actions, and appearance waits."
+  canonicalPath="/components/buttons/"
+  fixtureId="FX-BUTTON-001"
+  anchor="fixture-buttons"
+  guideHref="https://testheon.com/playwright-locators/"
+  guideLabel="Read the locator guide"
+  tasks={[
+    'Trigger every enabled action and assert its visible result.',
+    'Submit and reset the native form without bypassing browser semantics.',
+    'Exercise double-click, right-click, and long-press behavior.',
+    'Prove the original DOM node detaches after replacement.',
+    'Scope duplicate Save labels to their named regions.',
+    'Assert the intentionally unnamed icon has no accessible name.',
+  ]}
+  locatorHint="Prefer getByRole('button', { name }) and scope repeated names to a section or region. Capture the original locator before the replacement exercise so you can assert that node detaches."
+>
+  <FixtureSection
+    id="button-basics"
+    title="Normal, disabled, and icon actions"
+    description="Native buttons expose role, accessible name, and disabled state without custom attributes."
+  >
+    <div class="button-row">
+      <button
+        class="fixture-button"
+        type="button"
+        data-result-target="#basic-button-result"
+        data-result-message="Smoke test queued."
+      >
+        Run smoke test
+      </button>
+      <button class="fixture-button" type="button" disabled>
+        Unavailable action
+      </button>
+      <button
+        class="fixture-button icon-button"
+        type="button"
+        aria-label="Refresh results"
+        data-result-target="#basic-button-result"
+        data-result-message="Results refreshed."
+      >
+        <span aria-hidden="true">↻</span>
+      </button>
+    </div>
+    <p id="basic-button-result" class="result" role="status">
+      Choose an available action.
+    </p>
+  </FixtureSection>
+
+  <FixtureSection
+    id="unnamed-icon"
+    title="Icon-only button without an accessible name"
+    description="This deliberate defect should remain discoverable by role but has no accessible name."
+    antiPattern
+  >
+    <button
+      id="unnamed-icon-button"
+      class="fixture-button icon-button"
+      type="button"
+      data-result-target="#unnamed-result"
+      data-result-message="Unnamed icon action ran."
+    >
+      <span aria-hidden="true">★</span>
+    </button>
+    <p id="unnamed-result" class="result" role="status">
+      The defect is intentional and separately tested.
+    </p>
+  </FixtureSection>
+
+  <FixtureSection
+    id="form-buttons"
+    title="Submit and reset buttons"
+    description="Use native form events and assert the result message after either action."
+  >
+    <form id="button-form" class="control-stack">
+      <div class="field">
+        <label for="run-name">QA run name</label>
+        <input id="run-name" name="runName" value="Regression 4803" required />
+      </div>
+      <div class="button-row">
+        <button class="fixture-button" type="submit">
+          Submit run
+        </button>
+        <button class="fixture-button fixture-button--secondary" type="reset">
+          Reset run
+        </button>
+      </div>
+      <p id="form-button-result" class="result" role="status">
+        Form is ready.
+      </p>
+    </form>
+  </FixtureSection>
+
+  <FixtureSection
+    id="enabled-condition"
+    title="Enabled after a condition"
+    description="The action becomes enabled only after the confirmation checkbox is checked."
+  >
+    <label>
+      <input id="button-condition" type="checkbox" /> I reviewed the synthetic
+      data
+    </label>
+    <button
+      id="conditional-button"
+      class="fixture-button"
+      type="button"
+      disabled
+    >
+      Start reviewed run
+    </button>
+    <p id="condition-result" class="result" role="status">
+      Action is disabled.
+    </p>
+  </FixtureSection>
+
+  <FixtureSection
+    id="pointer-gestures"
+    title="Double-click, context click, and long press"
+    description="Each gesture reports a distinct assertion target. Long press completes after a bounded 650 ms hold."
+  >
+    <div class="button-row">
+      <button id="double-click-button" class="fixture-button" type="button">
+        Double-click me
+      </button>
+      <button id="context-button" class="fixture-button" type="button">
+        Right-click me
+      </button>
+      <button id="long-press-button" class="fixture-button" type="button">
+        Press and hold
+      </button>
+    </div>
+    <p id="gesture-result" class="result" role="status">
+      Waiting for a gesture.
+    </p>
+  </FixtureSection>
+
+  <FixtureSection
+    id="delayed-response"
+    title="Controlled delayed response"
+    description="Choose a bounded delay and wait for the final status rather than using a fixed test timeout."
+  >
+    <div class="inline-control">
+      <label for="button-delay">Delay</label>
+      <select id="button-delay">
+        <option value="100">100 ms</option>
+        <option value="500">500 ms</option>
+        <option value="1000">1,000 ms</option>
+      </select>
+      <button id="delayed-response-button" class="fixture-button" type="button">
+        Request response
+      </button>
+    </div>
+    <p id="delay-result" class="result" role="status">
+      No response requested.
+    </p>
+  </FixtureSection>
+
+  <FixtureSection
+    id="dom-replacement"
+    title="Button replaced after click"
+    description="The first click replaces the node. The replacement has a new ID and visible label."
+  >
+    <button id="replacement-button" class="fixture-button" type="button">
+      Replace this button
+    </button>
+    <p id="replacement-result" class="result" role="status">
+      Original node is attached.
+    </p>
+  </FixtureSection>
+
+  <FixtureSection
+    id="duplicate-buttons"
+    title="Duplicate labels in named sections"
+    description="Both buttons are called Save. Scope the locator to the intended region."
+  >
+    <div class="form-grid">
+      <section aria-label="Profile settings">
+        <h3>Profile settings</h3>
+        <button
+          class="fixture-button"
+          type="button"
+          data-duplicate-section="profile"
+        >
+          Save
+        </button>
+      </section>
+      <section aria-label="Danger zone">
+        <h3>Danger zone</h3>
+        <button
+          class="fixture-button"
+          type="button"
+          data-duplicate-section="danger"
+        >
+          Save
+        </button>
+      </section>
+    </div>
+    <p
+      id="duplicate-result"
+      class="result"
+      data-testid="duplicate-result"
+      role="status"
+    >
+      Nothing saved.
+    </p>
+  </FixtureSection>
+
+  <FixtureSection
+    id="nested-button-section"
+    title="Nested-container button"
+    description="Scope through a named billing region and nested card before selecting the action."
+  >
+    <section aria-label="Account settings">
+      <div class="locator-example">
+        <section aria-label="Billing card">
+          <h3>Billing</h3>
+          <button id="nested-button" class="fixture-button" type="button">
+            Update payment method
+          </button>
+        </section>
+      </div>
+    </section>
+    <p id="nested-result" class="result" role="status">
+      Billing unchanged.
+    </p>
+  </FixtureSection>
+
+  <FixtureSection
+    id="delayed-appearance"
+    title="Delayed-appearance button"
+    description="A trigger reveals the target after exactly 500 ms and moves focus to it."
+  >
+    <div class="button-row">
+      <button
+        id="reveal-delayed-button"
+        class="fixture-button fixture-button--secondary"
+        type="button"
+      >
+        Reveal action
+      </button>
+      <button
+        id="delayed-appearance-button"
+        class="fixture-button"
+        type="button"
+        hidden
+      >
+        Complete delayed action
+      </button>
+    </div>
+    <p id="appearance-result" class="result" role="status">
+      Action is hidden.
+    </p>
+  </FixtureSection>
+
+  <div slot="examples" class="example-stack">
+    <CodeBlock client:idle code={roleExample} label="Role locator and result" />
+    <CodeBlock
+      client:idle
+      code={scopedExample}
+      label="Scoped duplicate label"
+    />
+    <CodeBlock client:idle code={replaceExample} label="DOM replacement" />
+  </div>
+</ComponentLabPage>
+
+<script>
+  import '../../../scripts/buttons';
+</script>

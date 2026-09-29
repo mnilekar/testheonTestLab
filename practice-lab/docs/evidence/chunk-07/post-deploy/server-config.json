@@ -1,0 +1,29 @@
+{
+  "capturedAt": "2026-09-28T15:04:16.000Z",
+  "account": "u652010987",
+  "production": {
+    "domain": "testheon.com",
+    "deploymentTargeted": false,
+    "httpPagesCompared": 11,
+    "httpDifferences": 0,
+    "wordpressUntouched": true
+  },
+  "staging": {
+    "domain": "practice-staging.testheon.com",
+    "activeRelease": "20260928T150416Z-7bb20e",
+    "artifactSha256": "5147716b167173da00603be57800eb3143ba721b85455b9578f74d58a16278aa",
+    "retainedReleases": [
+      "20260928T105922Z-fb846d",
+      "20260928T130939Z-f8497f",
+      "20260928T150416Z-7bb20e"
+    ],
+    "rootHtaccessSha256": "9186269b669a6a1ab7bc26d52b66c633e1ae616460974cd60ff394c45bcacaf6",
+    "nestedPracticeHtaccessSha256": "c5d30d9405a292cc9eba1d41b512a5aa5e1176addfe30b0834b7cb800fe68141",
+    "apiRuntimeSha256": "205523c057d005bbcf4d0ce57f47c8b6a2f9b4d69c43f25354fe2d32a4c30111",
+    "releaseControllerSha256": "00ebe9d6888c27d4d5e57bce22ad5fa36e13333ee96f49089e5cafc0aab67416",
+    "protected": true,
+    "noindex": true,
+    "builtInDeployVerification": "pass",
+    "temporaryUploadCredentialsRemoved": true
+  }
+}

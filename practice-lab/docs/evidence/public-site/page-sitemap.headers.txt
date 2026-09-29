@@ -1,0 +1,21 @@
+HTTP/1.1 200 OK
+Date: Sun, 27 Sep 2026 09:40:49 GMT
+Content-Type: text/xml; charset=UTF-8
+Transfer-Encoding: chunked
+Connection: keep-alive
+Vary: Accept-Encoding
+x-powered-by: PHP/8.3.33
+x-robots-tag: noindex
+pragma: public
+Cache-Control: no-cache, no-store, must-revalidate, max-age=0
+expires: 0
+x-litespeed-cache-control: no-cache
+platform: hostinger
+panel: hpanel
+content-security-policy: upgrade-insecure-requests
+Server: hcdn
+alt-svc: h3=":443"; ma=86400
+x-hcdn-request-id: 615e2f72674b4a6f0926915f41a82826-mum-edge6
+x-hcdn-cache-status: DYNAMIC
+x-hcdn-upstream-rt: 0.325
+

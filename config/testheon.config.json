@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "site": {
+    "name": "Testheon",
+    "url": "https://testheon.com",
+    "gscProperty": "https://testheon.com/",
+    "defaultCategory": "QA & Testing"
+  },
+  "credentials": {
+    "wordpressUserEnv": "TESTHEON_WP_USER",
+    "wordpressPasswordEnv": "TESTHEON_WP_APP_PASSWORD"
+  },
+  "publishing": {
+    "requiredStatus": "draft",
+    "manualPublishOnly": true,
+    "authorMode": "authenticated-user",
+    "rankMathRoute": "/wp-json/rankmath/v1/updateMeta",
+    "rankMathAllowedMetaKeys": [
+      "rank_math_focus_keyword",
+      "rank_math_title",
+      "rank_math_description",
+      "rank_math_canonical_url"
+    ]
+  },
+  "integrations": {
+    "googleTrends": {
+      "primary": "mcp",
+      "fallback": "public-browser"
+    },
+    "googleSearchConsole": {
+      "primary": "mcp",
+      "fallback": "signed-in-browser-read-only"
+    },
+    "linear": {
+      "primary": "connected-app",
+      "activeStatus": "In Progress",
+      "draftIsDone": false
+    },
+    "imageGeneration": {
+      "primary": "codex-imagegen",
+      "preferredFormat": "webp"
+    },
+    "wordpress": {
+      "primary": "callable-wordpress-connector",
+      "fallback": "repository-rest-client"
+    }
+  },
+  "artifacts": {
+    "root": "artifacts/articles"
+  },
+  "quality": {
+    "stopWhenSameBlockingFingerprintRepeats": 3,
+    "requireHeadControllerPass": true,
+    "requireContentReviewerPass": true,
+    "requireRenderedDraftQa": true
+  }
+}

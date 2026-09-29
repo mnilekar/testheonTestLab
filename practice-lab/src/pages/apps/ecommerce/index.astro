@@ -1,0 +1,295 @@
+---
+import Button from '../../../components/Button.astro';
+import StoreShell from '../../../components/StoreShell.astro';
+
+const categories = [
+  'Electronics',
+  'Home',
+  'Books',
+  'Fitness',
+  'Beauty',
+  'Travel',
+];
+const endpoints = [
+  ['GET', '/practice/api/v1/store/catalog', 'data[] + pagination meta'],
+  ['GET', '/practice/api/v1/store/products/{id}', 'one enriched product'],
+  ['GET/POST', '/practice/api/v1/store/cart', 'cart totals and items'],
+  ['PATCH/DELETE', '/practice/api/v1/store/cart/items/{id}', 'updated cart'],
+  [
+    'POST',
+    '/practice/api/v1/store/checkout',
+    'created order + fake payment metadata',
+  ],
+  ['GET', '/practice/api/v1/store/orders', 'signed-in customer orders'],
+  ['POST', '/practice/api/v1/store/scenario', 'one session-only next response'],
+] as const;
+---
+
+<StoreShell
+  title="Testheon Store"
+  description="A deterministic ecommerce application for realistic Playwright UI, API, authentication, network, and visual testing practice."
+  canonicalPath="/apps/ecommerce/"
+  page="home"
+  robots="index,follow"
+>
+  <section
+    class="store-hero"
+    data-fixture-id="FX-STORE-001"
+    data-fixture-version="1.0.0"
+  >
+    <div class="container store-hero__grid">
+      <div>
+        <p class="eyebrow">Believable workflow · Synthetic commerce only</p>
+        <h1>Automate a complete store without real payments</h1>
+        <p class="lede">
+          Search a catalogue, choose variants, carry a guest cart into login,
+          apply deterministic coupons, complete a fake checkout, and verify the
+          resulting order through the same isolated Practice API.
+        </p>
+        <div class="hero__actions">
+          <Button href="/practice/apps/ecommerce/products/">
+            Browse products
+          </Button>
+          <Button href="#integration-scenarios" variant="secondary">
+            Plan an API ↔ UI test
+          </Button>
+        </div>
+      </div>
+      <aside class="hero-note" aria-label="Store fixture contract">
+        <strong>FX-STORE-001 · Version 1.0.0</strong>
+        <p>
+          Products, carts, accounts and orders are fictional and scoped to one
+          Lab session. The payment form never contacts a payment processor.
+        </p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="featured-title">
+    <div class="container">
+      <div class="section__heading store-heading-row">
+        <div>
+          <p class="eyebrow">API-backed home</p>
+          <h2 id="featured-title">Featured practice products</h2>
+          <p>
+            Stable product IDs and JSON fields make every card suitable for UI
+            and network assertions.
+          </p>
+        </div>
+        <button id="store-reset" class="button button--secondary" type="button">
+          Reset store data
+        </button>
+      </div>
+      <div id="store-featured" class="store-product-grid" aria-live="polite">
+        <p class="store-empty">Loading featured products…</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--soft" aria-labelledby="categories-title">
+    <div class="container">
+      <div class="section__heading">
+        <p class="eyebrow">Reusable catalogue filters</p>
+        <h2 id="categories-title">Shop by category</h2>
+      </div>
+      <div class="store-category-grid">
+        {categories.map((category) => (
+          <a
+            href={`/practice/apps/ecommerce/products/?category=${encodeURIComponent(category)}`}
+          >
+            <span aria-hidden="true">{category.slice(0, 1)}</span>
+            <strong>{category}</strong>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="flow-title">
+    <div class="container">
+      <div class="section__heading">
+        <p class="eyebrow">Complete app flow</p>
+        <h2 id="flow-title">
+          Every internal screen is a noindex practice target
+        </h2>
+      </div>
+      <ol class="store-flow">
+        <li>
+          <a href="/practice/apps/ecommerce/products/">
+            Search and filter products
+          </a>
+        </li>
+        <li>
+          <a href="/practice/apps/ecommerce/product/?id=prd-001">
+            Inspect a product and choose a variant
+          </a>
+        </li>
+        <li>
+          <a href="/practice/apps/ecommerce/cart/">
+            Update the guest cart and apply a coupon
+          </a>
+        </li>
+        <li>
+          <a href="/practice/apps/ecommerce/checkout/">
+            Log in at checkout and use a fake card
+          </a>
+        </li>
+        <li>
+          <a href="/practice/apps/ecommerce/confirmation/">
+            Assert the order confirmation
+          </a>
+        </li>
+        <li>
+          <a href="/practice/apps/ecommerce/orders/">Verify order history</a>
+        </li>
+        <li>
+          <a href="/practice/apps/ecommerce/profile/">
+            Inspect the authenticated profile
+          </a>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section
+    id="integration-scenarios"
+    class="section section--soft"
+    aria-labelledby="integration-title"
+  >
+    <div class="container">
+      <div class="section__heading">
+        <p class="eyebrow">API setup → UI action → API verification</p>
+        <h2 id="integration-title">Four cross-layer practice scenarios</h2>
+      </div>
+      <div class="grid">
+        <article class="card">
+          <h3>Create product</h3>
+          <p>
+            <code>POST /products</code>, open the listing, then assert the new
+            SKU and product name.
+          </p>
+        </article>
+        <article class="card">
+          <h3>Create login</h3>
+          <p>
+            <code>POST /auth/register</code>, use the same synthetic credentials
+            at checkout, then assert the profile.
+          </p>
+        </article>
+        <article class="card">
+          <h3>Delete order</h3>
+          <p>
+            <code>DELETE /orders/&#123;id&#125;</code>, refresh order history,
+            then assert the row is absent.
+          </p>
+        </article>
+        <article class="card">
+          <h3>Verify checkout</h3>
+          <p>
+            Submit the UI checkout, capture its order ID, then{' '}
+            <code>GET /orders/&#123;id&#125;</code>.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="network-title">
+    <div class="container store-split">
+      <div>
+        <p class="eyebrow">Network interception ready</p>
+        <h2 id="network-title">Stable routes and JSON shapes</h2>
+        <p>
+          Use <code>page.route()</code> to fulfil, modify or abort these
+          same-origin requests, and inspect checkout payloads before continuing
+          them.
+        </p>
+        <div class="table-wrap">
+          <table aria-label="Stable ecommerce API endpoints">
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th>Endpoint</th>
+                <th>Response</th>
+              </tr>
+            </thead>
+            <tbody>
+              {endpoints.map(([method, endpoint, shape]) => (
+                <tr>
+                  <td>{method}</td>
+                  <td>
+                    <code>{endpoint}</code>
+                  </td>
+                  <td>{shape}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <aside class="store-lab-panel" aria-labelledby="scenario-title">
+        <p class="eyebrow">Session-only lab control</p>
+        <h2 id="scenario-title">Error scenario panel</h2>
+        <p>
+          Arm one result, then run the next catalogue request. The scenario is
+          consumed once.
+        </p>
+        <div
+          class="store-scenario-grid"
+          role="group"
+          aria-label="Next request scenario"
+        >
+          {[
+            '500',
+            '503',
+            'timeout',
+            '401',
+            '403',
+            '404',
+            '409',
+            '422',
+            '429',
+            'malformed',
+            'empty',
+          ].map((scenario) => (
+            <button
+              class="fixture-button fixture-button--secondary"
+              type="button"
+              data-store-scenario={scenario}
+            >
+              {scenario}
+            </button>
+          ))}
+        </div>
+        <button id="run-store-scenario" class="fixture-button" type="button">
+          Run next catalogue request
+        </button>
+        <p id="store-scenario-result" class="result" role="status">
+          No scenario armed.
+        </p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section section--soft" aria-labelledby="visual-title">
+    <div class="container">
+      <div class="section__heading">
+        <p class="eyebrow">Screenshot-ready state</p>
+        <h2 id="visual-title">
+          Use <code>?visual=stable</code>
+        </h2>
+        <p>
+          Stable mode fixes rendered dates, disables animation and carousel
+          movement, and removes random presentation changes while preserving the
+          same data contract.
+        </p>
+      </div>
+      <Button
+        href="/practice/apps/ecommerce/?visual=stable"
+        variant="secondary"
+      >
+        Open stable visual mode
+      </Button>
+    </div>
+  </section>
+</StoreShell>

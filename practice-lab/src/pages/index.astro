@@ -1,0 +1,103 @@
+---
+import Button from '../components/Button.astro';
+import Card from '../components/Card.astro';
+import LabLayout from '../layouts/LabLayout.astro';
+import { categories } from '../config/categories';
+import { siteName, tagline } from '../config/site';
+
+const description =
+  'Testheon Practice Lab is a realistic QA automation playground for learning Playwright through stable components, real workflows, and progressive challenges.';
+---
+
+<LabLayout
+  title={siteName}
+  description={description}
+  canonicalPath="/"
+  breadcrumbs={[{ label: 'Practice Lab' }]}
+>
+  <section class="hero">
+    <div class="container hero__grid">
+      <div>
+        <p class="eyebrow">{tagline}</p>
+        <h1>Testheon Practice Lab</h1>
+        <p class="lede">
+          Build reliable automation skills against realistic, deterministic
+          applications—then apply the same components in isolated exercises,
+          guided workflows, and interview-ready challenges.
+        </p>
+        <div class="hero__actions">
+          <Button href="/practice/playwright/">Explore Playwright</Button>
+          <Button href="https://testheon.com/blog/" variant="secondary">
+            Read the guides
+          </Button>
+        </div>
+      </div>
+      <aside class="hero-note" aria-label="Practice Lab promise">
+        <strong>Practice that behaves on purpose</strong>
+        <p>
+          Every delay, failure, and data state is controlled. You can repeat a
+          test, reset a sandbox, and understand why an assertion passed.
+        </p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section__heading">
+        <p class="eyebrow">Who it is for</p>
+        <h2>From first locator to production-minded test design</h2>
+        <p>
+          The Lab supports manual testers moving into automation, Playwright
+          beginners, junior engineers, SDETs, interview candidates, trainers,
+          and Selenium users learning modern browser testing.
+        </p>
+      </div>
+      <div class="grid">
+        <Card
+          title="Learn deliberately"
+          description="Start with an isolated component, understand its contract, and move into a believable workflow."
+          eyebrow="Beginner friendly"
+        />
+        <Card
+          title="Test real workflows"
+          description="Connect UI, network, API, session, and data assertions without unstable third-party dependencies."
+          eyebrow="Engineering practice"
+        />
+        <Card
+          title="Repeat with confidence"
+          description="Use fixed seeds and bounded scenarios so failures teach a clear lesson instead of creating noise."
+          eyebrow="Deterministic by design"
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--soft" aria-labelledby="categories-heading">
+    <div class="container">
+      <div class="section__heading">
+        <p class="eyebrow">Practice catalogue</p>
+        <h2 id="categories-heading">Choose a skill area</h2>
+        <p>
+          The Playwright track map is available now. Each upcoming category
+          remains visible so the learning path is clear, but unfinished sections
+          are intentionally not linked.
+        </p>
+      </div>
+      <div class="grid">
+        {categories.map((category) =>
+          category.href ? (
+            <Card
+              title={category.name}
+              description={category.description}
+              href={category.href}
+              eyebrow="Available"
+            />
+          ) : (
+            <Card title={category.name} description={category.description} />
+          ),
+        )}
+      </div>
+    </div>
+  </section>
+</LabLayout>

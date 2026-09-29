@@ -1,0 +1,31 @@
+---
+const title = 'Nested child frame';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>{title}</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0.75rem;
+        color: #241f35;
+        background: #ecfff7;
+        font:
+          1rem/1.5 Inter,
+          system-ui,
+          sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <strong>Nested child frame</strong>
+    <p>
+      Deep value: <span data-testid="nested-frame-value">NESTED-731</span>.
+    </p>
+  </body>
+</html>

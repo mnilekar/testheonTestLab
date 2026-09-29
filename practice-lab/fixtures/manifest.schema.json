@@ -1,0 +1,101 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://testheon.com/practice/schemas/fixture-manifest.schema.json",
+  "title": "Testheon Practice Lab fixture manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "manifestVersion", "updatedAt", "fixtures"],
+  "properties": {
+    "$schema": { "const": "./manifest.schema.json" },
+    "manifestVersion": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "updatedAt": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "fixtures": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/fixture" }
+    }
+  },
+  "definitions": {
+    "fixture": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "version",
+        "url",
+        "anchor",
+        "title",
+        "area",
+        "difficulty",
+        "component",
+        "behavior",
+        "defaults",
+        "controls",
+        "seedVersion",
+        "intentionalDefects",
+        "expectedOutcomes",
+        "tests",
+        "guideLinks",
+        "challengeLinks"
+      ],
+      "properties": {
+        "id": { "type": "string", "pattern": "^FX-[A-Z0-9]+-[0-9]{3}$" },
+        "version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+        },
+        "url": {
+          "type": "string",
+          "pattern": "^/practice/(components|fixtures|apps|playwright)/[a-z0-9][a-z0-9/-]*/$"
+        },
+        "anchor": {
+          "type": "string",
+          "pattern": "^#[a-z][a-z0-9-]*$"
+        },
+        "title": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "area": { "type": "string", "minLength": 1, "maxLength": 60 },
+        "difficulty": {
+          "enum": ["Beginner", "Intermediate", "Advanced", "Expert"]
+        },
+        "component": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "behavior": { "type": "string", "minLength": 1, "maxLength": 1000 },
+        "defaults": { "type": "object" },
+        "controls": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "seedVersion": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+        },
+        "intentionalDefects": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "expectedOutcomes": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "tests": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "guideLinks": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^https://testheon\\.com/" }
+        },
+        "challengeLinks": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^/practice/challenges/" }
+        }
+      }
+    }
+  }
+}

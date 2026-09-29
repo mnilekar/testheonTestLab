@@ -1,0 +1,557 @@
+---
+import Button from '../../../components/Button.astro';
+import CodeBlock from '../../../islands/CodeBlock';
+import LabLayout from '../../../layouts/LabLayout.astro';
+
+const sharedPassword = 'Practice@123';
+const accounts = [
+  ['standard_user', 'Customer', 'Normal customer session'],
+  ['admin_user', 'Admin', 'All published permissions'],
+  ['manager_user', 'Manager', 'Reports and ticket updates'],
+  ['employee_user', 'Employee', 'Ticket updates'],
+  ['readonly_user', 'Read-only', 'Mutations disabled'],
+  ['locked_user', 'Customer', 'Always locked'],
+  ['expired_user', 'Customer', 'Forced password change'],
+  ['slow_user', 'Customer', 'Three-second login; ?delay=0 for fast tests'],
+] as const;
+const apiLogin = `const response = await request.post('/practice/api/v1/auth/login', {
+  data: { username: 'manager_user', password: 'Practice@123', idleSeconds: 300 },
+  headers: { 'X-Lab-CSRF': csrfToken },
+});
+expect(response.ok()).toBeTruthy();
+await page.goto('/practice/apps/auth/');
+await expect(page.getByTestId('signed-in-user')).toContainText('manager_user');`;
+---
+
+<LabLayout
+  title="Practice Authentication Sandbox"
+  description="A synthetic authentication application for deterministic login, session, role, reset, token and API-key automation practice."
+  canonicalPath="/apps/auth/"
+  robots="noindex,nofollow"
+  breadcrumbs={[
+    { label: 'Practice Lab', href: '/practice/' },
+    { label: 'Apps' },
+    { label: 'Authentication' },
+  ]}
+>
+  <section class="hero hero--compact">
+    <div class="container hero__grid">
+      <div>
+        <p class="eyebrow">Realistic app · Synthetic identities only</p>
+        <h1>Practice Authentication Sandbox</h1>
+        <p class="lede">
+          Automate login, registration, reset links, session expiry, role
+          permissions, bearer tokens and API keys without touching a real
+          account system.
+        </p>
+        <div class="hero__actions">
+          <Button href="#login-panel">Start with login</Button>
+          <Button
+            href="/practice/playwright/authentication/"
+            variant="secondary"
+          >
+            Read the Playwright lesson
+          </Button>
+        </div>
+      </div>
+      <aside class="hero-note" aria-label="Authentication fixture contract">
+        <strong>FX-AUTH-001 · Version 1.0.0</strong>
+        <p>
+          Every identity and credential is fake, public and scoped to your
+          isolated Lab sandbox. WordPress accounts are never read or changed.
+        </p>
+      </aside>
+    </div>
+  </section>
+
+  <div
+    class="section"
+    data-fixture-id="FX-AUTH-001"
+    data-fixture-version="1.0.0"
+  >
+    <div class="container auth-workspace">
+      <section
+        class="auth-card auth-card--wide"
+        aria-labelledby="demo-accounts-title"
+      >
+        <div>
+          <p class="eyebrow">Public practice credentials</p>
+          <h2 id="demo-accounts-title">Demo accounts</h2>
+          <p>
+            Shared fake password: <code>{sharedPassword}</code>. It is
+            intentionally public and must never be reused outside this sandbox.
+          </p>
+        </div>
+        <div class="table-wrap">
+          <table aria-label="Public demo accounts">
+            <thead>
+              <tr>
+                <th>Username</th>
+                <th>Role</th>
+                <th>Scenario</th>
+              </tr>
+            </thead>
+            <tbody>
+              {accounts.map(([username, role, scenario]) => (
+                <tr>
+                  <th scope="row">
+                    <code>{username}</code>
+                  </th>
+                  <td>{role}</td>
+                  <td>{scenario}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="login-panel" class="auth-card" aria-labelledby="login-title">
+        <p class="eyebrow">Cookie session</p>
+        <h2 id="login-title">Sign in</h2>
+        <form id="login-form" class="auth-form">
+          <label for="login-username">Username</label>
+          <input
+            id="login-username"
+            name="username"
+            value="standard_user"
+            autocomplete="username"
+          />
+          <label for="login-password">Password</label>
+          <input
+            id="login-password"
+            name="password"
+            type="password"
+            value={sharedPassword}
+            autocomplete="current-password"
+          />
+          <label for="idle-seconds">Idle expiry</label>
+          <select id="idle-seconds" name="idleSeconds">
+            <option value="5">5 seconds</option>
+            <option value="60">1 minute</option>
+            <option value="300" selected>
+              5 minutes
+            </option>
+            <option value="1800">30 minutes</option>
+          </select>
+          <label class="choice-row">
+            <input id="remember-me" name="rememberMe" type="checkbox" />
+            Remember me with a seven-day persistent cookie
+          </label>
+          <button class="fixture-button" type="submit">
+            Sign in to Practice
+          </button>
+        </form>
+        <p
+          id="login-result"
+          data-testid="login-result"
+          class="result"
+          role="status"
+        >
+          Sign-in has not run.
+        </p>
+      </section>
+
+      <section class="auth-card" aria-labelledby="session-title">
+        <p class="eyebrow">Server session</p>
+        <h2 id="session-title">Current identity</h2>
+        <p
+          id="signed-in-user"
+          data-testid="signed-in-user"
+          class="result"
+          role="status"
+        >
+          Signed out.
+        </p>
+        <dl class="auth-facts">
+          <div>
+            <dt>HttpOnly auth cookie</dt>
+            <dd id="auth-cookie-state">Not inspected</dd>
+          </div>
+          <div>
+            <dt>Readable preference</dt>
+            <dd id="ui-cookie-state">Not set</dd>
+          </div>
+          <div>
+            <dt>Authentication source</dt>
+            <dd id="auth-source">None</dd>
+          </div>
+        </dl>
+        <div class="button-row">
+          <button id="inspect-session" class="fixture-button" type="button">
+            Inspect session
+          </button>
+          <button
+            id="expire-session"
+            class="fixture-button fixture-button--secondary"
+            type="button"
+          >
+            Expire current session
+          </button>
+          <button
+            id="logout"
+            class="fixture-button fixture-button--secondary"
+            type="button"
+          >
+            Log out
+          </button>
+        </div>
+        <p id="session-result" class="result" role="status">
+          No session action.
+        </p>
+      </section>
+
+      <section class="auth-card" aria-labelledby="register-title">
+        <p class="eyebrow">Sandbox registration</p>
+        <h2 id="register-title">Create a Customer account</h2>
+        <form id="register-form" class="auth-form">
+          <label for="register-username">New username</label>
+          <input id="register-username" name="username" value="learner_4803" />
+          <label for="register-name">Display name</label>
+          <input id="register-name" name="displayName" value="Asha Learner" />
+          <label for="register-email">Synthetic email</label>
+          <input
+            id="register-email"
+            name="email"
+            type="email"
+            value="asha.4803@practice.test"
+          />
+          <label for="register-password">New password</label>
+          <input
+            id="register-password"
+            name="password"
+            type="password"
+            value="Sandbox@4803"
+            autocomplete="new-password"
+          />
+          <button class="fixture-button" type="submit">
+            Register sandbox account
+          </button>
+        </form>
+        <p
+          id="register-result"
+          data-testid="register-result"
+          class="result"
+          role="status"
+        >
+          No account created.
+        </p>
+      </section>
+
+      <section class="auth-card" aria-labelledby="forgot-title">
+        <p class="eyebrow">No real email</p>
+        <h2 id="forgot-title">Forgot and reset password</h2>
+        <form id="forgot-form" class="auth-form">
+          <label for="forgot-username">Username</label>
+          <input id="forgot-username" name="username" value="standard_user" />
+          <button class="fixture-button" type="submit">
+            Send fake reset email
+          </button>
+        </form>
+        <p id="forgot-result" class="result" role="status">
+          No reset requested.
+        </p>
+        <div class="auth-divider"></div>
+        <form id="reset-form" class="auth-form">
+          <label for="reset-token">Reset or forced-change token</label>
+          <input id="reset-token" name="token" autocomplete="off" />
+          <label for="reset-password">Replacement password</label>
+          <input
+            id="reset-password"
+            name="newPassword"
+            type="password"
+            value="Changed@4803"
+            autocomplete="new-password"
+          />
+          <button class="fixture-button" type="submit">
+            Reset practice password
+          </button>
+        </form>
+        <div class="button-row">
+          <button
+            id="reset-lockout"
+            class="fixture-button fixture-button--secondary"
+            type="button"
+          >
+            Reset temporary lock for username
+          </button>
+        </div>
+        <p
+          id="reset-result"
+          data-testid="reset-result"
+          class="result"
+          role="status"
+        >
+          No password reset.
+        </p>
+      </section>
+
+      <section class="auth-card auth-card--wide" aria-labelledby="inbox-title">
+        <div class="auth-heading-row">
+          <div>
+            <p class="eyebrow">Synthetic mailbox</p>
+            <h2 id="inbox-title">Practice Inbox</h2>
+          </div>
+          <button
+            id="refresh-inbox"
+            class="fixture-button fixture-button--secondary"
+            type="button"
+          >
+            Refresh Practice Inbox
+          </button>
+        </div>
+        <p>
+          No external message is sent. Reset links exist only in this sandbox.
+        </p>
+        <ul
+          id="practice-inbox"
+          data-testid="practice-inbox"
+          class="auth-inbox"
+          aria-live="polite"
+        >
+          <li>Inbox is empty.</li>
+        </ul>
+      </section>
+
+      <section
+        class="auth-card auth-card--wide"
+        aria-labelledby="permissions-title"
+      >
+        <p class="eyebrow">Role-based access control</p>
+        <h2 id="permissions-title">Published permission matrix</h2>
+        <div class="table-wrap">
+          <table aria-label="Role permission matrix">
+            <thead>
+              <tr>
+                <th>Role</th>
+                <th>Profile</th>
+                <th>Orders</th>
+                <th>Tickets</th>
+                <th>Reports</th>
+                <th>Users</th>
+              </tr>
+            </thead>
+            <tbody id="permission-matrix">
+              <tr>
+                <td colspan="6">Loading role matrix.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="permission-controls">
+          <button
+            class="fixture-button"
+            type="button"
+            data-permission="profile.read"
+          >
+            Read profile
+          </button>
+          <button
+            class="fixture-button fixture-button--secondary"
+            type="button"
+            data-permission="reports.read"
+          >
+            Read manager report
+          </button>
+          <button
+            class="fixture-button fixture-button--secondary"
+            type="button"
+            data-permission="tickets.update"
+            data-mutation="true"
+          >
+            Update ticket
+          </button>
+        </div>
+        <div id="admin-action-card" class="role-control" hidden>
+          <strong>Admin-only control</strong>
+          <button
+            class="fixture-button"
+            type="button"
+            data-permission="users.manage"
+            data-mutation="true"
+          >
+            Manage practice users
+          </button>
+        </div>
+        <div class="role-control">
+          <strong>Deliberately disabled mutation</strong>
+          <button
+            id="readonly-disabled-action"
+            class="fixture-button"
+            type="button"
+            data-permission="users.manage"
+            data-mutation="true"
+            disabled
+          >
+            Delete synthetic record
+          </button>
+          <span>
+            Read-only users see this disabled; the Admin control is hidden from
+            other roles.
+          </span>
+        </div>
+        <p
+          id="permission-result"
+          data-testid="permission-result"
+          class="result"
+          role="status"
+        >
+          No permission requested.
+        </p>
+      </section>
+
+      <section class="auth-card" aria-labelledby="tokens-title">
+        <p class="eyebrow">API authentication</p>
+        <h2 id="tokens-title">Bearer and refresh tokens</h2>
+        <div class="auth-form">
+          <label for="token-username">Token username</label>
+          <input id="token-username" value="manager_user" />
+          <label for="token-password">Token password</label>
+          <input id="token-password" type="password" value={sharedPassword} />
+        </div>
+        <div class="button-row">
+          <button id="issue-token" class="fixture-button" type="button">
+            Issue and store access token
+          </button>
+          <button
+            id="inspect-token"
+            class="fixture-button fixture-button--secondary"
+            type="button"
+          >
+            Call API with bearer token
+          </button>
+          <button
+            id="refresh-token"
+            class="fixture-button fixture-button--secondary"
+            type="button"
+          >
+            Rotate refresh token
+          </button>
+          <button
+            id="expired-token"
+            class="fixture-button fixture-button--secondary"
+            type="button"
+          >
+            Issue expired token
+          </button>
+          <button
+            id="invalid-token"
+            class="fixture-button fixture-button--secondary"
+            type="button"
+          >
+            Try invalid token
+          </button>
+        </div>
+        <p
+          id="token-result"
+          data-testid="token-result"
+          class="result"
+          role="status"
+        >
+          No token issued.
+        </p>
+      </section>
+
+      <section class="auth-card" aria-labelledby="api-key-title">
+        <p class="eyebrow">Public synthetic key</p>
+        <h2 id="api-key-title">API key</h2>
+        <label for="api-key">X-Practice-Api-Key</label>
+        <input id="api-key" value="testheon-demo-key-4803" />
+        <div class="button-row">
+          <button id="check-api-key" class="fixture-button" type="button">
+            Call API-key profile
+          </button>
+          <button
+            id="invalid-api-key"
+            class="fixture-button fixture-button--secondary"
+            type="button"
+          >
+            Use invalid key
+          </button>
+        </div>
+        <p
+          id="api-key-result"
+          data-testid="api-key-result"
+          class="result"
+          role="status"
+        >
+          No API-key request.
+        </p>
+      </section>
+
+      <section class="auth-card" aria-labelledby="wizard-title">
+        <p class="eyebrow">Tab-scoped state</p>
+        <h2 id="wizard-title">sessionStorage wizard</h2>
+        <label for="wizard-step">Current onboarding step</label>
+        <select id="wizard-step">
+          <option value="profile">Profile</option>
+          <option value="preferences">Preferences</option>
+          <option value="review">Review</option>
+        </select>
+        <div class="button-row">
+          <button id="save-wizard" class="fixture-button" type="button">
+            Save wizard step
+          </button>
+          <button
+            id="clear-wizard"
+            class="fixture-button fixture-button--secondary"
+            type="button"
+          >
+            Clear wizard state
+          </button>
+        </div>
+        <p id="wizard-result" class="result" role="status">
+          No wizard state.
+        </p>
+      </section>
+
+      <section
+        class="auth-card auth-card--wide"
+        aria-labelledby="security-title"
+      >
+        <p class="eyebrow">Security learning points</p>
+        <h2 id="security-title">Observe the contract, not secret internals</h2>
+        <div class="security-grid">
+          <article>
+            <h3>Passwords are hashed</h3>
+            <p>
+              Only password hashes are stored. The API never returns a password
+              or hash.
+            </p>
+          </article>
+          <article>
+            <h3>CSRF is enforced</h3>
+            <p>
+              Cookie-mode mutations require the same origin and the sandbox CSRF
+              token.
+            </p>
+          </article>
+          <article>
+            <h3>Errors do not enumerate users</h3>
+            <p>
+              Wrong, missing and locked accounts share one sign-in error;
+              forgot-password always gives the same accepted response.
+            </p>
+          </article>
+          <article>
+            <h3>401 and 403 differ</h3>
+            <p>
+              Missing or expired authentication returns 401. A signed-in role
+              without the requested permission returns 403.
+            </p>
+          </article>
+        </div>
+        <CodeBlock
+          client:idle
+          code={apiLogin}
+          language="typescript"
+          label="API login then UI reuse"
+        />
+      </section>
+    </div>
+  </div>
+</LabLayout>
+
+<script>
+  import '../../../scripts/auth-app';
+</script>

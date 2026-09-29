@@ -1,0 +1,310 @@
+---
+import ComponentLabPage from '../../../components/ComponentLabPage.astro';
+import FixtureSection from '../../../components/FixtureSection.astro';
+import CodeBlock from '../../../islands/CodeBlock';
+
+const permissionExample = `await context.grantPermissions(['geolocation'], { origin: new URL(page.url()).origin });
+await context.setGeolocation({ latitude: 18.5204, longitude: 73.8567 });
+await page.getByRole('button', { name: 'Read fictional location' }).click();
+await expect(page.getByTestId('geolocation-result')).toContainText('Pune');`;
+const offlineExample = `await context.setOffline(true);
+await page.getByRole('button', { name: 'Request health endpoint' }).click();
+await expect(page.getByTestId('network-result')).toContainText('Network request failed');
+await context.setOffline(false);`;
+const storageExample = `await page.getByLabel('Local storage value').fill('desktop-4803');
+await page.getByRole('button', { name: 'Write local storage' }).click();
+const state = await context.storageState();
+expect(state.origins[0]?.localStorage).toContainEqual({ name: 'practice-local', value: 'desktop-4803' });`;
+---
+
+<ComponentLabPage
+  title="Browser Context Lab"
+  eyebrow="Component Lab J · Cookies, storage, permissions and network"
+  intro="Inspect fixture-local browser state, exercise secure-context permissions, simulate offline requests, and assert deterministic responsive contracts."
+  canonicalPath="/components/browser-context/"
+  fixtureId="FX-CONTEXT-001"
+  anchor="fixture-browser-context"
+  guideHref="https://testheon.com/playwright-e2e/"
+  guideLabel="Read the E2E guide"
+  tasks={[
+    'Set, read, and delete fixture cookies and the inline consent preference.',
+    'Inspect only whether the HttpOnly Lab session cookie exists; Chunk 8 owns auth behavior.',
+    'Write, read, and clear localStorage and sessionStorage with visible state.',
+    'Grant or deny geolocation, notifications, and clipboard capabilities and assert graceful outcomes.',
+    'Use context.setOffline or route.abort and assert the network-error result.',
+    'Verify the documented desktop, tablet, and mobile layout contracts at their exact breakpoints.',
+  ]}
+  locatorHint="Drive browser capabilities through BrowserContext before using the visible controls. Inspect storageState for cookie/localStorage contracts and assert permission or network outcomes from the page's named status regions."
+>
+  <aside class="fixture-note">
+    Staging uses HTTPS, so geolocation, notifications, and clipboard APIs can
+    meet secure-context requirements. Denied or unavailable capabilities always
+    produce a visible result and never block another fixture.
+  </aside>
+
+  <FixtureSection
+    id="cookies"
+    title="Cookies and consent preference"
+    description="A readable fixture cookie demonstrates set/read/delete; the real sandbox cookie remains HttpOnly and is reported only as present or absent."
+  >
+    <div class="form-grid">
+      <div class="field">
+        <label for="cookie-name">Fixture cookie name</label>
+        <input id="cookie-name" value="practice_preference" />
+      </div>
+      <div class="field">
+        <label for="cookie-value">Fixture cookie value</label>
+        <input id="cookie-value" value="compact" />
+      </div>
+    </div>
+    <div class="button-row">
+      <button id="set-cookie" class="fixture-button" type="button">
+        Set fixture cookie
+      </button>
+      <button
+        id="read-cookie"
+        class="fixture-button fixture-button--secondary"
+        type="button"
+      >
+        Read fixture cookie
+      </button>
+      <button
+        id="delete-cookie"
+        class="fixture-button fixture-button--secondary"
+        type="button"
+      >
+        Delete fixture cookie
+      </button>
+      <button
+        id="inspect-auth-cookie"
+        class="fixture-button fixture-button--secondary"
+        type="button"
+      >
+        Inspect auth cookie boundary
+      </button>
+    </div>
+    <p
+      id="cookie-result"
+      data-testid="cookie-result"
+      class="result"
+      role="status"
+    >
+      No fixture cookie action.
+    </p>
+    <section class="consent-preference" aria-labelledby="consent-title">
+      <h3 id="consent-title">Fixture-local consent preference</h3>
+      <p>
+        This inline practice control does not load analytics or third-party
+        scripts.
+      </p>
+      <div class="button-row">
+        <button class="fixture-button" type="button" data-consent="accepted">
+          Accept practice preference
+        </button>
+        <button
+          class="fixture-button fixture-button--secondary"
+          type="button"
+          data-consent="declined"
+        >
+          Decline practice preference
+        </button>
+      </div>
+      <p id="consent-result" class="result" role="status">
+        No preference stored.
+      </p>
+    </section>
+  </FixtureSection>
+
+  <FixtureSection
+    id="web-storage"
+    title="Local and session storage"
+    description="Both stores use fixed keys and expose every write, read, and clear operation."
+  >
+    <div class="storage-grid">
+      <section aria-labelledby="local-storage-title">
+        <h3 id="local-storage-title">localStorage</h3>
+        <label for="local-storage-value">Local storage value</label>
+        <input id="local-storage-value" value="desktop-4803" />
+        <div class="button-row">
+          <button
+            class="fixture-button"
+            type="button"
+            data-storage="local"
+            data-action="write"
+          >
+            Write local storage
+          </button>
+          <button
+            class="fixture-button fixture-button--secondary"
+            type="button"
+            data-storage="local"
+            data-action="read"
+          >
+            Read local storage
+          </button>
+          <button
+            class="fixture-button fixture-button--secondary"
+            type="button"
+            data-storage="local"
+            data-action="clear"
+          >
+            Clear local storage
+          </button>
+        </div>
+        <p id="local-storage-result" class="result" role="status">
+          Local storage not read.
+        </p>
+      </section>
+      <section aria-labelledby="session-storage-title">
+        <h3 id="session-storage-title">sessionStorage</h3>
+        <label for="session-storage-value">Session storage value</label>
+        <input id="session-storage-value" value="tab-731" />
+        <div class="button-row">
+          <button
+            class="fixture-button"
+            type="button"
+            data-storage="session"
+            data-action="write"
+          >
+            Write session storage
+          </button>
+          <button
+            class="fixture-button fixture-button--secondary"
+            type="button"
+            data-storage="session"
+            data-action="read"
+          >
+            Read session storage
+          </button>
+          <button
+            class="fixture-button fixture-button--secondary"
+            type="button"
+            data-storage="session"
+            data-action="clear"
+          >
+            Clear session storage
+          </button>
+        </div>
+        <p id="session-storage-result" class="result" role="status">
+          Session storage not read.
+        </p>
+      </section>
+    </div>
+  </FixtureSection>
+
+  <FixtureSection
+    id="permissions"
+    title="Secure-context permissions"
+    description="Fictional locations, notification permission, and clipboard read/write report granted, denied, unavailable, and error states."
+  >
+    <p id="secure-context-state" class="result">
+      Checking secure context.
+    </p>
+    <div class="button-row">
+      <button id="read-geolocation" class="fixture-button" type="button">
+        Read fictional location
+      </button>
+      <button
+        id="request-notifications"
+        class="fixture-button fixture-button--secondary"
+        type="button"
+      >
+        Request notification permission
+      </button>
+      <button
+        id="write-clipboard"
+        class="fixture-button fixture-button--secondary"
+        type="button"
+      >
+        Write clipboard sample
+      </button>
+      <button
+        id="read-clipboard"
+        class="fixture-button fixture-button--secondary"
+        type="button"
+      >
+        Read clipboard sample
+      </button>
+    </div>
+    <p
+      id="geolocation-result"
+      data-testid="geolocation-result"
+      class="result"
+      role="status"
+    >
+      No location requested.
+    </p>
+    <p id="notification-result" class="result" role="status">
+      No notification permission requested.
+    </p>
+    <p id="clipboard-result" class="result" role="status">
+      No clipboard action.
+    </p>
+  </FixtureSection>
+
+  <FixtureSection
+    id="offline-network"
+    title="Offline and aborted requests"
+    description="Navigator events and a real health request expose online, offline, and network-error outcomes for context.setOffline and route.abort."
+  >
+    <p id="online-state" class="result" role="status">
+      Reading navigator state.
+    </p>
+    <button id="request-health" class="fixture-button" type="button">
+      Request health endpoint
+    </button>
+    <p
+      id="network-result"
+      data-testid="network-result"
+      class="result"
+      role="status"
+    >
+      No health request made.
+    </p>
+  </FixtureSection>
+
+  <FixtureSection
+    id="responsive-contract"
+    title="Responsive layout contract"
+    description="Mobile is below 700 px, tablet is 700–1023 px, and desktop is 1024 px and wider."
+  >
+    <div class="responsive-demo" data-testid="responsive-demo">
+      <span data-responsive-item="navigation">Navigation</span>
+      <span data-responsive-item="workspace">Workspace</span>
+      <span data-responsive-item="inspector">Inspector</span>
+    </div>
+    <p
+      id="responsive-result"
+      data-testid="responsive-result"
+      class="result"
+      role="status"
+    >
+      Measuring viewport.
+    </p>
+  </FixtureSection>
+
+  <div slot="examples" class="example-stack">
+    <CodeBlock
+      client:load
+      code={permissionExample}
+      language="typescript"
+      label="Permissions and geolocation"
+    />
+    <CodeBlock
+      client:load
+      code={offlineExample}
+      language="typescript"
+      label="Offline context"
+    />
+    <CodeBlock
+      client:load
+      code={storageExample}
+      language="typescript"
+      label="Storage state inspection"
+    />
+  </div>
+</ComponentLabPage>
+
+<script>
+  import '../../../scripts/browser-context';
+</script>

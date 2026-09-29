@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "title": "Replace with the approved article title",
+  "slug": "replace-with-approved-slug",
+  "status": "draft",
+  "excerpt": "Replace with the approved WordPress excerpt.",
+  "contentHtml": "<p>Replace with the QA-approved article body. Do not include an H1.</p>",
+  "taxonomy": {
+    "category": "QA & Testing",
+    "tags": []
+  },
+  "seo": {
+    "focusKeyword": "replace with primary keyword",
+    "title": "Replace with the approved SEO title",
+    "description": "Replace with the approved meta description.",
+    "canonicalUrl": "https://testheon.com/replace-with-approved-slug/"
+  },
+  "images": [],
+  "internalLinks": [],
+  "wordpress": {
+    "authorId": null,
+    "existingPostId": null,
+    "allowUpdateExisting": false
+  }
+}

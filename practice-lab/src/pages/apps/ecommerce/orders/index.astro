@@ -1,0 +1,32 @@
+---
+import StoreShell from '../../../../components/StoreShell.astro';
+---
+
+<StoreShell
+  title="Order history"
+  description="Inspect and refresh the authenticated customer's synthetic order history."
+  canonicalPath="/apps/ecommerce/orders/"
+  page="orders"
+>
+  <section class="store-page section">
+    <div class="container">
+      <p class="eyebrow">API-verifiable history</p>
+      <h1>Your practice orders</h1>
+      <p>
+        Delete an order through{' '}
+        <code>DELETE /practice/api/v1/orders/&#123;id&#125;</code>, then refresh
+        this table to assert the row disappears.
+      </p>
+      <button
+        id="store-refresh-orders"
+        class="button button--secondary"
+        type="button"
+      >
+        Refresh order history
+      </button>
+      <div id="store-orders" class="table-wrap" aria-live="polite">
+        <p class="store-empty">Loading orders…</p>
+      </div>
+    </div>
+  </section>
+</StoreShell>

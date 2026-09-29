@@ -1,0 +1,329 @@
+---
+import ComponentLabPage from '../../../components/ComponentLabPage.astro';
+import FixtureSection from '../../../components/FixtureSection.astro';
+import CodeBlock from '../../../islands/CodeBlock';
+
+const checkExample = `const selectAll = page.getByLabel('Select all environments');
+await page.getByLabel('Staging').check();
+await expect(selectAll).toHaveJSProperty('indeterminate', true);`;
+const treeExample = `await page.getByLabel('Electronics').check();
+await expect(page.getByLabel('Laptop')).toBeChecked();
+await expect(page.getByLabel('Mobile')).toBeChecked();`;
+const radioExample = `await page.getByRole('button', { name: 'Generate suite options' }).click();
+await page.getByLabel('Regression').check();
+await expect(page.getByRole('status')).toContainText('Regression suite selected');`;
+---
+
+<ComponentLabPage
+  title="Checkboxes and Radio Buttons"
+  eyebrow="Component Lab A · Choices"
+  intro="Practice checked, disabled, generated, conditional, indeterminate, and hierarchical choice states using native inputs and clear visible outcomes."
+  canonicalPath="/components/checkboxes-radios/"
+  fixtureId="FX-CHOICE-001"
+  anchor="fixture-choices"
+  guideHref="https://testheon.com/playwright-locators/"
+  guideLabel="Read the locator guide"
+  tasks={[
+    'Check a single option and a multi-option group.',
+    'Create and clear an indeterminate select-all state.',
+    'Verify parent-child propagation in the product tree.',
+    'Assert disabled and dynamically enabled options.',
+    'Generate radio options and select conditional content.',
+    'Scope identical radio labels to named sections.',
+  ]}
+  locatorHint="Use getByLabel() for native checkboxes and radio buttons. For identical labels, first locate the named fieldset or region, then search within that scope."
+>
+  <FixtureSection
+    id="single-group-checkboxes"
+    title="Single, grouped, and disabled checkboxes"
+    description="These choices use native labels and expose selected values in a status region."
+  >
+    <div class="control-stack">
+      <label>
+        <input id="single-checkbox" type="checkbox" /> Send run notifications
+      </label>
+      <p id="single-choice-result" class="result" role="status">
+        Notifications cleared.
+      </p>
+      <fieldset class="choice-group">
+        <legend>Notification channels</legend>
+        <label>
+          <input type="checkbox" name="channels" value="Email" /> Email
+        </label>
+        <label>
+          <input type="checkbox" name="channels" value="SMS" /> SMS
+        </label>
+        <label>
+          <input type="checkbox" name="channels" value="Slack" /> Slack
+        </label>
+      </fieldset>
+      <p id="group-choice-result" class="result" role="status">
+        No channels selected.
+      </p>
+      <label>
+        <input type="checkbox" disabled /> Archived option unavailable
+      </label>
+    </div>
+  </FixtureSection>
+
+  <FixtureSection
+    id="select-all-checkboxes"
+    title="Select all with indeterminate state"
+    description="The parent becomes indeterminate when only some environments are selected."
+  >
+    <fieldset class="choice-group">
+      <legend>Run environments</legend>
+      <label>
+        <input id="select-all" type="checkbox" /> Select all environments
+      </label>
+      <label>
+        <input type="checkbox" data-select-item value="Development" />{' '}
+        Development
+      </label>
+      <label>
+        <input type="checkbox" data-select-item value="Staging" /> Staging
+      </label>
+      <label>
+        <input type="checkbox" data-select-item value="Production mirror" />{' '}
+        Production mirror
+      </label>
+    </fieldset>
+    <p id="select-all-result" class="result" role="status">
+      0 of 3 environments selected.
+    </p>
+  </FixtureSection>
+
+  <FixtureSection
+    id="dynamic-checkbox"
+    title="Dynamically enabled checkbox"
+    description="The policy choice starts disabled and is enabled by a separate native checkbox."
+  >
+    <label>
+      <input id="enable-choice" type="checkbox" /> Enable policy choice
+    </label>
+    <label>
+      <input id="dynamic-choice" type="checkbox" disabled /> Apply deterministic
+      retry policy
+    </label>
+    <p id="dynamic-choice-result" class="result" role="status">
+      Choice disabled.
+    </p>
+  </FixtureSection>
+
+  <FixtureSection
+    id="nested-checkbox-tree"
+    title="Nested product hierarchy"
+    description="Branch selections propagate to their leaves; partial leaf selection makes the branch indeterminate."
+  >
+    <fieldset class="tree">
+      <legend>Products</legend>
+      <ul>
+        <li>
+          <label>
+            <input type="checkbox" data-tree-branch value="electronics" />{' '}
+            Electronics
+          </label>
+          <ul>
+            <li>
+              <label>
+                <input
+                  type="checkbox"
+                  data-tree-parent="electronics"
+                  value="Laptop"
+                />{' '}
+                Laptop
+              </label>
+            </li>
+            <li>
+              <label>
+                <input
+                  type="checkbox"
+                  data-tree-parent="electronics"
+                  value="Mobile"
+                />{' '}
+                Mobile
+              </label>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <label>
+            <input type="checkbox" data-tree-branch value="clothing" /> Clothing
+          </label>
+          <ul>
+            <li>
+              <label>
+                <input
+                  type="checkbox"
+                  data-tree-parent="clothing"
+                  value="Men"
+                />{' '}
+                Men
+              </label>
+            </li>
+            <li>
+              <label>
+                <input
+                  type="checkbox"
+                  data-tree-parent="clothing"
+                  value="Women"
+                />{' '}
+                Women
+              </label>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </fieldset>
+    <p id="tree-result" class="result" role="status">
+      No products selected.
+    </p>
+  </FixtureSection>
+
+  <FixtureSection
+    id="radio-groups"
+    title="Normal and disabled radio options"
+    description="Select a browser engine while keeping the unsupported option visibly disabled."
+  >
+    <fieldset class="choice-group">
+      <legend>Browser engine</legend>
+      <label>
+        <input type="radio" name="browser" value="Chromium" /> Chromium
+      </label>
+      <label>
+        <input type="radio" name="browser" value="Firefox" /> Firefox
+      </label>
+      <label>
+        <input type="radio" name="browser" value="WebKit" /> WebKit
+      </label>
+      <label>
+        <input type="radio" name="browser" value="Legacy" disabled /> Legacy
+        browser
+      </label>
+    </fieldset>
+    <p id="radio-result" class="result" role="status">
+      No browser selected.
+    </p>
+  </FixtureSection>
+
+  <FixtureSection
+    id="generated-radios-section"
+    title="Dynamically generated radio options"
+    description="Generate a stable three-option suite group, then select by label."
+  >
+    <button id="generate-radios" class="fixture-button" type="button">
+      Generate suite options
+    </button>
+    <div
+      id="generated-radios"
+      class="choice-group"
+      role="group"
+      aria-label="Generated suites"
+    ></div>
+    <p id="generated-radio-result" class="result" role="status">
+      No suite options generated.
+    </p>
+  </FixtureSection>
+
+  <FixtureSection
+    id="conditional-radio-section"
+    title="Radio-controlled conditional content"
+    description="The business option reveals an additional named region."
+  >
+    <fieldset class="choice-group">
+      <legend>Account type</legend>
+      <label>
+        <input type="radio" name="account-type" value="Personal" /> Personal
+      </label>
+      <label>
+        <input type="radio" name="account-type" value="Business" /> Business
+      </label>
+    </fieldset>
+    <section
+      id="business-details"
+      class="locator-example"
+      aria-label="Business details"
+      hidden
+    >
+      <h3>Business details</h3>
+      <p>
+        GST and company fields would appear in the realistic onboarding app.
+      </p>
+    </section>
+    <p id="conditional-radio-result" class="result" role="status">
+      Choose an account type.
+    </p>
+  </FixtureSection>
+
+  <FixtureSection
+    id="duplicate-radio-labels"
+    title="Identical labels in separate sections"
+    description="Scope the repeated Yes and No labels to the correct named section."
+  >
+    <div class="form-grid">
+      <fieldset class="choice-group">
+        <legend>Email reports</legend>
+        <label>
+          <input
+            type="radio"
+            name="email-reports"
+            value="Yes"
+            data-duplicate-radio-section="Email reports"
+          />{' '}
+          Yes
+        </label>
+        <label>
+          <input
+            type="radio"
+            name="email-reports"
+            value="No"
+            data-duplicate-radio-section="Email reports"
+          />{' '}
+          No
+        </label>
+      </fieldset>
+      <fieldset class="choice-group">
+        <legend>SMS reports</legend>
+        <label>
+          <input
+            type="radio"
+            name="sms-reports"
+            value="Yes"
+            data-duplicate-radio-section="SMS reports"
+          />{' '}
+          Yes
+        </label>
+        <label>
+          <input
+            type="radio"
+            name="sms-reports"
+            value="No"
+            data-duplicate-radio-section="SMS reports"
+          />{' '}
+          No
+        </label>
+      </fieldset>
+    </div>
+    <p id="duplicate-radio-result" class="result" role="status">
+      No reporting preference selected.
+    </p>
+  </FixtureSection>
+
+  <div slot="examples" class="example-stack">
+    <CodeBlock
+      client:idle
+      code={checkExample}
+      label="Indeterminate select-all"
+    />
+    <CodeBlock
+      client:idle
+      code={treeExample}
+      label="Parent-child propagation"
+    />
+    <CodeBlock client:idle code={radioExample} label="Generated radio group" />
+  </div>
+</ComponentLabPage>
+
+<script>
+  import '../../../scripts/choices';
+</script>

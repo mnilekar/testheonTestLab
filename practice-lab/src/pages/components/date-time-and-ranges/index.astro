@@ -1,0 +1,323 @@
+---
+import ComponentLabPage from '../../../components/ComponentLabPage.astro';
+import FixtureSection from '../../../components/FixtureSection.astro';
+import CodeBlock from '../../../islands/CodeBlock';
+
+const calendarExample = `await page.getByRole('button', { name: 'Choose custom date' }).click();
+await page.getByRole('gridcell', { name: 'October 18, 2026' }).click();
+await expect(page.getByTestId('custom-date-result')).toHaveText('Selected date: 2026-10-18.');`;
+---
+
+<ComponentLabPage
+  title="Date, Time, and Range Controls"
+  eyebrow="Component Lab F · Temporal and numeric controls"
+  intro="Practise native and custom date selection, ranges, fixed timezone assertions, sliders, linked values, steppers, and deterministic async progress."
+  canonicalPath="/components/date-time-and-ranges/"
+  fixtureId="FX-DATETIME-001"
+  anchor="fixture-date-time-ranges"
+  guideHref="https://testheon.com/playwright-e2e/"
+  guideLabel="Read the E2E guide"
+  tasks={[
+    'Fill native date, month, year, and time controls and assert normalized output.',
+    'Choose October 18, 2026 in the reusable keyboard-friendly calendar.',
+    'Create a valid date range and assert invalid reversed ranges.',
+    'Pin the fictional reference clock with ?now=<ISO timestamp>.',
+    'Exercise single and dual-thumb ranges, linked values, and a stepper.',
+    'Wait for the asynchronous job to report 100%.',
+  ]}
+  locatorHint="Use getByLabel for native controls and role=gridcell with an accessible date name for the custom calendar. Assert normalized result text so browser locale formatting does not leak into the test contract."
+>
+  <FixtureSection
+    id="native-date"
+    title="Native date input"
+    description="The browser control writes a normalized ISO date to the visible result."
+  >
+    <div class="field">
+      <label for="native-date-input">Release date</label>
+      <input id="native-date-input" type="date" value="2026-10-15" />
+    </div>
+    <p id="native-date-result" class="result" role="status">
+      Release date: 2026-10-15.
+    </p>
+  </FixtureSection>
+
+  <FixtureSection
+    id="custom-calendar"
+    title="Reusable custom calendar"
+    description="A dialog calendar uses grid semantics, a stable October 2026 fixture, and keyboard-selectable dates."
+  >
+    <button id="open-custom-calendar" class="fixture-button" type="button">
+      Choose custom date
+    </button>
+    <dialog id="custom-calendar-dialog" aria-labelledby="custom-calendar-title">
+      <div class="modal-card calendar-card">
+        <div class="calendar-header">
+          <button
+            id="previous-calendar-month"
+            type="button"
+            aria-label="Previous month"
+          >
+            ←
+          </button>
+          <h3 id="custom-calendar-title">October 2026</h3>
+          <button
+            id="next-calendar-month"
+            type="button"
+            aria-label="Next month"
+          >
+            →
+          </button>
+        </div>
+        <div class="calendar-weekdays" aria-hidden="true">
+          <span>Sun</span>
+          <span>Mon</span>
+          <span>Tue</span>
+          <span>Wed</span>
+          <span>Thu</span>
+          <span>Fri</span>
+          <span>Sat</span>
+        </div>
+        <div
+          id="calendar-grid"
+          class="calendar-grid"
+          role="grid"
+          aria-label="October 2026 calendar"
+        ></div>
+        <button
+          class="fixture-button fixture-button--secondary"
+          id="close-custom-calendar"
+          type="button"
+        >
+          Close calendar
+        </button>
+      </div>
+    </dialog>
+    <p
+      id="custom-date-result"
+      data-testid="custom-date-result"
+      class="result"
+      role="status"
+    >
+      No custom date selected.
+    </p>
+  </FixtureSection>
+
+  <FixtureSection
+    id="date-range"
+    title="Date range"
+    description="Start and end dates are validated together with an explicit invalid state."
+  >
+    <div class="form-grid">
+      <div class="field">
+        <label for="range-start">Start date</label>
+        <input id="range-start" type="date" value="2026-10-15" />
+      </div>
+      <div class="field">
+        <label for="range-end">End date</label>
+        <input id="range-end" type="date" value="2026-10-18" />
+      </div>
+    </div>
+    <p id="date-range-result" class="result" role="status">
+      Range: 2026-10-15 to 2026-10-18 (3 days).
+    </p>
+  </FixtureSection>
+
+  <FixtureSection
+    id="month-year-time"
+    title="Month, year, and time selectors"
+    description="Each control reports a stable machine-readable value."
+  >
+    <div class="form-grid form-grid--three">
+      <div class="field">
+        <label for="month-selector">Release month</label>
+        <input id="month-selector" type="month" value="2026-10" />
+      </div>
+      <div class="field">
+        <label for="year-selector">Release year</label>
+        <select id="year-selector">
+          <option>2025</option>
+          <option selected>2026</option>
+          <option>2027</option>
+          <option>2028</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="time-selector">Run time</label>
+        <input id="time-selector" type="time" value="09:30" step="60" />
+      </div>
+    </div>
+    <p id="selector-result" class="result" role="status">
+      Month 2026-10 · year 2026 · time 09:30.
+    </p>
+  </FixtureSection>
+
+  <FixtureSection
+    id="timezone-scenario"
+    title="Fixed fictional timezone scenario"
+    description="The default reference is fixed; ?now= accepts a valid ISO timestamp so tests can pin another instant."
+  >
+    <dl class="timezone-grid">
+      <div>
+        <dt>Reference instant</dt>
+        <dd id="reference-instant"></dd>
+      </div>
+      <div>
+        <dt>UTC</dt>
+        <dd id="utc-time"></dd>
+      </div>
+      <div>
+        <dt>Asia/Kolkata</dt>
+        <dd id="kolkata-time"></dd>
+      </div>
+      <div>
+        <dt>America/New_York</dt>
+        <dd id="new-york-time"></dd>
+      </div>
+    </dl>
+    <p id="timezone-result" class="result" role="status"></p>
+  </FixtureSection>
+
+  <FixtureSection
+    id="single-slider"
+    title="Single slider"
+    description="The range input keeps its visible numeric output synchronized."
+  >
+    <div class="field">
+      <label for="confidence-slider">
+        Confidence:{' '}
+        <output id="confidence-output" for="confidence-slider">
+          70
+        </output>
+        %
+      </label>
+      <input
+        id="confidence-slider"
+        type="range"
+        min="0"
+        max="100"
+        step="5"
+        value="70"
+      />
+    </div>
+  </FixtureSection>
+
+  <FixtureSection
+    id="dual-range"
+    title="Dual-thumb range"
+    description="Two linked native sliders expose a valid minimum and maximum salary range."
+  >
+    <div class="dual-range">
+      <div class="field">
+        <label for="salary-min">Minimum salary ₹</label>
+        <input
+          id="salary-min"
+          type="range"
+          min="20000"
+          max="200000"
+          step="5000"
+          value="50000"
+        />
+      </div>
+      <div class="field">
+        <label for="salary-max">Maximum salary ₹</label>
+        <input
+          id="salary-max"
+          type="range"
+          min="20000"
+          max="200000"
+          step="5000"
+          value="150000"
+        />
+      </div>
+    </div>
+    <p id="dual-range-result" class="result" role="status">
+      Salary range: ₹50,000–₹1,50,000.
+    </p>
+  </FixtureSection>
+
+  <FixtureSection
+    id="linked-values"
+    title="Dynamically linked values"
+    description="Changing estimated hours or hourly rate immediately recalculates the synthetic project cost."
+  >
+    <div class="form-grid">
+      <div class="field">
+        <label for="estimate-hours">Estimated hours</label>
+        <input id="estimate-hours" type="number" min="1" max="200" value="16" />
+      </div>
+      <div class="field">
+        <label for="hourly-rate">Hourly rate ₹</label>
+        <input
+          id="hourly-rate"
+          type="number"
+          min="100"
+          max="10000"
+          step="100"
+          value="1200"
+        />
+      </div>
+    </div>
+    <p id="linked-result" class="result" role="status">
+      Estimated cost: ₹19,200.
+    </p>
+  </FixtureSection>
+
+  <FixtureSection
+    id="stepper"
+    title="Numeric stepper"
+    description="Minus and plus buttons update the same labelled value with fixed bounds."
+  >
+    <div class="stepper" role="group" aria-label="Retry count">
+      <button
+        id="stepper-minus"
+        type="button"
+        aria-label="Decrease retry count"
+      >
+        −
+      </button>
+      <output id="stepper-value">2</output>
+      <button id="stepper-plus" type="button" aria-label="Increase retry count">
+        +
+      </button>
+    </div>
+    <p id="stepper-result" class="result" role="status">
+      Retry count: 2.
+    </p>
+  </FixtureSection>
+
+  <FixtureSection
+    id="async-progress"
+    title="Asynchronous job progress"
+    description="Choose a controlled duration and wait for the progress bar and status to reach completion."
+  >
+    <div class="inline-control">
+      <label for="job-duration">Job duration</label>
+      <select id="job-duration">
+        <option value="0">0 ms</option>
+        <option value="1000">1 second</option>
+        <option value="2000">2 seconds</option>
+      </select>
+      <button id="start-async-job" class="fixture-button" type="button">
+        Start async job
+      </button>
+    </div>
+    <progress id="async-job-progress" max="100" value="0">
+      0%
+    </progress>
+    <p id="async-job-result" class="result" role="status">
+      Async job idle.
+    </p>
+  </FixtureSection>
+
+  <div slot="examples" class="example-stack">
+    <CodeBlock
+      client:idle
+      code={calendarExample}
+      label="Select a custom date"
+    />
+  </div>
+</ComponentLabPage>
+
+<script>
+  import '../../../scripts/date-time-ranges';
+</script>

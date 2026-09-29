@@ -1,0 +1,15 @@
+import '../../examples/playwright-ts/inputs.spec';
+import '../../examples/playwright-ts/buttons.spec';
+import '../../examples/playwright-ts/choices.spec';
+import '../../examples/playwright-ts/dropdowns.spec';
+import '../../examples/playwright-ts/forms.spec';
+import '../../examples/playwright-ts/locators.spec';
+import '../../examples/playwright-ts/tables.spec';
+import '../../examples/playwright-ts/search-lists.spec';
+import '../../examples/playwright-ts/waits-dialogs.spec';
+import '../../examples/playwright-ts/interactions-controls.spec';
+import '../../examples/playwright-ts/frames-windows.spec';
+import '../../examples/playwright-ts/files-drag.spec';
+import '../../examples/playwright-ts/browser-context.spec';
+import '../../examples/playwright-ts/authentication.spec';
+import '../../examples/playwright-ts/ecommerce.spec';

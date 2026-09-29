@@ -1,0 +1,7 @@
+Public evidence verification: PASS
+Verified UTC: 2026-09-27T09:47:38.2605667Z
+Baseline: 11/11 HTTP 200; 11/11 exactly one canonical; 11/11 canonical equals requested URL.
+Inventory: 20 unique published Playwright URLs; 20/20 present in post sitemap.
+Public collision: zero /practice* matches in published posts/pages/sitemap; direct /practice/ status 404.
+All requests were anonymous public GETs; no production write/deployment executed by this subtask.
+Only local evidence extraction/consistency checks run here; root task owns repository tests.

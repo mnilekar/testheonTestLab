@@ -1,0 +1,26 @@
+{
+  "extends": "astro/tsconfigs/strictest",
+  "compilerOptions": {
+    "allowJs": false,
+    "baseUrl": ".",
+    "exactOptionalPropertyTypes": true,
+    "jsxImportSource": "preact",
+    "noUncheckedIndexedAccess": true,
+    "types": ["node", "astro/client"],
+    "paths": {
+      "@components/*": ["src/components/*"],
+      "@layouts/*": ["src/layouts/*"],
+      "@lib/*": ["src/lib/*"],
+      "@styles/*": ["src/styles/*"]
+    }
+  },
+  "include": [
+    ".astro/types.d.ts",
+    "src/**/*",
+    "scripts/**/*",
+    "tests/**/*",
+    "playwright.config.ts",
+    "vitest.config.ts"
+  ],
+  "exclude": ["dist", "node_modules", "playwright-report", "test-results"]
+}

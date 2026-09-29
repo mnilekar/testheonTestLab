@@ -1,0 +1,285 @@
+---
+import ComponentLabPage from '../../../components/ComponentLabPage.astro';
+import FixtureSection from '../../../components/FixtureSection.astro';
+import CodeBlock from '../../../islands/CodeBlock';
+
+const keyboardExample = `await page.keyboard.press('ControlOrMeta+K');
+await expect(page.getByRole('dialog', { name: 'Command palette' })).toBeVisible();
+await page.keyboard.press('Escape');
+await expect(page.getByRole('dialog', { name: 'Command palette' })).not.toBeVisible();`;
+---
+
+<ComponentLabPage
+  title="Interaction Lab"
+  eyebrow="Component Lab E · Pointer and keyboard"
+  intro="Automate pointer gestures, scrolling, focus order, global shortcuts, menus, listboxes, and autocomplete with one assertion-friendly event log."
+  canonicalPath="/components/interactions/"
+  fixtureId="FX-INTERACT-001"
+  anchor="fixture-interactions"
+  guideHref="https://testheon.com/playwright-e2e/"
+  guideLabel="Read the E2E guide"
+  tasks={[
+    'Open hover and context menus, then choose a scoped item.',
+    'Assert a tooltip and complete double-click and scroll-to-target actions.',
+    'Use Enter, Tab, Escape, and Ctrl/Cmd+K without mouse-only shortcuts.',
+    'Navigate a listbox with arrow keys and select the active option.',
+    'Complete autocomplete using ArrowDown and Enter.',
+    'Assert every outcome through the shared event log.',
+  ]}
+  locatorHint="Use hover(), dblclick(), click({ button: 'right' }), scrollIntoViewIfNeeded(), press(), and keyboard.press() against controls with stable accessible names. Assert the final log entry rather than internal event flags."
+>
+  <aside
+    class="interaction-log-panel"
+    aria-labelledby="interaction-log-heading"
+  >
+    <h2 id="interaction-log-heading">Interaction event log</h2>
+    <ol
+      id="interaction-log"
+      data-testid="interaction-log"
+      class="result-list"
+      aria-live="polite"
+    >
+      <li>Interaction lab ready.</li>
+    </ol>
+  </aside>
+
+  <FixtureSection
+    id="hover-menu"
+    title="Hover menu"
+    description="Hover or focus opens the menu; leaving the region closes it."
+  >
+    <div id="hover-menu-region" class="menu-fixture">
+      <button
+        id="hover-menu-trigger"
+        class="fixture-button"
+        type="button"
+        aria-haspopup="menu"
+        aria-expanded="false"
+      >
+        Hover for test actions
+      </button>
+      <div id="hover-menu-popup" class="fixture-menu" role="menu" hidden>
+        <button
+          type="button"
+          role="menuitem"
+          data-log="Hover menu: Run smoke selected."
+        >
+          Run smoke
+        </button>
+        <button
+          type="button"
+          role="menuitem"
+          data-log="Hover menu: View trace selected."
+        >
+          View trace
+        </button>
+      </div>
+    </div>
+  </FixtureSection>
+
+  <FixtureSection
+    id="tooltips"
+    title="Accessible tooltip"
+    description="Pointer hover and keyboard focus reveal the same described tooltip."
+  >
+    <button
+      id="tooltip-trigger"
+      class="fixture-button"
+      type="button"
+      aria-describedby="interaction-tooltip"
+    >
+      Inspect flaky check
+    </button>
+    <div id="interaction-tooltip" class="tooltip" role="tooltip" hidden>
+      Opens the deterministic trace summary.
+    </div>
+  </FixtureSection>
+
+  <FixtureSection
+    id="pointer-actions"
+    title="Double-click and right-click"
+    description="Each gesture has a separate target and visible log outcome."
+  >
+    <div class="button-row">
+      <button
+        id="interaction-double-click"
+        class="fixture-button"
+        type="button"
+      >
+        Double-click release
+      </button>
+      <button
+        id="interaction-context"
+        class="fixture-button"
+        type="button"
+        aria-haspopup="menu"
+        aria-expanded="false"
+      >
+        Right-click test row
+      </button>
+    </div>
+    <div id="context-menu" class="fixture-menu" role="menu" hidden>
+      <button
+        type="button"
+        role="menuitem"
+        data-log="Context menu: Retry selected."
+      >
+        Retry
+      </button>
+      <button
+        type="button"
+        role="menuitem"
+        data-log="Context menu: Inspect selected."
+      >
+        Inspect
+      </button>
+    </div>
+  </FixtureSection>
+
+  <FixtureSection
+    id="scroll-action"
+    title="Scroll into view"
+    description="A distant target reports its intersection and click outcome."
+  >
+    <button id="scroll-target-control" class="fixture-button" type="button">
+      Scroll to completion target
+    </button>
+    <div
+      class="scroll-practice-region"
+      tabindex="0"
+      aria-label="Scroll practice region"
+    >
+      <p>Top of bounded scroll region.</p>
+      <div class="scroll-practice-spacer" aria-hidden="true"></div>
+      <button
+        id="scroll-completion-target"
+        class="fixture-button"
+        type="button"
+      >
+        Complete scrolled action
+      </button>
+    </div>
+  </FixtureSection>
+
+  <FixtureSection
+    id="keyboard-basics"
+    title="Enter, Tab order, and Escape"
+    description="Native focus order and keyboard events remain observable in the shared log."
+  >
+    <div class="form-grid" id="tab-order-region">
+      <div class="field">
+        <label for="tab-first">First focus target</label>
+        <input id="tab-first" data-tab-label="First input" />
+      </div>
+      <div class="field">
+        <label for="tab-second">Second focus target</label>
+        <input id="tab-second" data-tab-label="Second input" />
+      </div>
+      <button
+        id="enter-action"
+        class="fixture-button"
+        data-tab-label="Enter action"
+        type="button"
+      >
+        Press Enter to run
+      </button>
+    </div>
+    <button
+      id="open-escape-panel"
+      class="fixture-button fixture-button--secondary"
+      type="button"
+    >
+      Open Escape panel
+    </button>
+    <section
+      id="escape-panel"
+      class="result"
+      aria-label="Escape panel"
+      tabindex="-1"
+      hidden
+    >
+      <p>Press Escape to close this panel.</p>
+    </section>
+  </FixtureSection>
+
+  <FixtureSection
+    id="command-shortcut"
+    title="Ctrl/Cmd+K command palette"
+    description="The platform-neutral shortcut opens a focused dialog and Escape closes it."
+  >
+    <p>
+      Press <kbd>Ctrl</kbd>/<kbd>Cmd</kbd> + <kbd>K</kbd> anywhere on this page.
+    </p>
+    <dialog id="command-palette" aria-labelledby="command-palette-title">
+      <div class="modal-card">
+        <h3 id="command-palette-title">Command palette</h3>
+        <div class="field">
+          <label for="command-search">Command</label>
+          <input id="command-search" />
+        </div>
+        <button id="run-command" class="fixture-button" type="button">
+          Run selected command
+        </button>
+      </div>
+    </dialog>
+  </FixtureSection>
+
+  <FixtureSection
+    id="arrow-listbox"
+    title="Arrow navigation in a listbox"
+    description="ArrowDown and ArrowUp move the active option; Enter selects it."
+  >
+    <div
+      id="browser-listbox"
+      class="custom-listbox"
+      role="listbox"
+      aria-label="Browser engine"
+    >
+      <button type="button" role="option" aria-selected="true" tabindex="0">
+        Chromium
+      </button>
+      <button type="button" role="option" aria-selected="false" tabindex="-1">
+        Firefox
+      </button>
+      <button type="button" role="option" aria-selected="false" tabindex="-1">
+        WebKit
+      </button>
+    </div>
+  </FixtureSection>
+
+  <FixtureSection
+    id="keyboard-autocomplete"
+    title="Autocomplete keyboard selection"
+    description="Filtered suggestions expose active-descendant state and Enter commits the active choice."
+  >
+    <div class="field autocomplete-field">
+      <label for="interaction-autocomplete">QA tool</label>
+      <input
+        id="interaction-autocomplete"
+        role="combobox"
+        aria-expanded="false"
+        aria-autocomplete="list"
+        aria-controls="interaction-suggestions"
+        autocomplete="off"
+      />
+      <ul
+        id="interaction-suggestions"
+        class="suggestions"
+        role="listbox"
+        aria-label="QA tool suggestions"
+      ></ul>
+    </div>
+  </FixtureSection>
+
+  <div slot="examples" class="example-stack">
+    <CodeBlock
+      client:idle
+      code={keyboardExample}
+      label="Keyboard shortcut and Escape"
+    />
+  </div>
+</ComponentLabPage>
+
+<script>
+  import '../../../scripts/interactions';
+</script>

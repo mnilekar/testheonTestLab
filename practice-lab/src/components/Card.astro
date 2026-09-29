@@ -1,0 +1,31 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  href?: string;
+  eyebrow?: string;
+}
+
+const { title, description, href, eyebrow } = Astro.props;
+---
+
+<article class:list={['card', { 'card--linked': href }]}>
+  {eyebrow && <p class="card__eyebrow">{eyebrow}</p>}
+  <h3>
+    {href ? (
+      <a class="card__link" href={href}>
+        {title}
+      </a>
+    ) : (
+      title
+    )}
+  </h3>
+  <p>{description}</p>
+  {href ? (
+    <span class="card__action" aria-hidden="true">
+      Explore track →
+    </span>
+  ) : (
+    <span class="status">Coming soon</span>
+  )}
+</article>

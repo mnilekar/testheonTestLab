@@ -1,0 +1,41 @@
+---
+const title = 'Single frame fixture';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>{title}</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 1rem;
+        color: #241f35;
+        background: #f7f5ff;
+        font:
+          1rem/1.5 Inter,
+          system-ui,
+          sans-serif;
+      }
+      h1 {
+        margin: 0 0 0.5rem;
+        font:
+          700 1.25rem/1.3 Poppins,
+          system-ui,
+          sans-serif;
+      }
+      code {
+        color: #5b35b5;
+      }
+    </style>
+  </head>
+  <body data-frame="single">
+    <h1>Single frame content</h1>
+    <p>
+      Frame reference: <code>FRAME-4803</code>.
+    </p>
+  </body>
+</html>

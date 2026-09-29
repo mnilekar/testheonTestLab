@@ -1,0 +1,30 @@
+---
+interface Props {
+  id: string;
+  title: string;
+  description: string;
+  antiPattern?: boolean;
+}
+
+const { id, title, description, antiPattern = false } = Astro.props;
+---
+
+<section
+  id={id}
+  class:list={['fixture-section', { 'fixture-section--warning': antiPattern }]}
+  data-anti-pattern={antiPattern ? 'true' : undefined}
+  data-a11y-exclude={antiPattern ? 'true' : undefined}
+>
+  <header class="fixture-section__header">
+    <div>
+      <h2>{title}</h2>
+      <p>{description}</p>
+    </div>
+    {antiPattern && (
+      <span class="anti-pattern-badge">Intentional anti-pattern</span>
+    )}
+  </header>
+  <div class="fixture-surface">
+    <slot />
+  </div>
+</section>

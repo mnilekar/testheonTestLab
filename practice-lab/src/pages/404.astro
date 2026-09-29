@@ -1,0 +1,32 @@
+---
+import Button from '../components/Button.astro';
+import LabLayout from '../layouts/LabLayout.astro';
+---
+
+<LabLayout
+  title="Practice page not found"
+  description="The requested Testheon Practice Lab page does not exist."
+  canonicalPath="/404.html"
+  robots="noindex,nofollow"
+  breadcrumbs={[
+    { label: 'Practice Lab', href: '/practice/' },
+    { label: 'Page not found' },
+  ]}
+>
+  <section class="hero">
+    <div class="container">
+      <p class="eyebrow">404 · Lab route</p>
+      <h1>Practice page not found</h1>
+      <p class="lede">
+        This route is not part of the current fixture or learning catalogue.
+        Return to the Lab hub or continue with the Playwright track.
+      </p>
+      <div class="hero__actions">
+        <Button href="/practice/">Practice Lab home</Button>
+        <Button href="/practice/playwright/" variant="secondary">
+          Playwright track
+        </Button>
+      </div>
+    </div>
+  </section>
+</LabLayout>

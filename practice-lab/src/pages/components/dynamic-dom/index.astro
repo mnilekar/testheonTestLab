@@ -1,0 +1,191 @@
+---
+import ComponentLabPage from '../../../components/ComponentLabPage.astro';
+import FixtureSection from '../../../components/FixtureSection.astro';
+import CodeBlock from '../../../islands/CodeBlock';
+
+const semanticExample = `const billing = page.getByRole('region', { name: 'Billing workflow' });
+await billing.getByRole('button', { name: 'Approve request' }).click();
+await expect(page.getByTestId('dynamic-log')).toContainText('Billing request approved');`;
+const replacementExample = `const original = page.getByRole('button', { name: 'Replace card' });
+await original.click();
+await expect(original).not.toBeAttached();
+await expect(page.getByRole('article', { name: 'Replacement card' })).toBeVisible();`;
+---
+
+<ComponentLabPage
+  title="Dynamic DOM Lab"
+  eyebrow="Component Lab C · Selector resilience"
+  intro="A clearly marked practice fixture for learning why implementation-coupled selectors fail when IDs, classes, order, visibility, and nodes change."
+  canonicalPath="/components/dynamic-dom/"
+  fixtureId="FX-DOM-001"
+  anchor="fixture-dynamic-dom"
+  guideHref="https://testheon.com/playwright-locators/"
+  guideLabel="Read the locator guide"
+  tasks={[
+    'Replay a seed and verify the same generated ID, class, and order sequence.',
+    'Locate identical text by its named region rather than global text position.',
+    'Distinguish the visible duplicate from its hidden counterpart.',
+    'Prove a saved locator detaches when the card is replaced.',
+    'Wait for an API-rendered employee by accessible name.',
+  ]}
+  locatorHint="Prefer roles, labels, visible text within a stable region, and relational filters. Generated IDs, generated class names, nth positions, and stale element handles are deliberately unreliable on this page."
+>
+  <div class="control-panel">
+    <div class="field">
+      <label for="dynamic-seed">Deterministic seed</label>
+      <input id="dynamic-seed" type="number" value="4803" />
+    </div>
+    <button id="rerender-dynamic" class="fixture-button" type="button">
+      Render next deterministic DOM
+    </button>
+    <p id="dynamic-log" data-testid="dynamic-log" class="result" role="status">
+      Render 1 uses seed 4803.
+    </p>
+  </div>
+
+  <FixtureSection
+    id="dynamic-ids"
+    title="IDs change on every fixture render"
+    description="The control keeps its role and accessible name while its generated ID changes."
+    antiPattern
+  >
+    <section aria-label="Billing workflow">
+      <button
+        data-dynamic-action="approve"
+        class="fixture-button"
+        type="button"
+      >
+        Approve request
+      </button>
+    </section>
+    <p class="fragility-note">
+      <strong>Why fragile selectors fail here:</strong> a selector copied from
+      the generated ID stops matching after the next render.
+    </p>
+  </FixtureSection>
+
+  <FixtureSection
+    id="generated-classes"
+    title="Generated class names"
+    description="The stable card title survives while hashed-looking class tokens rotate."
+    antiPattern
+  >
+    <article data-generated-card aria-label="Generated class card">
+      <h3>Regression summary</h3>
+      <p>24 stable checks</p>
+    </article>
+    <p class="fragility-note">
+      <strong>Why fragile selectors fail here:</strong> build-style class tokens
+      are implementation details and change with the render sequence.
+    </p>
+  </FixtureSection>
+
+  <FixtureSection
+    id="seeded-reordering"
+    title="Seeded reordering"
+    description="The same seed produces the same order; a different seed produces another documented order."
+    antiPattern
+  >
+    <ul
+      id="reordered-list"
+      class="result-list"
+      aria-label="Seeded learner queue"
+    ></ul>
+    <p class="fragility-note">
+      <strong>Why fragile selectors fail here:</strong> nth-child points at a
+      position, not the learner the test intends to select.
+    </p>
+  </FixtureSection>
+
+  <FixtureSection
+    id="identical-contexts"
+    title="Identical text in different contexts"
+    description="Two named regions intentionally expose the same button label."
+    antiPattern
+  >
+    <div class="form-grid">
+      <section aria-label="Profile workflow">
+        <h3>Profile workflow</h3>
+        <button class="fixture-button" data-context="Profile" type="button">
+          Continue
+        </button>
+      </section>
+      <section aria-label="Security workflow">
+        <h3>Security workflow</h3>
+        <button class="fixture-button" data-context="Security" type="button">
+          Continue
+        </button>
+      </section>
+    </div>
+    <p class="fragility-note">
+      <strong>Why fragile selectors fail here:</strong> global text matches both
+      controls; scope to the intended named region.
+    </p>
+  </FixtureSection>
+
+  <FixtureSection
+    id="hidden-visible-duplicates"
+    title="Hidden and visible duplicates"
+    description="The DOM includes the same text twice, but only one copy is user-visible."
+    antiPattern
+  >
+    <p hidden>Release candidate approved</p>
+    <p data-visible-duplicate>Release candidate approved</p>
+    <p class="fragility-note">
+      <strong>Why fragile selectors fail here:</strong> raw text engines may
+      count hidden content; use visibility-aware locators and assertions.
+    </p>
+  </FixtureSection>
+
+  <FixtureSection
+    id="dynamic-replacement"
+    title="DOM replacement after action"
+    description="The original article is removed and a new node takes its place."
+    antiPattern
+  >
+    <article id="replacement-card" aria-label="Original card">
+      <h3>Original card</h3>
+      <button id="replace-dynamic-card" class="fixture-button" type="button">
+        Replace card
+      </button>
+    </article>
+    <p class="fragility-note">
+      <strong>Why fragile selectors fail here:</strong> an element handle
+      becomes stale; a Playwright locator resolves the replacement on each
+      action.
+    </p>
+  </FixtureSection>
+
+  <FixtureSection
+    id="api-rendered-dom"
+    title="Elements rendered after an API call"
+    description="The button requests synthetic employees and renders accessible cards only after the response."
+    antiPattern
+  >
+    <button id="load-api-dom" class="fixture-button" type="button">
+      Load API-rendered employees
+    </button>
+    <div id="api-dom-results" class="grid" aria-live="polite"></div>
+    <p class="fragility-note">
+      <strong>Why fragile selectors fail here:</strong> querying synchronously
+      before the response returns captures an empty container.
+    </p>
+  </FixtureSection>
+
+  <div slot="examples" class="example-stack">
+    <CodeBlock
+      client:idle
+      code={semanticExample}
+      label="Scope by named region"
+    />
+    <CodeBlock
+      client:idle
+      code={replacementExample}
+      label="Assert DOM replacement"
+    />
+  </div>
+</ComponentLabPage>
+
+<script>
+  import '../../../scripts/dynamic-dom';
+</script>

@@ -1,0 +1,226 @@
+---
+import ComponentLabPage from '../../../components/ComponentLabPage.astro';
+import FixtureSection from '../../../components/FixtureSection.astro';
+import CodeBlock from '../../../islands/CodeBlock';
+
+const debounceExample = `await page.getByLabel('Debounced list search').fill('Rahul');
+await expect(page.getByTestId('debounced-list-status')).toContainText('applied');
+await expect(page.locator('#debounced-list li')).toContainText(['Rahul']);`;
+const infiniteExample = `const list = page.getByTestId('infinite-list');
+for (;;) {
+  const end = page.getByText('End of API product list.');
+  if (await end.isVisible()) break;
+  await list.evaluate((node) => { node.scrollTop = node.scrollHeight; });
+  await expect(page.getByRole('status')).not.toContainText('Loading next');
+}`;
+---
+
+<ComponentLabPage
+  title="Search and Lists Lab"
+  eyebrow="Component Lab B · Discovery patterns"
+  intro="Compare immediate, delayed, and debounced discovery behavior, then automate autocomplete, combined filters, load-more pagination, and a true cursor-backed infinite list."
+  canonicalPath="/components/search-and-lists/"
+  fixtureId="FX-LIST-001"
+  anchor="fixture-search-lists"
+  guideHref="https://testheon.com/playwright-e2e/"
+  guideLabel="Read the E2E testing guide"
+  tasks={[
+    'Distinguish instant, delayed API, and debounced search timing.',
+    'Choose an autocomplete result using ArrowDown and Enter.',
+    'Combine department, location, and status filters.',
+    'Assert the explicit no-results state.',
+    'Load additional product pages without duplicating items.',
+    'Scroll through true API cursor pages and assert the end-of-list state.',
+  ]}
+  locatorHint="Scope each assertion to its named list and status region. For progressive loading, assert the item count and explicit end state after each visible loading transition instead of waiting for network-idle."
+>
+  <p id="list-load-status" class="result" role="status">
+    Loading synthetic search data from the Practice API…
+  </p>
+
+  <FixtureSection
+    id="search-timing"
+    title="Instant, delayed, and debounced search"
+    description="Three controls expose different timing contracts while returning the same synthetic employee shape."
+  >
+    <div class="search-lab-grid">
+      <section class="table-panel" aria-labelledby="instant-list-heading">
+        <h3 id="instant-list-heading">Instant search</h3>
+        <div class="field">
+          <label for="instant-list-search">Instant list search</label>
+          <input id="instant-list-search" type="search" autocomplete="off" />
+        </div>
+        <p id="instant-list-status" class="result" role="status">
+          Type to filter immediately.
+        </p>
+        <ul
+          id="instant-list"
+          class="result-list"
+          aria-label="Instant employee results"
+        ></ul>
+      </section>
+      <section class="table-panel" aria-labelledby="delayed-list-heading">
+        <h3 id="delayed-list-heading">Delayed API search</h3>
+        <div class="field">
+          <label for="delayed-list-search">Delayed employee search</label>
+          <input id="delayed-list-search" type="search" value="Rahul" />
+        </div>
+        <button id="run-delayed-search" class="fixture-button" type="button">
+          Run 400 ms API search
+        </button>
+        <p id="delayed-list-status" class="result" role="status">
+          Search has not run.
+        </p>
+        <ul
+          id="delayed-list"
+          class="result-list"
+          aria-label="Delayed employee results"
+        ></ul>
+      </section>
+      <section class="table-panel" aria-labelledby="debounced-list-heading">
+        <h3 id="debounced-list-heading">Debounced search</h3>
+        <div class="field">
+          <label for="debounced-list-search">Debounced list search</label>
+          <input id="debounced-list-search" type="search" autocomplete="off" />
+        </div>
+        <p
+          id="debounced-list-status"
+          class="result"
+          role="status"
+          data-testid="debounced-list-status"
+        >
+          Waiting for input.
+        </p>
+        <ul
+          id="debounced-list"
+          class="result-list"
+          aria-label="Debounced employee results"
+        ></ul>
+      </section>
+    </div>
+  </FixtureSection>
+
+  <FixtureSection
+    id="list-autocomplete"
+    title="Keyboard autocomplete"
+    description="Suggestions use combobox/listbox semantics, active descendant state, and deterministic keyboard selection."
+  >
+    <div class="field autocomplete-field">
+      <label for="employee-autocomplete">Employee autocomplete</label>
+      <input
+        id="employee-autocomplete"
+        role="combobox"
+        aria-expanded="false"
+        aria-autocomplete="list"
+        aria-controls="employee-suggestions"
+        autocomplete="off"
+      />
+      <ul
+        id="employee-suggestions"
+        class="suggestions"
+        role="listbox"
+        aria-label="Employee suggestions"
+      ></ul>
+      <p id="autocomplete-result" class="result" role="status">
+        Type at least two characters.
+      </p>
+    </div>
+  </FixtureSection>
+
+  <FixtureSection
+    id="combined-list-filters"
+    title="Combined filters and no-results state"
+    description="All selected filters apply together, and impossible combinations expose a stable empty result instead of a blank region."
+  >
+    <div class="form-grid form-grid--three">
+      <div class="field">
+        <label for="list-department-filter">Department</label>
+        <select id="list-department-filter">
+          <option value="">All departments</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="list-location-filter">Location</label>
+        <select id="list-location-filter">
+          <option value="">All locations</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="list-status-filter">Status</label>
+        <select id="list-status-filter">
+          <option value="">All statuses</option>
+          <option value="true">Active</option>
+          <option value="false">Inactive</option>
+        </select>
+      </div>
+    </div>
+    <p id="combined-filter-status" class="result" role="status">
+      All employees shown.
+    </p>
+    <ul
+      id="combined-filter-list"
+      class="result-list result-list--cards"
+      aria-label="Filtered employees"
+    ></ul>
+  </FixtureSection>
+
+  <FixtureSection
+    id="load-more-list"
+    title="Load-more pagination"
+    description="Each button request appends one numbered API product page and preserves every previously visible result."
+  >
+    <ul
+      id="load-more-products"
+      class="result-list result-list--cards"
+      aria-label="Load more products"
+    ></ul>
+    <div class="button-row">
+      <button id="load-more-button" class="fixture-button" type="button">
+        Load more products
+      </button>
+      <p id="load-more-status" class="result" role="status">
+        No product page loaded.
+      </p>
+    </div>
+  </FixtureSection>
+
+  <FixtureSection
+    id="infinite-list-section"
+    title="True API-backed infinite scroll"
+    description="The scroll boundary requests the next cursor page from the Product API until the server reports no next cursor."
+  >
+    <div
+      id="api-infinite-list"
+      class="api-infinite-list"
+      data-testid="infinite-list"
+      tabindex="0"
+      aria-label="Infinite API products"
+    >
+      <ul
+        id="infinite-product-items"
+        class="result-list result-list--cards"
+      ></ul>
+      <div id="infinite-sentinel" aria-hidden="true"></div>
+    </div>
+    <p id="infinite-list-status" class="result" role="status">
+      Preparing the first API page.
+    </p>
+  </FixtureSection>
+
+  <div slot="examples" class="example-stack">
+    <CodeBlock
+      client:idle
+      code={debounceExample}
+      label="Assert a debounced search"
+    />
+    <CodeBlock
+      client:idle
+      code={infiniteExample}
+      label="Scroll until the API end state"
+    />
+  </div>
+</ComponentLabPage>
+
+<script>
+  import '../../../scripts/search-and-lists';
+</script>

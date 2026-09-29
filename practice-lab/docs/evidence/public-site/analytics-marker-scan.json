@@ -1,0 +1,79 @@
+[
+  {
+    "file": "baseline-playwright-ai.html",
+    "markers": [
+      "jetpack-stats",
+      "stats.wp.com"
+    ]
+  },
+  {
+    "file": "baseline-playwright-authentication.html",
+    "markers": [
+      "jetpack-stats",
+      "stats.wp.com"
+    ]
+  },
+  {
+    "file": "baseline-playwright-ci-cd.html",
+    "markers": [
+      "jetpack-stats",
+      "stats.wp.com"
+    ]
+  },
+  {
+    "file": "baseline-playwright-e2e.html",
+    "markers": [
+      "jetpack-stats",
+      "stats.wp.com"
+    ]
+  },
+  {
+    "file": "baseline-playwright-fixtures.html",
+    "markers": [
+      "jetpack-stats",
+      "stats.wp.com"
+    ]
+  },
+  {
+    "file": "baseline-playwright-interview-questions.html",
+    "markers": [
+      "jetpack-stats",
+      "stats.wp.com"
+    ]
+  },
+  {
+    "file": "baseline-playwright-mcp.html",
+    "markers": [
+      "jetpack-stats",
+      "stats.wp.com"
+    ]
+  },
+  {
+    "file": "baseline-playwright-test-agents.html",
+    "markers": [
+      "jetpack-stats",
+      "stats.wp.com"
+    ]
+  },
+  {
+    "file": "baseline-playwright-trace-viewer.html",
+    "markers": [
+      "jetpack-stats",
+      "stats.wp.com"
+    ]
+  },
+  {
+    "file": "baseline-playwright-visual-testing.html",
+    "markers": [
+      "jetpack-stats",
+      "stats.wp.com"
+    ]
+  },
+  {
+    "file": "homepage.html",
+    "markers": [
+      "jetpack-stats",
+      "stats.wp.com"
+    ]
+  }
+]

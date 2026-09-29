@@ -1,0 +1,171 @@
+---
+import ComponentLabPage from '../../../components/ComponentLabPage.astro';
+import FixtureSection from '../../../components/FixtureSection.astro';
+import CodeBlock from '../../../islands/CodeBlock';
+
+const frameExample = `const formFrame = page.frameLocator('iframe[title="Frame with form"]');
+await formFrame.getByLabel('Project name').fill('Phoenix');
+await formFrame.getByRole('button', { name: 'Save frame form' }).click();
+await expect(formFrame.getByRole('status')).toHaveText('Frame form saved: Phoenix.');`;
+const windowExample = `const newPagePromise = context.waitForEvent('page');
+await page.getByRole('link', { name: 'Open new tab fixture' }).click();
+const child = await newPagePromise;
+await expect(child.getByRole('heading', { name: 'New tab fixture' })).toBeVisible();`;
+---
+
+<ComponentLabPage
+  title="Frames and Windows Lab"
+  eyebrow="Component Lab G · Browsing contexts"
+  intro="Practise same-origin frames, nested documents, dynamic iframes, tabs, popups, and safe postMessage flows without third-party content."
+  canonicalPath="/components/frames-and-windows/"
+  fixtureId="FX-FRAME-001"
+  anchor="fixture-frames-windows"
+  guideHref="https://testheon.com/playwright-e2e/"
+  guideLabel="Read the E2E guide"
+  tasks={[
+    'Locate content in single, form, nested, multiple, and dynamically loaded frames.',
+    'Wait for a target=_blank tab and a window.open popup at the context level.',
+    'Track multiple child pages without relying on tab order.',
+    'Complete the synthetic popup sign-in and assert the postMessage result in the parent.',
+    'Let a child window update its parent through a same-origin validated message.',
+  ]}
+  locatorHint="Use frameLocator with each iframe title, and start context.waitForEvent('page') before the action that opens a tab or popup. Assert the parent result after the child posts a same-origin message."
+>
+  <aside class="fixture-note">
+    Every embedded document and child window stays under <code>/practice/</code>{' '}
+    on the current origin. No third-party frames, scripts, or identities are
+    used.
+  </aside>
+
+  <FixtureSection
+    id="single-and-form-frames"
+    title="Single frame and frame form"
+    description="Two titled same-origin frames expose stable text and a complete form workflow."
+  >
+    <div class="frame-grid">
+      <iframe
+        title="Single practice frame"
+        src="/practice/components/frames-and-windows/frame-basic/"
+      ></iframe>
+      <iframe
+        title="Frame with form"
+        src="/practice/components/frames-and-windows/frame-form/"
+      ></iframe>
+    </div>
+  </FixtureSection>
+
+  <FixtureSection
+    id="nested-and-multiple-frames"
+    title="Nested and multiple frames"
+    description="The parent contains a second iframe, while adjacent frames require explicit scoping by title."
+  >
+    <iframe
+      class="wide-frame"
+      title="Nested parent frame"
+      src="/practice/components/frames-and-windows/frame-nested/"
+    ></iframe>
+    <div class="frame-grid" aria-label="Multiple frame fixture">
+      <iframe
+        title="Multiple frame alpha"
+        src="/practice/components/frames-and-windows/frame-basic/?instance=alpha"
+      ></iframe>
+      <iframe
+        title="Multiple frame beta"
+        src="/practice/components/frames-and-windows/frame-basic/?instance=beta"
+      ></iframe>
+    </div>
+  </FixtureSection>
+
+  <FixtureSection
+    id="dynamic-frame"
+    title="Dynamically loaded iframe"
+    description="The iframe is created after a controlled delay and exposes a visible ready state."
+  >
+    <div class="inline-control">
+      <label for="dynamic-frame-delay">Frame delay</label>
+      <select id="dynamic-frame-delay">
+        <option value="0">0 ms</option>
+        <option value="500">500 ms</option>
+      </select>
+      <button id="load-dynamic-frame" class="fixture-button" type="button">
+        Load dynamic frame
+      </button>
+    </div>
+    <div id="dynamic-frame-host"></div>
+    <p id="dynamic-frame-result" class="result" role="status">
+      Dynamic frame not loaded.
+    </p>
+  </FixtureSection>
+
+  <FixtureSection
+    id="tabs-and-popups"
+    title="Tabs, popups, and parent communication"
+    description="Each same-origin child has a named purpose and can return a deterministic result to this parent."
+  >
+    <div class="button-row">
+      <a
+        class="fixture-button"
+        href="/practice/components/frames-and-windows/window-child/?mode=tab"
+        target="_blank"
+        rel="opener"
+      >
+        Open new tab fixture
+      </a>
+      <button
+        class="fixture-button fixture-button--secondary"
+        type="button"
+        data-window-mode="popup"
+      >
+        Open popup fixture
+      </button>
+      <button
+        class="fixture-button fixture-button--secondary"
+        type="button"
+        id="open-multiple-tabs"
+      >
+        Open two practice tabs
+      </button>
+      <button
+        class="fixture-button fixture-button--secondary"
+        type="button"
+        data-window-mode="signin"
+      >
+        Open popup sign-in
+      </button>
+      <button
+        class="fixture-button fixture-button--secondary"
+        type="button"
+        data-window-mode="update"
+      >
+        Open child updater
+      </button>
+    </div>
+    <p
+      id="window-result"
+      data-testid="window-result"
+      class="result"
+      role="status"
+    >
+      No child window result received.
+    </p>
+  </FixtureSection>
+
+  <div slot="examples" class="example-stack">
+    <CodeBlock
+      client:load
+      code={frameExample}
+      language="typescript"
+      label="Frame locator example"
+    />
+    <CodeBlock
+      client:load
+      code={windowExample}
+      language="typescript"
+      label="New page example"
+    />
+  </div>
+</ComponentLabPage>
+
+<script>
+  import '../../../scripts/frames-windows';
+</script>

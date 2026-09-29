@@ -1,0 +1,37 @@
+---
+interface Props {
+  id: string;
+  title: string;
+  guidance: string;
+  goodHtml: string;
+  awkwardHtml: string;
+}
+
+const { id, title, guidance, goodHtml, awkwardHtml } = Astro.props;
+---
+
+<section id={id} class="fixture-section">
+  <header class="fixture-section__header">
+    <div>
+      <h2>{title}</h2>
+      <p>{guidance}</p>
+    </div>
+  </header>
+  <div class="locator-grid">
+    <article class="locator-example" aria-label={`${title} good DOM`}>
+      <h3>Good DOM</h3>
+      <div set:html={goodHtml} />
+    </article>
+    <article
+      class="locator-example locator-example--awkward"
+      aria-label={`${title} awkward DOM`}
+      data-anti-pattern="true"
+      data-a11y-exclude="true"
+    >
+      <h3>
+        Awkward DOM <span class="anti-pattern-badge">Intentional</span>
+      </h3>
+      <div set:html={awkwardHtml} />
+    </article>
+  </div>
+</section>

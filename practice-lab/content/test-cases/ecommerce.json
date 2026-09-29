@@ -1,0 +1,708 @@
+{
+  "suite": "Testheon Store functional test cases",
+  "version": "1.0.0",
+  "generatedAt": "2026-09-29",
+  "caseCount": 50,
+  "cases": [
+    {
+      "id": "ECOM-LOGIN-001",
+      "title": "Sign in during checkout",
+      "preconditions": [
+        "A guest Lab session exists and the checkout page is open."
+      ],
+      "steps": [
+        "Open /practice/apps/ecommerce/checkout/",
+        "Submit standard_user and the shared practice password."
+      ],
+      "expectedResult": "Checkout becomes available and the guest cart remains unchanged.",
+      "priority": "Critical",
+      "goodAutomationCandidate": "yes"
+    },
+    {
+      "id": "ECOM-LOGIN-002",
+      "title": "Reject an incorrect checkout password",
+      "preconditions": [
+        "A guest Lab session exists and the checkout page is open."
+      ],
+      "steps": [
+        "Open /practice/apps/ecommerce/checkout/",
+        "Submit standard_user with an incorrect password."
+      ],
+      "expectedResult": "A generic AUTHENTICATION_FAILED message appears and checkout remains locked.",
+      "priority": "High",
+      "goodAutomationCandidate": "yes"
+    },
+    {
+      "id": "ECOM-LOGIN-003",
+      "title": "Preserve guest cart across login",
+      "preconditions": [
+        "A guest Lab session exists and the checkout page is open."
+      ],
+      "steps": [
+        "Open /practice/apps/ecommerce/checkout/",
+        "Add a product as guest, then sign in from checkout."
+      ],
+      "expectedResult": "The same product, quantity, variant, and totals remain in the summary.",
+      "priority": "Critical",
+      "goodAutomationCandidate": "yes"
+    },
+    {
+      "id": "ECOM-LOGIN-004",
+      "title": "Require login for order history",
+      "preconditions": [
+        "A guest Lab session exists and the checkout page is open."
+      ],
+      "steps": [
+        "Open /practice/apps/ecommerce/checkout/",
+        "Open order history without an auth session."
+      ],
+      "expectedResult": "The page shows an assertion-ready 401 state and a checkout sign-in link.",
+      "priority": "High",
+      "goodAutomationCandidate": "yes"
+    },
+    {
+      "id": "ECOM-LOGIN-005",
+      "title": "Show authenticated profile",
+      "preconditions": [
+        "A guest Lab session exists and the checkout page is open."
+      ],
+      "steps": [
+        "Open /practice/apps/ecommerce/checkout/",
+        "Sign in as standard_user and open Profile."
+      ],
+      "expectedResult": "Username, Customer role, synthetic email, and order count are visible.",
+      "priority": "Medium",
+      "goodAutomationCandidate": "yes"
+    },
+    {
+      "id": "ECOM-CATALOG-001",
+      "title": "Load featured products",
+      "preconditions": [
+        "The store sandbox contains its deterministic product seed."
+      ],
+      "steps": [
+        "Open /practice/apps/ecommerce/products/",
+        "Open the Store overview."
+      ],
+      "expectedResult": "Six or fewer highest-rated in-stock products render with stable IDs.",
+      "priority": "High",
+      "goodAutomationCandidate": "yes"
+    },
+    {
+      "id": "ECOM-CATALOG-002",
+      "title": "Search catalogue by product name",
+      "preconditions": [
+        "The store sandbox contains its deterministic product seed."
+      ],
+      "steps": [
+        "Open /practice/apps/ecommerce/products/",
+        "Enter part of a seeded product name and apply filters."
+      ],
+      "expectedResult": "Every rendered card contains the requested search term.",
+      "priority": "High",
+      "goodAutomationCandidate": "yes"
+    },
+    {
+      "id": "ECOM-CATALOG-003",
+      "title": "Search catalogue by SKU",
+      "preconditions": [
+        "The store sandbox contains its deterministic product seed."
+      ],
+      "steps": [
+        "Open /practice/apps/ecommerce/products/",
+        "Enter a seeded SKU and apply filters."
+      ],
+      "expectedResult": "The matching product appears without unrelated results.",
+      "priority": "Medium",
+      "goodAutomationCandidate": "yes"
+    },
+    {
+      "id": "ECOM-CATALOG-004",
+      "title": "Filter catalogue by category",
+      "preconditions": [
+        "The store sandbox contains its deterministic product seed."
+      ],
+      "steps": [
+        "Open /practice/apps/ecommerce/products/",
+        "Choose Electronics and apply filters."
+      ],
+      "expectedResult": "Only Electronics cards render and the total count updates.",
+      "priority": "High",
+      "goodAutomationCandidate": "yes"
+    },
+    {
+      "id": "ECOM-CATALOG-005",
+      "title": "Filter by price range",
+      "preconditions": [
+        "The store sandbox contains its deterministic product seed."
+      ],
+      "steps": [
+        "Open /practice/apps/ecommerce/products/",
+        "Set minimum 1000 and maximum 5000, then apply filters."
+      ],
+      "expectedResult": "Every product price is within the inclusive range.",
+      "priority": "High",
+      "goodAutomationCandidate": "yes"
+    },
+    {
+      "id": "ECOM-CATALOG-006",
+      "title": "Filter by minimum rating",
+      "preconditions": [
+        "The store sandbox contains its deterministic product seed."
+      ],
+      "steps": [
+        "Open /practice/apps/ecommerce/products/",
+        "Choose 4+ stars and apply filters."
+      ],
+      "expectedResult": "No rendered rating is below four.",
+      "priority": "Medium",
+      "goodAutomationCandidate": "yes"
+    },
+    {
+      "id": "ECOM-CATALOG-007",
+      "title": "Sort price low to high",
+      "preconditions": [
+        "The store sandbox contains its deterministic product seed."
+      ],
+      "steps": [
+        "Open /practice/apps/ecommerce/products/",
+        "Select price low to high."
+      ],
+      "expectedResult": "Rendered prices are in ascending order.",
+      "priority": "High",
+      "goodAutomationCandidate": "yes"
+    },
+    {
+      "id": "ECOM-CATALOG-008",
+      "title": "Sort price high to low",
+      "preconditions": [
+        "The store sandbox contains its deterministic product seed."
+      ],
+      "steps": [
+        "Open /practice/apps/ecommerce/products/",
+        "Select price high to low."
+      ],
+      "expectedResult": "Rendered prices are in descending order.",
+      "priority": "High",
+      "goodAutomationCandidate": "yes"
+    },
+    {
+      "id": "ECOM-CATALOG-009",
+      "title": "Navigate catalogue pagination",
+      "preconditions": [
+        "The store sandbox contains its deterministic product seed."
+      ],
+      "steps": [
+        "Open /practice/apps/ecommerce/products/",
+        "Load page one, select Next, then Previous."
+      ],
+      "expectedResult": "Page labels and products change without duplicate rows.",
+      "priority": "High",
+      "goodAutomationCandidate": "yes"
+    },
+    {
+      "id": "ECOM-CATALOG-010",
+      "title": "Render no-results state",
+      "preconditions": [
+        "The store sandbox contains its deterministic product seed."
+      ],
+      "steps": [
+        "Open /practice/apps/ecommerce/products/",
+        "Search for a string absent from all synthetic products."
+      ],
+      "expectedResult": "An explicit empty state replaces product cards without an error.",
+      "priority": "Medium",
+      "goodAutomationCandidate": "yes"
+    },
+    {
+      "id": "ECOM-PRODUCT-001",
+      "title": "Display product images and alt text",
+      "preconditions": [
+        "Product prd-001 exists in the current store sandbox."
+      ],
+      "steps": [
+        "Open /practice/apps/ecommerce/product/?id=prd-001",
+        "Open a seeded product detail page."
+      ],
+      "expectedResult": "Three local images render with product-specific accessible alt text.",
+      "priority": "Medium",
+      "goodAutomationCandidate": "yes"
+    },
+    {
+      "id": "ECOM-PRODUCT-002",
+      "title": "Display variants",
+      "preconditions": [
+        "Product prd-001 exists in the current store sandbox."
+      ],
+      "steps": [
+        "Open /practice/apps/ecommerce/product/?id=prd-001",
+        "Inspect the Variant control."
+      ],
+      "expectedResult": "Published colour and pack choices are available.",
+      "priority": "Medium",
+      "goodAutomationCandidate": "yes"
+    },
+    {
+      "id": "ECOM-PRODUCT-003",
+      "title": "Add selected quantity and variant",
+      "preconditions": [
+        "Product prd-001 exists in the current store sandbox."
+      ],
+      "steps": [
+        "Open /practice/apps/ecommerce/product/?id=prd-001",
+        "Choose a variant, set quantity two, and add to cart."
+      ],
+      "expectedResult": "The cart records the exact product, quantity, and variant.",
+      "priority": "Critical",
+      "goodAutomationCandidate": "yes"
+    },
+    {
+      "id": "ECOM-PRODUCT-004",
+      "title": "Show stock status",
+      "preconditions": [
+        "Product prd-001 exists in the current store sandbox."
+      ],
+      "steps": [
+        "Open /practice/apps/ecommerce/product/?id=prd-001",
+        "Open an in-stock seeded product."
+      ],
+      "expectedResult": "Visible stock text matches the API stock field.",
+      "priority": "Medium",
+      "goodAutomationCandidate": "yes"
+    },
+    {
+      "id": "ECOM-PRODUCT-005",
+      "title": "Display fictional reviews",
+      "preconditions": [
+        "Product prd-001 exists in the current store sandbox."
+      ],
+      "steps": [
+        "Open /practice/apps/ecommerce/product/?id=prd-001",
+        "Open product details and inspect reviews."
+      ],
+      "expectedResult": "Two clearly synthetic reviews show author, rating, and text.",
+      "priority": "Low",
+      "goodAutomationCandidate": "yes"
+    },
+    {
+      "id": "ECOM-CART-001",
+      "title": "Add product from listing",
+      "preconditions": [
+        "The current Lab session has an available guest cart."
+      ],
+      "steps": [
+        "Open /practice/apps/ecommerce/cart/",
+        "Select Add to cart on an in-stock listing card."
+      ],
+      "expectedResult": "The cart count increments and the item appears in the cart.",
+      "priority": "Critical",
+      "goodAutomationCandidate": "yes"
+    },
+    {
+      "id": "ECOM-CART-002",
+      "title": "Update cart quantity",
+      "preconditions": [
+        "The current Lab session has an available guest cart."
+      ],
+      "steps": [
+        "Open /practice/apps/ecommerce/cart/",
+        "Change an item quantity from one to three."
+      ],
+      "expectedResult": "Line total, item count, subtotal, and total update through the API.",
+      "priority": "Critical",
+      "goodAutomationCandidate": "yes"
+    },
+    {
+      "id": "ECOM-CART-003",
+      "title": "Remove cart item",
+      "preconditions": [
+        "The current Lab session has an available guest cart."
+      ],
+      "steps": [
+        "Open /practice/apps/ecommerce/cart/",
+        "Select Remove for one cart row."
+      ],
+      "expectedResult": "The row disappears and totals are recalculated.",
+      "priority": "High",
+      "goodAutomationCandidate": "yes"
+    },
+    {
+      "id": "ECOM-CART-004",
+      "title": "Apply TESTHEON10 coupon",
+      "preconditions": [
+        "The current Lab session has an available guest cart."
+      ],
+      "steps": [
+        "Open /practice/apps/ecommerce/cart/",
+        "Enter TESTHEON10 and apply."
+      ],
+      "expectedResult": "A ten-percent discount is persisted and displayed.",
+      "priority": "Critical",
+      "goodAutomationCandidate": "yes"
+    },
+    {
+      "id": "ECOM-CART-005",
+      "title": "Reject expired EXPIRED20 coupon",
+      "preconditions": [
+        "The current Lab session has an available guest cart."
+      ],
+      "steps": [
+        "Open /practice/apps/ecommerce/cart/",
+        "Enter EXPIRED20 and apply."
+      ],
+      "expectedResult": "The UI displays COUPON_EXPIRED with HTTP 409.",
+      "priority": "High",
+      "goodAutomationCandidate": "yes"
+    },
+    {
+      "id": "ECOM-CART-006",
+      "title": "Reject unknown INVALID coupon",
+      "preconditions": [
+        "The current Lab session has an available guest cart."
+      ],
+      "steps": [
+        "Open /practice/apps/ecommerce/cart/",
+        "Enter INVALID and apply."
+      ],
+      "expectedResult": "The UI displays COUPON_UNKNOWN with HTTP 404.",
+      "priority": "High",
+      "goodAutomationCandidate": "yes"
+    },
+    {
+      "id": "ECOM-CART-007",
+      "title": "Render empty cart state",
+      "preconditions": [
+        "The current Lab session has an available guest cart."
+      ],
+      "steps": [
+        "Open /practice/apps/ecommerce/cart/",
+        "Remove every item from the cart."
+      ],
+      "expectedResult": "An explicit empty-cart message appears and count becomes zero.",
+      "priority": "Medium",
+      "goodAutomationCandidate": "yes"
+    },
+    {
+      "id": "ECOM-CART-008",
+      "title": "Keep cart isolated by session",
+      "preconditions": [
+        "The current Lab session has an available guest cart."
+      ],
+      "steps": [
+        "Open /practice/apps/ecommerce/cart/",
+        "Create a second header-mode Lab session and read its cart."
+      ],
+      "expectedResult": "The second session has no items from the browser session.",
+      "priority": "Critical",
+      "goodAutomationCandidate": "yes"
+    },
+    {
+      "id": "ECOM-CART-009",
+      "title": "Reset store data",
+      "preconditions": [
+        "The current Lab session has an available guest cart."
+      ],
+      "steps": [
+        "Open /practice/apps/ecommerce/cart/",
+        "Mutate products, add cart items, create an order, then select Reset store data."
+      ],
+      "expectedResult": "Products and orders return to seed while cart, coupon, and pending scenario clear.",
+      "priority": "Critical",
+      "goodAutomationCandidate": "yes"
+    },
+    {
+      "id": "ECOM-CHECKOUT-001",
+      "title": "Load dependent address options",
+      "preconditions": [
+        "The guest cart contains an in-stock product."
+      ],
+      "steps": [
+        "Open /practice/apps/ecommerce/checkout/",
+        "Choose India, Maharashtra, then Pune."
+      ],
+      "expectedResult": "Country, State, and City enable in order using the locations endpoint.",
+      "priority": "High",
+      "goodAutomationCandidate": "yes"
+    },
+    {
+      "id": "ECOM-CHECKOUT-002",
+      "title": "Calculate standard shipping",
+      "preconditions": [
+        "The guest cart contains an in-stock product."
+      ],
+      "steps": [
+        "Open /practice/apps/ecommerce/checkout/",
+        "Choose Standard shipping and submit a valid fake checkout."
+      ],
+      "expectedResult": "The order includes a ₹99 shipping cost.",
+      "priority": "High",
+      "goodAutomationCandidate": "yes"
+    },
+    {
+      "id": "ECOM-CHECKOUT-003",
+      "title": "Calculate express shipping",
+      "preconditions": [
+        "The guest cart contains an in-stock product."
+      ],
+      "steps": [
+        "Open /practice/apps/ecommerce/checkout/",
+        "Choose Express shipping and submit a valid fake checkout."
+      ],
+      "expectedResult": "The order includes a ₹249 shipping cost.",
+      "priority": "High",
+      "goodAutomationCandidate": "yes"
+    },
+    {
+      "id": "ECOM-CHECKOUT-004",
+      "title": "Accept successful fake card",
+      "preconditions": [
+        "The guest cart contains an in-stock product."
+      ],
+      "steps": [
+        "Open /practice/apps/ecommerce/checkout/",
+        "Use 4242 4242 4242 4242, 12/30, and 123."
+      ],
+      "expectedResult": "A confirmed synthetic order is created with charged=false.",
+      "priority": "Critical",
+      "goodAutomationCandidate": "yes"
+    },
+    {
+      "id": "ECOM-CHECKOUT-005",
+      "title": "Decline fake failure card",
+      "preconditions": [
+        "The guest cart contains an in-stock product."
+      ],
+      "steps": [
+        "Open /practice/apps/ecommerce/checkout/",
+        "Use 4000 0000 0000 0002."
+      ],
+      "expectedResult": "PAYMENT_DECLINED appears and no order is created.",
+      "priority": "Critical",
+      "goodAutomationCandidate": "yes"
+    },
+    {
+      "id": "ECOM-CHECKOUT-006",
+      "title": "Reject unpublished card number",
+      "preconditions": [
+        "The guest cart contains an in-stock product."
+      ],
+      "steps": [
+        "Open /practice/apps/ecommerce/checkout/",
+        "Enter a different numeric card value."
+      ],
+      "expectedResult": "PAYMENT_TEST_DATA_INVALID appears and no external request occurs.",
+      "priority": "High",
+      "goodAutomationCandidate": "yes"
+    },
+    {
+      "id": "ECOM-CHECKOUT-007",
+      "title": "Validate required address",
+      "preconditions": [
+        "The guest cart contains an in-stock product."
+      ],
+      "steps": [
+        "Open /practice/apps/ecommerce/checkout/",
+        "Clear Full name and submit."
+      ],
+      "expectedResult": "Native required validation blocks the checkout request.",
+      "priority": "High",
+      "goodAutomationCandidate": "yes"
+    },
+    {
+      "id": "ECOM-CHECKOUT-008",
+      "title": "Reject empty cart checkout",
+      "preconditions": [
+        "The guest cart contains an in-stock product."
+      ],
+      "steps": [
+        "Open /practice/apps/ecommerce/checkout/",
+        "Remove all items, sign in, and submit checkout through the API."
+      ],
+      "expectedResult": "CART_EMPTY returns HTTP 409 and no order is created.",
+      "priority": "Critical",
+      "goodAutomationCandidate": "yes"
+    },
+    {
+      "id": "ECOM-CHECKOUT-009",
+      "title": "Assert checkout request payload",
+      "preconditions": [
+        "The guest cart contains an in-stock product."
+      ],
+      "steps": [
+        "Open /practice/apps/ecommerce/checkout/",
+        "Intercept POST /store/checkout and inspect its JSON body."
+      ],
+      "expectedResult": "Address, shippingMethod, and fake payment fields match the UI values.",
+      "priority": "High",
+      "goodAutomationCandidate": "yes"
+    },
+    {
+      "id": "ECOM-CHECKOUT-010",
+      "title": "Show confirmation order ID",
+      "preconditions": [
+        "The guest cart contains an in-stock product."
+      ],
+      "steps": [
+        "Open /practice/apps/ecommerce/checkout/",
+        "Complete a valid fake checkout."
+      ],
+      "expectedResult": "Confirmation displays the exact API order ID and no-charge message.",
+      "priority": "Critical",
+      "goodAutomationCandidate": "yes"
+    },
+    {
+      "id": "ECOM-ORDER-001",
+      "title": "List current customer orders",
+      "preconditions": [
+        "standard_user is signed in to the current Lab session."
+      ],
+      "steps": [
+        "Open /practice/apps/ecommerce/orders/",
+        "Complete checkout and open Order history."
+      ],
+      "expectedResult": "The new order row shows ID, status, item count, total, and date.",
+      "priority": "High",
+      "goodAutomationCandidate": "yes"
+    },
+    {
+      "id": "ECOM-ORDER-002",
+      "title": "Verify UI order through API",
+      "preconditions": [
+        "standard_user is signed in to the current Lab session."
+      ],
+      "steps": [
+        "Open /practice/apps/ecommerce/orders/",
+        "Capture the confirmation order ID and GET /orders/{id}."
+      ],
+      "expectedResult": "API fields match the confirmation and submitted cart items.",
+      "priority": "Critical",
+      "goodAutomationCandidate": "yes"
+    },
+    {
+      "id": "ECOM-ORDER-003",
+      "title": "Reflect API order deletion",
+      "preconditions": [
+        "standard_user is signed in to the current Lab session."
+      ],
+      "steps": [
+        "Open /practice/apps/ecommerce/orders/",
+        "DELETE the new order through the API and refresh history."
+      ],
+      "expectedResult": "The deleted order row is absent.",
+      "priority": "High",
+      "goodAutomationCandidate": "yes"
+    },
+    {
+      "id": "ECOM-ORDER-004",
+      "title": "Keep orders scoped to identity",
+      "preconditions": [
+        "standard_user is signed in to the current Lab session."
+      ],
+      "steps": [
+        "Open /practice/apps/ecommerce/orders/",
+        "Create an order as standard_user and read history as another customer."
+      ],
+      "expectedResult": "The second customer cannot see the first customer order.",
+      "priority": "Critical",
+      "goodAutomationCandidate": "yes"
+    },
+    {
+      "id": "ECOM-NETWORK-001",
+      "title": "Mock catalogue response",
+      "preconditions": [
+        "The Store overview is open in an isolated Lab session."
+      ],
+      "steps": [
+        "Open /practice/apps/ecommerce/",
+        "Use page.route to fulfil /store/catalog with one known product."
+      ],
+      "expectedResult": "The supplied product renders with its mocked values.",
+      "priority": "High",
+      "goodAutomationCandidate": "yes"
+    },
+    {
+      "id": "ECOM-NETWORK-002",
+      "title": "Modify catalogue response",
+      "preconditions": [
+        "The Store overview is open in an isolated Lab session."
+      ],
+      "steps": [
+        "Open /practice/apps/ecommerce/",
+        "Fetch the real response, replace one product name, and fulfil it."
+      ],
+      "expectedResult": "The modified name renders without changing server data.",
+      "priority": "High",
+      "goodAutomationCandidate": "yes"
+    },
+    {
+      "id": "ECOM-NETWORK-003",
+      "title": "Abort catalogue request",
+      "preconditions": [
+        "The Store overview is open in an isolated Lab session."
+      ],
+      "steps": [
+        "Open /practice/apps/ecommerce/",
+        "Abort /store/catalog from page.route."
+      ],
+      "expectedResult": "A visible request-failed state appears and controls remain usable.",
+      "priority": "High",
+      "goodAutomationCandidate": "yes"
+    },
+    {
+      "id": "ECOM-NETWORK-004",
+      "title": "Handle one-shot 500",
+      "preconditions": [
+        "The Store overview is open in an isolated Lab session."
+      ],
+      "steps": [
+        "Open /practice/apps/ecommerce/",
+        "Arm 500 and run the next catalogue request."
+      ],
+      "expectedResult": "STORE_SIMULATED_500 appears once; the following request succeeds.",
+      "priority": "High",
+      "goodAutomationCandidate": "yes"
+    },
+    {
+      "id": "ECOM-NETWORK-005",
+      "title": "Handle deterministic timeout",
+      "preconditions": [
+        "The Store overview is open in an isolated Lab session."
+      ],
+      "steps": [
+        "Open /practice/apps/ecommerce/",
+        "Arm timeout and run the next catalogue request."
+      ],
+      "expectedResult": "The frontend shows REQUEST_TIMEOUT after its bounded client wait.",
+      "priority": "High",
+      "goodAutomationCandidate": "yes"
+    },
+    {
+      "id": "ECOM-NETWORK-006",
+      "title": "Handle malformed JSON",
+      "preconditions": [
+        "The Store overview is open in an isolated Lab session."
+      ],
+      "steps": [
+        "Open /practice/apps/ecommerce/",
+        "Arm malformed and run the next catalogue request."
+      ],
+      "expectedResult": "MALFORMED_JSON appears without an uncaught page error.",
+      "priority": "High",
+      "goodAutomationCandidate": "yes"
+    },
+    {
+      "id": "ECOM-NETWORK-007",
+      "title": "Handle empty array",
+      "preconditions": [
+        "The Store overview is open in an isolated Lab session."
+      ],
+      "steps": [
+        "Open /practice/apps/ecommerce/",
+        "Arm empty and run the next catalogue request."
+      ],
+      "expectedResult": "The UI renders its explicit EMPTY_ARRAY state.",
+      "priority": "Medium",
+      "goodAutomationCandidate": "yes"
+    }
+  ]
+}

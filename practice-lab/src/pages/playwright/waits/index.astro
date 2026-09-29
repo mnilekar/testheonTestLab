@@ -1,0 +1,298 @@
+---
+import ComponentLabPage from '../../../components/ComponentLabPage.astro';
+import FixtureSection from '../../../components/FixtureSection.astro';
+import CodeBlock from '../../../islands/CodeBlock';
+
+const visibleExample = `await page.getByRole('button', { name: 'Start appearance wait' }).click();
+await expect(page.getByTestId('appeared-element')).toBeVisible({ timeout: 11_000 });`;
+const responseExample = `const response = page.waitForResponse((candidate) =>
+  candidate.url().includes('/practice/api/v1/users') && candidate.status() === 200,
+);
+await page.getByRole('button', { name: 'Run background request' }).click();
+await response;
+await expect(page.getByTestId('network-counter')).toHaveText('1');`;
+---
+
+<ComponentLabPage
+  title="Playwright Waits Lab"
+  eyebrow="Playwright foundations · Synchronization"
+  intro="Practise Playwright auto-waiting, web-first assertions, network synchronization, and deterministic delayed UI without fixed sleeps."
+  canonicalPath="/playwright/waits/"
+  fixtureId="FX-WAIT-001"
+  anchor="fixture-waits"
+  guideHref="https://testheon.com/playwright-e2e/"
+  guideLabel="Read the E2E guide"
+  tasks={[
+    'Pin a delay with ?delay=0–10000 or choose a visible delay preset.',
+    'Wait for appearance, enabled state, text, spinner, skeleton, and progress outcomes.',
+    'Synchronize with one request and a combined group of requests.',
+    'Assert delayed options, lazy content, and the infinite-list end state.',
+    'Replay the same seeded-random delay and verify the outcome is identical.',
+  ]}
+  locatorHint="Trigger the action and assert the final visible state. Playwright locators auto-wait for actionability, while expect(locator) retries until its condition succeeds. Use waitForResponse only when the response itself is the contract."
+>
+  <section class="wait-guidance" aria-labelledby="wait-guidance-heading">
+    <div>
+      <p class="eyebrow">Synchronization strategy</p>
+      <h2 id="wait-guidance-heading">Wait for evidence, not elapsed time</h2>
+      <p>
+        Playwright auto-waits before actions such as click and fill. Web-first
+        assertions retry against a live locator, so an assertion like
+        <code>toBeVisible()</code> expresses the user-facing condition directly.
+      </p>
+      <p>
+        Avoid <code>waitForTimeout()</code>: it guesses how long the application
+        needs and is either slower than necessary or flaky under load. For
+        network-driven behavior, begin <code>waitForResponse()</code> before the
+        action, then assert what the response changed in the page.
+      </p>
+    </div>
+    <ol class="strategy-list">
+      <li>
+        <strong>Action:</strong> let the locator wait for actionability.
+      </li>
+      <li>
+        <strong>State:</strong> use a web-first assertion on visible output.
+      </li>
+      <li>
+        <strong>Network:</strong> wait for a specific response when it matters.
+      </li>
+      <li>
+        <strong>Fallback:</strong> use explicit polling only for non-DOM state.
+      </li>
+    </ol>
+  </section>
+
+  <div class="control-panel" aria-label="Wait fixture controls">
+    <div class="field">
+      <label for="wait-delay">Fixture delay</label>
+      <select id="wait-delay">
+        <option value="1000">1 second</option>
+        <option value="2000">2 seconds</option>
+        <option value="5000">5 seconds</option>
+        <option value="10000">10 seconds</option>
+        <option value="random">Seeded random</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="wait-seed">Random seed</label>
+      <input id="wait-seed" type="number" value="4803" inputmode="numeric" />
+    </div>
+    <p id="wait-control-result" class="result" role="status">
+      Active delay: 1,000 ms. Add <code>?delay=0</code> for fast automation.
+    </p>
+  </div>
+
+  <FixtureSection
+    id="wait-element-appears"
+    title="Element appears after N seconds"
+    description="The trigger schedules one bounded reveal; assert the target rather than sleeping."
+  >
+    <button id="start-appearance" class="fixture-button" type="button">
+      Start appearance wait
+    </button>
+    <p
+      id="appeared-element"
+      data-testid="appeared-element"
+      class="result"
+      role="status"
+      hidden
+    >
+      Delayed element is visible.
+    </p>
+  </FixtureSection>
+
+  <FixtureSection
+    id="wait-element-enabled"
+    title="Element becomes enabled"
+    description="The target remains a native disabled button until the controlled delay completes."
+  >
+    <div class="button-row">
+      <button
+        id="start-enable"
+        class="fixture-button fixture-button--secondary"
+        type="button"
+      >
+        Start enable wait
+      </button>
+      <button id="enabled-target" class="fixture-button" type="button" disabled>
+        Complete enabled action
+      </button>
+    </div>
+    <p id="enabled-result" class="result" role="status">
+      Target is disabled.
+    </p>
+  </FixtureSection>
+
+  <FixtureSection
+    id="wait-text-change"
+    title="Text changes"
+    description="A stable status node changes content after the selected delay."
+  >
+    <button id="start-text-change" class="fixture-button" type="button">
+      Start text update
+    </button>
+    <p id="text-change-result" class="result" role="status">
+      Build pending.
+    </p>
+  </FixtureSection>
+
+  <FixtureSection
+    id="wait-spinner-content"
+    title="Spinner becomes content"
+    description="The loading indicator is removed and replaced by a named content region."
+  >
+    <button id="start-spinner" class="fixture-button" type="button">
+      Load spinner content
+    </button>
+    <p id="spinner" class="loading-indicator" role="status" hidden>
+      Loading report…
+    </p>
+    <article id="spinner-content" class="result" hidden>
+      <h3>Run report</h3>
+      <p>48 checks passed.</p>
+    </article>
+  </FixtureSection>
+
+  <FixtureSection
+    id="wait-skeleton-content"
+    title="Skeleton becomes content"
+    description="A labelled placeholder is replaced by the completed card."
+  >
+    <button id="start-skeleton" class="fixture-button" type="button">
+      Load skeleton card
+    </button>
+    <div
+      id="skeleton"
+      class="skeleton-card"
+      aria-label="Loading learner card"
+      hidden
+    ></div>
+    <article id="skeleton-content" class="result" hidden>
+      <h3>Priya Shah</h3>
+      <p>Advanced Playwright path</p>
+    </article>
+  </FixtureSection>
+
+  <FixtureSection
+    id="wait-progress"
+    title="Progress bar reaches 100%"
+    description="The bar advances on a deterministic schedule and exposes its numeric value."
+  >
+    <button id="start-progress" class="fixture-button" type="button">
+      Start progress job
+    </button>
+    <progress id="wait-progress-bar" max="100" value="0">
+      0%
+    </progress>
+    <p id="progress-result" class="result" role="status">
+      Progress: 0%.
+    </p>
+  </FixtureSection>
+
+  <FixtureSection
+    id="wait-background-request"
+    title="Background request updates a counter"
+    description="A real Practice API response increments a visible counter; local preview uses a deterministic fallback."
+  >
+    <button id="run-background-request" class="fixture-button" type="button">
+      Run background request
+    </button>
+    <p class="metric">
+      Completed requests:{' '}
+      <strong data-testid="network-counter" id="network-counter">
+        0
+      </strong>
+    </p>
+    <p id="network-result" class="result" role="status">
+      No request completed.
+    </p>
+  </FixtureSection>
+
+  <FixtureSection
+    id="wait-concurrent-requests"
+    title="Concurrent requests produce one combined result"
+    description="Three resources run together and the final result appears only after all settle."
+  >
+    <button id="run-concurrent-requests" class="fixture-button" type="button">
+      Run three requests
+    </button>
+    <p id="concurrent-result" class="result" role="status">
+      Combined result is idle.
+    </p>
+  </FixtureSection>
+
+  <FixtureSection
+    id="wait-delayed-dropdown"
+    title="Delayed dropdown population"
+    description="The select remains disabled until its deterministic options exist."
+  >
+    <div class="inline-control">
+      <button id="load-delayed-options" class="fixture-button" type="button">
+        Load environments
+      </button>
+      <label for="delayed-environment">Environment</label>
+      <select id="delayed-environment" disabled>
+        <option value="">Waiting for options</option>
+      </select>
+    </div>
+    <p id="dropdown-result" class="result" role="status">
+      No environments loaded.
+    </p>
+  </FixtureSection>
+
+  <FixtureSection
+    id="wait-lazy-content"
+    title="Lazy-loaded images and sections"
+    description="Scroll the fixture into view to load a local image and reveal the related section."
+  >
+    <div class="lazy-spacer" aria-hidden="true">
+      Scroll inside the page to reach the lazy target
+    </div>
+    <article id="lazy-target" class="lazy-card" data-lazy-pending="true">
+      <img id="lazy-image" width="72" height="72" alt="" />
+      <div>
+        <h3>Lazy practice module</h3>
+        <p id="lazy-result" role="status">
+          Waiting to enter the viewport.
+        </p>
+      </div>
+    </article>
+  </FixtureSection>
+
+  <FixtureSection
+    id="wait-infinite-scroll"
+    title="Infinite scroll with an end state"
+    description="A bounded 25-item list appends five rows per intersection and then reports completion."
+  >
+    <div
+      id="wait-infinite-list"
+      class="api-infinite-list"
+      tabindex="0"
+      aria-label="Wait lab infinite list"
+    >
+      <ul id="wait-infinite-items" class="result-list"></ul>
+      <div id="wait-infinite-sentinel" aria-hidden="true"></div>
+    </div>
+    <p id="wait-infinite-result" class="result" role="status">
+      Preparing list.
+    </p>
+  </FixtureSection>
+
+  <div slot="examples" class="example-stack">
+    <CodeBlock
+      client:idle
+      code={visibleExample}
+      label="Web-first visibility assertion"
+    />
+    <CodeBlock
+      client:idle
+      code={responseExample}
+      label="Wait for a specific response"
+    />
+  </div>
+</ComponentLabPage>
+
+<script>
+  import '../../../scripts/waits';
+</script>

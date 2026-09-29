@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>Practice child window</title>
+    <style>
+      body {
+        max-width: 38rem;
+        margin: 0 auto;
+        padding: 2rem;
+        color: #241f35;
+        background: #f7f5ff;
+        font:
+          1rem/1.5 Inter,
+          system-ui,
+          sans-serif;
+      }
+      h1 {
+        font-family: Poppins, system-ui, sans-serif;
+      }
+      button {
+        padding: 0.65rem 0.9rem;
+        color: white;
+        border: 0;
+        border-radius: 0.45rem;
+        background: #5b35b5;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 id="child-title">Practice child window</h1>
+    <p id="child-description">
+      This same-origin page can safely message its opener.
+    </p>
+    <button id="send-to-parent" type="button">
+      Send result to parent
+    </button>
+    <p id="child-result" role="status">
+      No result sent.
+    </p>
+    <script>
+      const mode = new URLSearchParams(location.search).get('mode') ?? 'tab';
+      const modes: Record<string, readonly [string, string]> = {
+        tab: ['New tab fixture', 'Tab result: TAB-4803'],
+        popup: ['Popup window fixture', 'Popup result: POPUP-4803'],
+        signin: ['Synthetic sign-in', 'Signed in as Demo Learner'],
+        update: ['Child updates parent', 'Child update: BUILD-731'],
+      };
+      const copy = modes[mode] ?? [
+        'Practice child window',
+        'Child result: WINDOW-4803',
+      ];
+      document.title = copy[0];
+      const title = document.querySelector('#child-title');
+      const description = document.querySelector('#child-description');
+      if (title) title.textContent = copy[0];
+      if (description) description.textContent = copy[1];
+      document
+        .querySelector('#send-to-parent')
+        ?.addEventListener('click', () => {
+          if (window.opener && window.opener !== window) {
+            window.opener.postMessage(
+              { type: 'practice-window-result', mode, value: copy[1] },
+              location.origin,
+            );
+          }
+          const result = document.querySelector('#child-result');
+          if (result) result.textContent = copy[1] + ' sent.';
+        });
+    </script>
+  </body>
+</html>

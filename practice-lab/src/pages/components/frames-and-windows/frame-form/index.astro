@@ -1,0 +1,72 @@
+---
+const title = 'Frame form fixture';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>{title}</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 1rem;
+        color: #241f35;
+        background: #fffaf0;
+        font:
+          1rem/1.5 Inter,
+          system-ui,
+          sans-serif;
+      }
+      h1 {
+        margin: 0 0 0.75rem;
+        font:
+          700 1.25rem/1.3 Poppins,
+          system-ui,
+          sans-serif;
+      }
+      label {
+        display: block;
+        font-weight: 700;
+      }
+      input,
+      button {
+        margin-top: 0.4rem;
+        padding: 0.55rem 0.7rem;
+        font: inherit;
+      }
+      button {
+        color: white;
+        border: 0;
+        border-radius: 0.4rem;
+        background: #5b35b5;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Frame form</h1>
+    <form id="frame-form">
+      <label for="frame-project">Project name</label>
+      <input id="frame-project" name="project" value="Orion" />
+      <button type="submit">Save frame form</button>
+    </form>
+    <p id="frame-form-result" role="status">
+      No frame form submitted.
+    </p>
+    <script>
+      document
+        .querySelector('#frame-form')
+        ?.addEventListener('submit', (event) => {
+          event.preventDefault();
+          const input = document.querySelector('#frame-project');
+          const result = document.querySelector('#frame-form-result');
+          if (input instanceof HTMLInputElement && result) {
+            result.textContent = `Frame form saved: ${input.value}.`;
+          }
+        });
+    </script>
+  </body>
+</html>

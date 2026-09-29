@@ -1,0 +1,22 @@
+HTTP/1.1 200 OK
+Date: Sun, 27 Sep 2026 09:41:17 GMT
+Content-Type: text/html; charset=UTF-8
+Transfer-Encoding: chunked
+Connection: keep-alive
+Vary: Accept-Encoding
+x-powered-by: PHP/8.3.33
+x-pingback: https://testheon.com/xmlrpc.php
+link: <https://testheon.com/wp-json/>; rel="https://api.w.org/"
+link: <https://testheon.com/wp-json/wp/v2/posts/229>; rel="alternate"; title="JSON"; type="application/json"
+link: <https://testheon.com/?p=229>; rel=shortlink
+etag: W/"75-1790502076;gz"
+x-litespeed-cache: miss
+platform: hostinger
+panel: hpanel
+content-security-policy: upgrade-insecure-requests
+Server: hcdn
+alt-svc: h3=":443"; ma=86400
+x-hcdn-request-id: b5becaeaefaf9b3d20a14fe2ab90a4f6-mum-edge9
+x-hcdn-cache-status: MISS
+x-hcdn-upstream-rt: 0.515
+

@@ -1,0 +1,209 @@
+---
+import ComponentLabPage from '../../../components/ComponentLabPage.astro';
+import LocatorComparison from '../../../components/LocatorComparison.astro';
+import CodeBlock from '../../../islands/CodeBlock';
+
+const comparisons = [
+  {
+    id: 'by-role',
+    title: 'getByRole',
+    guidance:
+      'Role locators follow the accessibility tree and reflect how people understand controls. Add an accessible name to distinguish similar roles. This is the strongest default for buttons, links, headings, form controls, dialogs, and status regions.',
+    goodHtml: '<button type="button">Create report</button>',
+    awkwardHtml: '<div class="fake-button">Create report</div>',
+  },
+  {
+    id: 'by-text',
+    title: 'getByText',
+    guidance:
+      'Text locators suit non-interactive copy and unique visible outcomes. Use exact matching when nearby text overlaps. Avoid using body-wide text as a shortcut for an interactive control that already has a meaningful role.',
+    goodHtml: '<p>Payment method updated</p>',
+    awkwardHtml: '<div>Updated</div><div>Updated</div>',
+  },
+  {
+    id: 'by-label',
+    title: 'getByLabel',
+    guidance:
+      'A real label creates a durable relationship between field name and control. It improves click targets and accessibility at the same time. Missing or visually nearby text is not an equivalent relationship.',
+    goodHtml:
+      '<label for="locator-email">Email address</label><input id="locator-email" type="email">',
+    awkwardHtml: '<div>Email address</div><input type="email">',
+  },
+  {
+    id: 'by-placeholder',
+    title: 'getByPlaceholder',
+    guidance:
+      'Placeholder locators can be useful when the product genuinely exposes a unique prompt, but placeholders disappear during typing and are not labels. Treat them as a fallback or as a deliberate exercise requirement.',
+    goodHtml:
+      '<label for="project-code">Project code</label><input id="project-code" placeholder="QA-123">',
+    awkwardHtml: '<input placeholder="Enter value">',
+  },
+  {
+    id: 'by-alt',
+    title: 'getByAltText',
+    guidance:
+      'Alternative text identifies meaningful images and image controls. Write alt text for purpose rather than file appearance. Decorative images should use an empty alt and should not be targeted as meaningful content.',
+    goodHtml:
+      '<img src="/practice/favicon.svg" alt="Testheon Practice Lab mark" width="40" height="40">',
+    awkwardHtml: '<img src="/practice/favicon.svg" width="40" height="40">',
+  },
+  {
+    id: 'by-title',
+    title: 'getByTitle',
+    guidance:
+      'Title locators cover elements whose title attribute is part of the observable contract. Since titles are often hidden until hover and unavailable on touch, prefer visible names when you control the markup.',
+    goodHtml: '<abbr title="Application Programming Interface">API</abbr>',
+    awkwardHtml: '<span title="More">i</span><span title="More">i</span>',
+  },
+  {
+    id: 'by-testid',
+    title: 'getByTestId',
+    guidance:
+      'Test IDs are a deliberate escape hatch when user-facing semantics cannot identify a stable technical target. Keep them rare, meaningful, and documented; they should not replace an accessible name that users need.',
+    goodHtml:
+      '<output data-testid="build-sequence">Build 4803 complete</output>',
+    awkwardHtml: '<button data-testid="button-7">Save</button>',
+  },
+  {
+    id: 'css-locator',
+    title: 'locator() with CSS',
+    guidance:
+      'CSS is useful for structural or state assertions that have no user-facing equivalent. Prefer a stable attribute owned by the fixture. Long descendant chains couple tests to styling and incidental wrappers.',
+    goodHtml:
+      '<article data-state="ready"><h3>Release candidate</h3></article>',
+    awkwardHtml:
+      '<div class="page"><div><div><span class="green">Ready</span></div></div></div>',
+  },
+  {
+    id: 'filtering',
+    title: 'filter({ hasText, has })',
+    guidance:
+      'Filtering starts with a meaningful collection and narrows it by visible text or a descendant locator. It is ideal for repeated cards and rows. Make the outer collection semantic before applying the filter.',
+    goodHtml:
+      '<ul><li><h3>Apollo</h3><button>Open</button></li><li><h3>Gemini</h3><button>Open</button></li></ul>',
+    awkwardHtml:
+      '<div><div>Apollo <span>Open</span></div><div>Gemini <span>Open</span></div></div>',
+  },
+  {
+    id: 'nth-locator',
+    title: 'nth()',
+    guidance:
+      'nth() selects by zero-based position. Use it only when order itself is the behavior under test, such as a ranked list. If an item has an identity, filter by that identity instead.',
+    goodHtml:
+      '<ol aria-label="Ranked runs"><li>Run A</li><li>Run B</li><li>Run C</li></ol>',
+    awkwardHtml: '<div><div>Item</div><div>Item</div><div>Item</div></div>',
+  },
+  {
+    id: 'first-locator',
+    title: 'first()',
+    guidance:
+      'first() communicates that the first matching item matters. Pair it with a scoped, meaningful list so unrelated matches cannot move ahead of it. Do not use first() merely to silence strict-mode ambiguity.',
+    goodHtml:
+      '<section aria-label="Newest alerts"><ol><li>Build complete</li><li>Review ready</li></ol></section>',
+    awkwardHtml: '<div>Alert</div><div>Alert</div>',
+  },
+  {
+    id: 'last-locator',
+    title: 'last()',
+    guidance:
+      'last() is appropriate when the newest or final item is the contract. Assert the collection context and count when that matters. A locator that happens to be last today can become ambiguous after unrelated content changes.',
+    goodHtml:
+      '<ol aria-label="Activity log"><li>Started</li><li>Validated</li><li>Deployed</li></ol>',
+    awkwardHtml: '<div>Log</div><div>Log</div><div>Log</div>',
+  },
+  {
+    id: 'chaining',
+    title: 'Locator chaining',
+    guidance:
+      'Chaining keeps each step readable: locate a region, then a card, then its action. Each link in the chain should express product meaning. Avoid chains made only of implementation classes and child indexes.',
+    goodHtml:
+      '<section aria-label="Billing"><article><h3>Visa ending 1111</h3><button>Remove</button></article></section>',
+    awkwardHtml:
+      '<div class="c1"><div class="c2"><div class="c3"><span>Remove</span></div></div></div>',
+  },
+  {
+    id: 'scoping',
+    title: 'Frame-free scoping',
+    guidance:
+      'Named regions, forms, dialogs, rows, and cards provide scope without iframe complexity. Begin at the smallest stable container and locate within it. This resolves duplicate labels while keeping the exercise in one document.',
+    goodHtml:
+      '<section aria-label="Shipping address"><button>Edit</button></section><section aria-label="Billing address"><button>Edit</button></section>',
+    awkwardHtml: '<div>Edit</div><div>Edit</div>',
+  },
+] as const;
+
+const roleCode = `const dialog = page.getByRole('dialog', { name: 'Delete project' });
+await dialog.getByRole('button', { name: 'Confirm delete' }).click();`;
+const filterCode = `const project = page.getByRole('listitem').filter({ hasText: 'Apollo' });
+await project.getByRole('button', { name: 'Open' }).click();`;
+const positionCode = `const runs = page.getByRole('list', { name: 'Ranked runs' }).getByRole('listitem');
+await expect(runs.first()).toContainText('Run A');
+await expect(runs.nth(1)).toContainText('Run B');
+await expect(runs.last()).toContainText('Run C');`;
+const scopeCode = `const billing = page.getByRole('region', { name: 'Billing address' });
+await billing.getByRole('button', { name: 'Edit' }).click();`;
+---
+
+<ComponentLabPage
+  title="Playwright Locator Lab"
+  eyebrow="Playwright foundations · Locator index"
+  intro="Choose locators from the user-visible contract, then use scoping, filtering, and position only when the product behavior makes them necessary."
+  canonicalPath="/playwright/locators/"
+  fixtureId="FX-LOCATOR-001"
+  anchor="fixture-locators"
+  guideHref="https://testheon.com/playwright-locators/"
+  guideLabel="Read the complete locator guide"
+  tasks={[
+    'Write one stable locator for every Good DOM example.',
+    'Explain why each Awkward DOM example is ambiguous or inaccessible.',
+    'Resolve duplicate text using filter, chaining, or named-region scope.',
+    'Use nth, first, and last only where list order is the explicit contract.',
+    'Assert the documented missing labels and roles remain intentionally awkward.',
+  ]}
+  locatorHint="Start with role and accessible name. Move to label, text, alt, title, or placeholder when that is the visible contract. Use test IDs and CSS as documented fallbacks, then narrow repeated matches through semantic scope."
+>
+  <div class="locator-prose">
+    <p>
+      Locator quality determines whether a browser test describes product
+      behavior or merely survives today’s markup. Playwright locators retry
+      while the page changes, enforce strictness when an action should target
+      one element, and combine selection with web-first assertions. Those
+      capabilities work best when the DOM exposes the same names and
+      relationships a user perceives.
+    </p>
+    <p>
+      Begin with accessible roles and names for interactive controls. Labels are
+      the strongest field contract. Visible text, alternative text, titles, and
+      placeholders each fit narrower content types. Test IDs and CSS remain
+      useful when a technical state has no honest user-facing selector, but
+      their presence should be deliberate rather than automatic.
+    </p>
+    <p>
+      Repeated content needs context. Filter a meaningful collection by a child
+      or visible text, or enter a named region before finding its action.
+      Position helpers communicate order-sensitive behavior; they should not
+      conceal duplicate or missing identity. The paired examples below keep
+      awkward markup visible so you can compare the cost of each choice.
+    </p>
+  </div>
+
+  <nav aria-label="Locator topics">
+    <ul class="fixture-nav">
+      {comparisons.map((item) => (
+        <li>
+          <a href={`#${item.id}`}>{item.title}</a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+  {comparisons.map((item) => (
+    <LocatorComparison {...item} />
+  ))}
+
+  <div slot="examples" class="example-stack">
+    <CodeBlock client:idle code={roleCode} label="Role and dialog scope" />
+    <CodeBlock client:idle code={filterCode} label="Filter repeated cards" />
+    <CodeBlock client:idle code={positionCode} label="Position helpers" />
+    <CodeBlock client:idle code={scopeCode} label="Frame-free region scope" />
+  </div>
+</ComponentLabPage>

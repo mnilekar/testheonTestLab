@@ -1,0 +1,9 @@
+---
+type Difficulty = 'Beginner' | 'Intermediate' | 'Advanced' | 'Expert';
+interface Props {
+  level: Difficulty;
+}
+const { level } = Astro.props;
+---
+
+<span class={`difficulty difficulty--${level.toLowerCase()}`}>{level}</span>

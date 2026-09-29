@@ -1,0 +1,150 @@
+---
+import '../styles/global.css';
+import { canonicalUrl } from '../lib/urls';
+import {
+  resolveDeployTarget,
+  resolveRobotsPolicy,
+  siteName,
+  type RobotsPolicy,
+} from '../config/site';
+
+interface Breadcrumb {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  title: string;
+  description: string;
+  canonicalPath: string;
+  robots?: RobotsPolicy;
+  breadcrumbs?: Breadcrumb[];
+}
+
+const {
+  title,
+  description,
+  canonicalPath,
+  robots = 'index,follow',
+  breadcrumbs = [{ label: 'Practice Lab' }],
+} = Astro.props;
+const origin = import.meta.env.PUBLIC_SITE_ORIGIN ?? 'https://testheon.com';
+const target = resolveDeployTarget(import.meta.env.PUBLIC_DEPLOY_TARGET);
+const resolvedRobots = resolveRobotsPolicy(
+  robots,
+  target,
+  import.meta.env.PUBLIC_ROBOTS_POLICY,
+);
+const canonical = canonicalUrl(origin, canonicalPath);
+const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
+const breadcrumbItems = breadcrumbs.map((crumb, index) => ({
+  '@type': 'ListItem',
+  position: index + 1,
+  name: crumb.label,
+  ...(crumb.href ? { item: canonicalUrl(origin, crumb.href) } : {}),
+}));
+const breadcrumbJson = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: breadcrumbItems,
+});
+const path = Astro.url.pathname;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <meta name="robots" content={resolvedRobots} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="theme-color" content="#6528f7" />
+    <link rel="icon" href="/practice/favicon.svg" type="image/svg+xml" />
+    <title>{fullTitle}</title>
+    <script type="application/ld+json" set:html={breadcrumbJson}></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">
+      Skip to content
+    </a>
+    <header class="site-header">
+      <div class="container site-header__inner">
+        <a
+          class="wordmark"
+          href="/practice/"
+          aria-label="Testheon Practice Lab home"
+        >
+          <span class="wordmark__mark" aria-hidden="true">
+            T
+          </span>
+          <span class="wordmark__text">
+            TESTHEON <small>Practice Lab</small>
+          </span>
+        </a>
+        <nav class="lab-nav" aria-label="Lab navigation">
+          <ul>
+            <li>
+              <a
+                href="/practice/"
+                aria-current={path === '/practice/' ? 'page' : undefined}
+              >
+                Lab home
+              </a>
+            </li>
+            <li>
+              <a
+                href="/practice/playwright/"
+                aria-current={
+                  path.startsWith('/practice/playwright/') ? 'page' : undefined
+                }
+              >
+                Playwright
+              </a>
+            </li>
+            <li>
+              <a href="https://testheon.com/blog/">Testheon blog</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <nav class="container breadcrumbs" aria-label="Breadcrumb">
+      <ol>
+        {breadcrumbs.map((crumb, index) => (
+          <li>
+            {crumb.href && index < breadcrumbs.length - 1 ? (
+              <a href={crumb.href}>{crumb.label}</a>
+            ) : (
+              <span aria-current="page">{crumb.label}</span>
+            )}
+          </li>
+        ))}
+      </ol>
+    </nav>
+    <main id="main-content">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="container site-footer__inner">
+        <p>© 2026 Testheon. Built for deliberate QA practice.</p>
+        <ul class="footer-links" aria-label="Testheon links">
+          <li>
+            <a href="https://testheon.com/">Home</a>
+          </li>
+          <li>
+            <a href="https://testheon.com/blog/">Blog</a>
+          </li>
+          <li>
+            <a href="https://testheon.com/privacy-policy/">Privacy</a>
+          </li>
+        </ul>
+      </div>
+    </footer>
+  </body>
+</html>

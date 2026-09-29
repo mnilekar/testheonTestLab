@@ -1,0 +1,76 @@
+---
+import LabLayout from '../layouts/LabLayout.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  canonicalPath: string;
+  page: string;
+  robots?: 'index,follow' | 'noindex,nofollow';
+}
+
+const {
+  title,
+  description,
+  canonicalPath,
+  page,
+  robots = 'noindex,nofollow',
+} = Astro.props;
+const links = [
+  ['home', 'Store home', '/practice/apps/ecommerce/'],
+  ['products', 'Products', '/practice/apps/ecommerce/products/'],
+  ['cart', 'Cart', '/practice/apps/ecommerce/cart/'],
+  ['orders', 'Orders', '/practice/apps/ecommerce/orders/'],
+  ['profile', 'Profile', '/practice/apps/ecommerce/profile/'],
+] as const;
+---
+
+<LabLayout
+  title={title}
+  description={description}
+  canonicalPath={canonicalPath}
+  robots={robots}
+  breadcrumbs={[
+    { label: 'Practice Lab', href: '/practice/' },
+    { label: 'Apps', href: '/practice/apps/ecommerce/' },
+    { label: title },
+  ]}
+>
+  <div class="store-app" data-store-page={page}>
+    <nav class="store-nav" aria-label="Testheon Store">
+      <div class="container store-nav__inner">
+        <a class="store-brand" href="/practice/apps/ecommerce/">
+          <span aria-hidden="true">T</span>
+          Testheon Store
+        </a>
+        <ul>
+          {links.map(([key, label, href]) => (
+            <li>
+              <a href={href} aria-current={page === key ? 'page' : undefined}>
+                {label}
+                {key === 'cart' && (
+                  <span id="store-cart-count" class="store-count">
+                    0
+                  </span>
+                )}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </nav>
+    <div
+      id="store-global-status"
+      class="container store-global-status"
+      role="status"
+      aria-live="polite"
+    >
+      Connecting to your isolated store sandbox…
+    </div>
+    <slot />
+  </div>
+</LabLayout>
+
+<script>
+  import '../scripts/store-app';
+</script>

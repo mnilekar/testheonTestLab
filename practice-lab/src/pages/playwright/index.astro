@@ -1,0 +1,280 @@
+---
+import Button from '../../components/Button.astro';
+import Callout from '../../components/Callout.astro';
+import Card from '../../components/Card.astro';
+import DifficultyBadge from '../../components/DifficultyBadge.astro';
+import FixtureMarker from '../../components/FixtureMarker.astro';
+import Solution from '../../components/Solution.astro';
+import CodeBlock from '../../islands/CodeBlock';
+import Tabs from '../../islands/Tabs';
+import LabLayout from '../../layouts/LabLayout.astro';
+
+const description =
+  'Explore the Testheon Playwright practice track: a TypeScript-first path from reliable locators to realistic end-to-end QA workflows.';
+const exampleCode =
+  "import { test, expect } from '@playwright/test';\n\ntest('opens the practice hub', async ({ page }) => {\n  await page.goto('/practice/');\n  await expect(page.getByRole('heading', { name: 'Testheon Practice Lab' })).toBeVisible();\n});";
+---
+
+<LabLayout
+  title="Playwright Practice Track"
+  description={description}
+  canonicalPath="/playwright/"
+  breadcrumbs={[
+    { label: 'Practice Lab', href: '/practice/' },
+    { label: 'Playwright' },
+  ]}
+>
+  <section class="hero">
+    <div class="container hero__grid">
+      <div>
+        <p class="eyebrow">TypeScript first · Python and Java next</p>
+        <h1>Playwright Practice Track</h1>
+        <p class="lede">
+          Follow a progressive route from semantic locators and deterministic
+          waits to API-aware, session-safe, production-minded browser tests.
+        </p>
+        <div class="hero__actions">
+          <Button href="https://testheon.com/playwright-e2e/">
+            Read the E2E guide
+          </Button>
+          <Button href="/practice/" variant="secondary">
+            Back to all categories
+          </Button>
+        </div>
+      </div>
+      <aside class="hero-note" aria-label="Track status">
+        <strong>Track scaffold ready</strong>
+        <p>
+          This foundation proves the shell, testing, and release workflow.
+          Guided exercises arrive in their assigned chunks without changing
+          these stable routes.
+        </p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section__heading">
+        <p class="eyebrow">Learning path</p>
+        <h2>Build skills in layers</h2>
+      </div>
+      <div class="grid">
+        <Card
+          title="Foundations"
+          description="Locators, assertions, forms, and waits built around accessible contracts."
+        />
+        <Card
+          title="Component Lab"
+          description="Focused controls and documented edge cases before they appear in an application."
+        />
+        <Card
+          title="Realistic applications"
+          description="Authentication and ecommerce flows that connect browser, API, and network testing."
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--soft" aria-labelledby="system-preview">
+    <div class="container component-stack">
+      <div class="section__heading">
+        <p class="eyebrow">Reusable system preview</p>
+        <h2 id="system-preview">Clear states for learners and tests</h2>
+      </div>
+
+      <FixtureMarker />
+
+      <div class="badge-row" aria-label="Difficulty levels">
+        <DifficultyBadge level="Beginner" />
+        <DifficultyBadge level="Intermediate" />
+        <DifficultyBadge level="Advanced" />
+        <DifficultyBadge level="Expert" />
+      </div>
+
+      <Callout title="Stable by default" tone="success">
+        <p>
+          Exercise controls expose deterministic states. Intentionally difficult
+          behavior is labelled and tested as part of its fixture contract.
+        </p>
+      </Callout>
+
+      <Tabs
+        client:load
+        label="Language paths"
+        tabs={[
+          {
+            id: 'typescript',
+            label: 'TypeScript',
+            content:
+              'The first-class path with complete starter tests and examples.',
+          },
+          {
+            id: 'python',
+            label: 'Python',
+            content:
+              'Secondary examples follow the same observable fixture contracts.',
+          },
+          {
+            id: 'java',
+            label: 'Java',
+            content:
+              'Secondary examples preserve the same stable URLs and outcomes.',
+          },
+        ]}
+      />
+
+      <CodeBlock
+        client:load
+        code={exampleCode}
+        language="typescript"
+        label="First smoke test"
+      />
+
+      <Solution>
+        <p>
+          Prefer role and accessible-name locators, assert the user-visible
+          outcome, and keep the exercise route stable. The same contract can
+          then move into a realistic app flow.
+        </p>
+      </Solution>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="component-lab-heading">
+    <div class="container">
+      <div class="section__heading">
+        <p class="eyebrow">Component Labs</p>
+        <h2 id="component-lab-heading">
+          Practice stable controls and awkward DOM
+        </h2>
+        <p>
+          Learn one interaction contract at a time, then carry the same controls
+          into realistic applications.
+        </p>
+      </div>
+      <div class="grid">
+        <Card
+          title="Input components"
+          description="Native, masked, dynamic, validated, debounced and suggested inputs."
+          href="/practice/components/inputs/"
+          eyebrow="FX-INPUT-001"
+        />
+        <Card
+          title="Button components"
+          description="Actions, gestures, delays, DOM replacement and scoped duplicate labels."
+          href="/practice/components/buttons/"
+          eyebrow="FX-BUTTON-001"
+        />
+        <Card
+          title="Checkboxes and radios"
+          description="Groups, indeterminate state, hierarchy, generated and conditional options."
+          href="/practice/components/checkboxes-radios/"
+          eyebrow="FX-CHOICE-001"
+        />
+        <Card
+          title="Dropdown components"
+          description="Native and ARIA selection plus dependent and paged API options."
+          href="/practice/components/dropdowns/"
+          eyebrow="FX-DROPDOWN-001"
+        />
+        <Card
+          title="Realistic forms"
+          description="Client and API validation across six believable form workflows."
+          href="/practice/components/forms/"
+          eyebrow="FX-FORM-001"
+        />
+        <Card
+          title="Locator Lab"
+          description="Semantic selection, filtering, position and frame-free scoping."
+          href="/practice/playwright/locators/"
+          eyebrow="FX-LOCATOR-001"
+        />
+        <Card
+          title="Table Lab"
+          description="Sorting, search, filters, pagination, editing, row actions, virtualization and nested data."
+          href="/practice/components/tables/"
+          eyebrow="FX-TABLE-001"
+        />
+        <Card
+          title="Search and Lists Lab"
+          description="Search timing, autocomplete, combined filters, load more and cursor-backed infinite scroll."
+          href="/practice/components/search-and-lists/"
+          eyebrow="FX-LIST-001"
+        />
+        <Card
+          title="Playwright Waits Lab"
+          description="Auto-waiting, web-first assertions, deterministic delays, requests, lazy content and progress."
+          href="/practice/playwright/waits/"
+          eyebrow="FX-WAIT-001"
+        />
+        <Card
+          title="Dynamic DOM Lab"
+          description="Generated selectors, seeded order, duplicate text, replacement and API-rendered elements."
+          href="/practice/components/dynamic-dom/"
+          eyebrow="FX-DOM-001"
+        />
+        <Card
+          title="Dialogs and Toasts"
+          description="Browser dialogs, accessible application modals and semantic toast notifications."
+          href="/practice/components/dialogs/"
+          eyebrow="FX-DIALOG-001"
+        />
+        <Card
+          title="Interaction Lab"
+          description="Hover, pointer gestures, scrolling, focus order, shortcuts, listboxes and autocomplete."
+          href="/practice/components/interactions/"
+          eyebrow="FX-INTERACT-001"
+        />
+        <Card
+          title="Date, Time, and Ranges"
+          description="Native and custom dates, fixed timezones, sliders, linked values and async progress."
+          href="/practice/components/date-time-and-ranges/"
+          eyebrow="FX-DATETIME-001"
+        />
+        <Card
+          title="Frames and Windows Lab"
+          description="Same-origin iframes, nested documents, tabs, popups and parent communication."
+          href="/practice/components/frames-and-windows/"
+          eyebrow="FX-FRAME-001"
+        />
+        <Card
+          title="Files Lab"
+          description="Private safe uploads, sanitized previews, rejection paths and deterministic downloads."
+          href="/practice/components/files/"
+          eyebrow="FX-FILE-001"
+        />
+        <Card
+          title="Drag and Drop Lab"
+          description="HTML5 and pointer dragging, keyboard sorting, file drops and API-backed Kanban."
+          href="/practice/components/drag-and-drop/"
+          eyebrow="FX-DRAG-001"
+        />
+        <Card
+          title="Browser Context Lab"
+          description="Cookies, storage, permissions, offline requests and responsive breakpoints."
+          href="/practice/components/browser-context/"
+          eyebrow="FX-CONTEXT-001"
+        />
+        <Card
+          title="Authentication Sandbox"
+          description="Public demo users, password reset, secure sessions, roles, bearer tokens and API keys."
+          href="/practice/apps/auth/"
+          eyebrow="FX-AUTH-001"
+        />
+        <Card
+          title="Playwright Authentication"
+          description="Global setup, storageState, role projects, API login, logout and deterministic expiry."
+          href="/practice/playwright/authentication/"
+          eyebrow="Index lesson"
+        />
+        <Card
+          title="Testheon Store"
+          description="Catalogue, product, guest cart, authenticated checkout, orders, network failures and visual mode."
+          href="/practice/apps/ecommerce/"
+          eyebrow="FX-STORE-001"
+        />
+      </div>
+    </div>
+  </section>
+</LabLayout>

@@ -1,0 +1,108 @@
+---
+import Button from './Button.astro';
+import FixtureMarker from './FixtureMarker.astro';
+import Solution from './Solution.astro';
+import LabLayout from '../layouts/LabLayout.astro';
+
+interface Props {
+  title: string;
+  eyebrow: string;
+  intro: string;
+  canonicalPath: string;
+  fixtureId: string;
+  anchor: string;
+  guideHref: string;
+  guideLabel: string;
+  tasks: string[];
+  locatorHint: string;
+}
+
+const {
+  title,
+  eyebrow,
+  intro,
+  canonicalPath,
+  fixtureId,
+  anchor,
+  guideHref,
+  guideLabel,
+  tasks,
+  locatorHint,
+} = Astro.props;
+---
+
+<LabLayout
+  title={title}
+  description={intro}
+  canonicalPath={canonicalPath}
+  breadcrumbs={[
+    { label: 'Practice Lab', href: '/practice/' },
+    { label: 'Components', href: '/practice/playwright/' },
+    { label: title },
+  ]}
+>
+  <section class="hero hero--compact">
+    <div class="container hero__grid">
+      <div>
+        <p class="eyebrow">{eyebrow}</p>
+        <h1>{title}</h1>
+        <p class="lede">{intro}</p>
+        <div class="hero__actions">
+          <Button href={`#${anchor}`}>Start the fixture</Button>
+          <Button href={guideHref} variant="secondary">
+            {guideLabel}
+          </Button>
+        </div>
+      </div>
+      <aside class="hero-note" aria-label="Fixture contract">
+        <strong>{fixtureId}</strong>
+        <p>
+          Version 1.0.0 · deterministic behavior · reset by reloading this page.
+        </p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container practice-layout">
+      <article
+        id={anchor}
+        class="fixture-shell"
+        data-fixture-id={fixtureId}
+        data-fixture-version="1.0.0"
+      >
+        <FixtureMarker />
+        <slot />
+      </article>
+
+      <aside class="practice-sidebar" aria-label="Exercise guidance">
+        <section class="task-card">
+          <p class="eyebrow">Exercise brief</p>
+          <h2>What to automate</h2>
+          <ul class="task-list">
+            {tasks.map((task) => (
+              <li>{task}</li>
+            ))}
+          </ul>
+        </section>
+        <Solution summary="Recommended locator hint">
+          <p>{locatorHint}</p>
+        </Solution>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section section--soft">
+    <div class="container example-stack">
+      <div class="section__heading">
+        <p class="eyebrow">Passing examples</p>
+        <h2>Start with observable behavior</h2>
+        <p>
+          These snippets match executable tests stored in
+          <code>examples/playwright-ts/</code>.
+        </p>
+      </div>
+      <slot name="examples" />
+    </div>
+  </section>
+</LabLayout>

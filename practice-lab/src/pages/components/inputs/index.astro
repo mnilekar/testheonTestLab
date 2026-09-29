@@ -1,0 +1,306 @@
+---
+import ComponentLabPage from '../../../components/ComponentLabPage.astro';
+import FixtureSection from '../../../components/FixtureSection.astro';
+import CodeBlock from '../../../islands/CodeBlock';
+
+const basicExample = `import { test, expect } from '@playwright/test';
+
+test('fills labelled inputs', async ({ page }) => {
+  await page.goto('/practice/components/inputs/');
+  await page.getByLabel('Work email').fill('learner@example.test');
+  await expect(page.getByLabel('Work email')).toHaveValue('learner@example.test');
+});`;
+const debounceExample = `await page.getByLabel('Debounced project name').fill('Apollo');
+await expect(page.getByTestId('debounce-result')).toHaveText('Debounced value: Apollo');`;
+const autocompleteExample = `const skill = page.getByRole('combobox', { name: 'Automation skill' });
+await skill.fill('Play');
+await skill.press('ArrowDown');
+await skill.press('Enter');
+await expect(skill).toHaveValue('Playwright automation');`;
+---
+
+<ComponentLabPage
+  title="Input Components"
+  eyebrow="Component Lab A · Fields"
+  intro="Practice filling, clearing, validating, waiting, and selecting values across native and custom inputs while learning when labels, placeholders, and state assertions matter."
+  canonicalPath="/components/inputs/"
+  fixtureId="FX-INPUT-001"
+  anchor="fixture-inputs"
+  guideHref="https://testheon.com/playwright-locators/"
+  guideLabel="Read the locator guide"
+  tasks={[
+    'Fill every labelled native input and assert its value.',
+    'Toggle password visibility and verify the input type.',
+    'Wait for dynamic, validation, debounce, and populated states.',
+    'Select autosuggest and autocomplete options by keyboard.',
+    'Prove the placeholder-only anti-pattern has no associated label.',
+  ]}
+  locatorHint="Start with getByLabel() for correctly labelled fields. Use getByPlaceholder() only for the explicitly marked anti-pattern, and prefer role plus accessible name for the two custom suggestion widgets."
+>
+  <nav aria-label="Input fixture sections">
+    <ul class="fixture-nav">
+      <li>
+        <a href="#native-inputs">Native fields</a>
+      </li>
+      <li>
+        <a href="#masked-inputs">Masked inputs</a>
+      </li>
+      <li>
+        <a href="#field-states">Field states</a>
+      </li>
+      <li>
+        <a href="#validation-input">Validation</a>
+      </li>
+      <li>
+        <a href="#suggestion-inputs">Suggestions</a>
+      </li>
+    </ul>
+  </nav>
+
+  <FixtureSection
+    id="native-inputs"
+    title="Native text-like inputs"
+    description="Each control uses its real HTML input type so Playwright can exercise browser-native semantics."
+  >
+    <div class="form-grid">
+      <div class="field">
+        <label for="full-name">Full name</label>
+        <input id="full-name" name="fullName" type="text" autocomplete="name" />
+      </div>
+      <div class="field">
+        <label for="account-password">Account password</label>
+        <div class="inline-control">
+          <input
+            id="account-password"
+            name="password"
+            type="password"
+            autocomplete="new-password"
+          />
+          <button
+            id="toggle-password"
+            class="fixture-button fixture-button--secondary"
+            type="button"
+            aria-pressed="false"
+          >
+            Show password
+          </button>
+        </div>
+        <p id="password-result" class="result" role="status">
+          Password is hidden.
+        </p>
+      </div>
+      <div class="field">
+        <label for="work-email">Work email</label>
+        <input id="work-email" name="email" type="email" autocomplete="email" />
+      </div>
+      <div class="field">
+        <label for="team-size">Team size</label>
+        <input id="team-size" name="teamSize" type="number" min="1" max="100" />
+      </div>
+      <div class="field">
+        <label for="telephone">Telephone</label>
+        <input id="telephone" name="telephone" type="tel" autocomplete="tel" />
+      </div>
+      <div class="field">
+        <label for="portfolio-url">Portfolio URL</label>
+        <input
+          id="portfolio-url"
+          name="url"
+          type="url"
+          placeholder="https://example.test"
+        />
+      </div>
+      <div class="field span-2">
+        <label for="search-input">Search practices</label>
+        <input id="search-input" name="search" type="search" />
+        <ul aria-label="Practice search results">
+          <li data-search-item>API testing</li>
+          <li data-search-item>Accessibility testing</li>
+          <li data-search-item>Visual regression</li>
+        </ul>
+        <p id="search-result" class="result" role="status">
+          3 results visible.
+        </p>
+      </div>
+    </div>
+  </FixtureSection>
+
+  <FixtureSection
+    id="masked-inputs"
+    title="Masked phone and card-style inputs"
+    description="Formatting is deterministic and accepts digits only. Use obviously fake values such as 4111 1111 1111 1111."
+  >
+    <div class="form-grid">
+      <div class="field">
+        <label for="phone-mask">Fake Indian phone</label>
+        <input
+          id="phone-mask"
+          inputmode="numeric"
+          autocomplete="off"
+          placeholder="98765 43210"
+        />
+        <p id="mask-result" class="result" role="status">
+          0/10 phone digits entered.
+        </p>
+      </div>
+      <div class="field">
+        <label for="card-mask">Fake card-style number</label>
+        <input
+          id="card-mask"
+          inputmode="numeric"
+          autocomplete="off"
+          placeholder="4111 1111 1111 1111"
+        />
+        <p id="card-result" class="result" role="status">
+          0/16 fake card digits entered.
+        </p>
+      </div>
+    </div>
+  </FixtureSection>
+
+  <FixtureSection
+    id="field-states"
+    title="Disabled, readonly, dynamic, and populated fields"
+    description="Assert state before action, then wait for a user-visible result rather than an arbitrary timeout."
+  >
+    <div class="form-grid">
+      <div class="field">
+        <label for="disabled-field">Disabled environment</label>
+        <input id="disabled-field" value="Production locked" disabled />
+      </div>
+      <div class="field">
+        <label for="readonly-field">Readonly run ID</label>
+        <input id="readonly-field" value="RUN-4803" readonly />
+      </div>
+      <div class="field">
+        <label>
+          <input id="enable-field" type="checkbox" /> Enable advanced note
+        </label>
+        <label for="dynamic-field">Advanced note</label>
+        <input id="dynamic-field" disabled />
+        <p id="dynamic-result" class="result" role="status">
+          Field disabled.
+        </p>
+      </div>
+      <div class="field">
+        <label for="populated-field">Generated value</label>
+        <input id="populated-field" readonly />
+        <button id="populate-field" class="fixture-button" type="button">
+          Populate field
+        </button>
+        <p id="populate-result" class="result" role="status">
+          Waiting to populate.
+        </p>
+      </div>
+    </div>
+  </FixtureSection>
+
+  <FixtureSection
+    id="placeholder-antipattern"
+    title="Placeholder-only input"
+    description="This field intentionally has no label. It exists to show why placeholder locators are weaker and less accessible."
+    antiPattern
+  >
+    <input
+      id="placeholder-only"
+      type="text"
+      placeholder="Unlabelled account alias"
+    />
+  </FixtureSection>
+
+  <FixtureSection
+    id="validation-input"
+    title="Validation and debounce"
+    description="One field validates a fixed reference format; the other exposes its debounced value after 300 ms."
+  >
+    <div class="form-grid">
+      <div class="field">
+        <label for="validation-field">Test reference</label>
+        <input
+          id="validation-field"
+          aria-describedby="validation-result"
+          placeholder="QA-123"
+        />
+        <p
+          id="validation-result"
+          class="result"
+          data-testid="validation-result"
+          role="status"
+        >
+          Use the format QA-123.
+        </p>
+      </div>
+      <div class="field">
+        <label for="debounce-field">Debounced project name</label>
+        <input id="debounce-field" />
+        <p
+          id="debounce-result"
+          class="result"
+          data-testid="debounce-result"
+          role="status"
+        >
+          Debounced value: (empty)
+        </p>
+      </div>
+    </div>
+  </FixtureSection>
+
+  <FixtureSection
+    id="suggestion-inputs"
+    title="Autosuggest and keyboard autocomplete"
+    description="Autosuggest exposes clickable city suggestions. The ARIA combobox supports Arrow Up, Arrow Down, and Enter."
+  >
+    <div class="form-grid">
+      <div class="field">
+        <label for="autosuggest-field">Office city</label>
+        <input
+          id="autosuggest-field"
+          aria-controls="autosuggest-list"
+          autocomplete="off"
+        />
+        <ul
+          id="autosuggest-list"
+          class="suggestions"
+          aria-label="City suggestions"
+        ></ul>
+        <p id="autosuggest-result" class="result" role="status">
+          Type to see city suggestions.
+        </p>
+      </div>
+      <div class="field">
+        <label for="autocomplete-field">Automation skill</label>
+        <input
+          id="autocomplete-field"
+          role="combobox"
+          aria-autocomplete="list"
+          aria-expanded="false"
+          aria-controls="autocomplete-list"
+          autocomplete="off"
+        />
+        <div
+          id="autocomplete-list"
+          class="option-list"
+          role="listbox"
+          aria-label="Automation skills"
+        ></div>
+        <p id="autocomplete-result" class="result" role="status">
+          Type and use the keyboard to select.
+        </p>
+      </div>
+    </div>
+  </FixtureSection>
+
+  <div slot="examples" class="example-stack">
+    <CodeBlock client:idle code={basicExample} label="Label-first input test" />
+    <CodeBlock client:idle code={debounceExample} label="Debounce assertion" />
+    <CodeBlock
+      client:idle
+      code={autocompleteExample}
+      label="Keyboard autocomplete"
+    />
+  </div>
+</ComponentLabPage>
+
+<script>
+  import '../../../scripts/inputs';
+</script>

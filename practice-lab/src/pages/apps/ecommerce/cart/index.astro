@@ -1,0 +1,51 @@
+---
+import StoreShell from '../../../../components/StoreShell.astro';
+---
+
+<StoreShell
+  title="Shopping cart"
+  description="Update quantities, remove items, and test deterministic ecommerce coupons."
+  canonicalPath="/apps/ecommerce/cart/"
+  page="cart"
+>
+  <section class="store-page section">
+    <div class="container">
+      <p class="eyebrow">Guest cart · Session scoped</p>
+      <h1>Your practice cart</h1>
+      <p>
+        The cart survives login-at-checkout because it belongs to the same
+        isolated Lab session.
+      </p>
+      <div id="store-cart" aria-live="polite">
+        <p class="store-empty">Loading cart…</p>
+      </div>
+      <form id="store-coupon-form" class="store-coupon-form">
+        <div>
+          <label for="store-coupon">Coupon code</label>
+          <input id="store-coupon" name="code" placeholder="TESTHEON10" />
+        </div>
+        <button class="button button--secondary" type="submit">
+          Apply coupon
+        </button>
+      </form>
+      <p id="store-coupon-result" class="result" role="status">
+        Use TESTHEON10, EXPIRED20, or INVALID.
+      </p>
+      <div class="hero__actions">
+        <a
+          class="button button--secondary"
+          href="/practice/apps/ecommerce/products/"
+        >
+          Continue shopping
+        </a>
+        <a
+          id="store-checkout-link"
+          class="button button--primary"
+          href="/practice/apps/ecommerce/checkout/"
+        >
+          Continue to checkout
+        </a>
+      </div>
+    </div>
+  </section>
+</StoreShell>

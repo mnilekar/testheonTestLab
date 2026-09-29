@@ -1,0 +1,264 @@
+---
+import ComponentLabPage from '../../../components/ComponentLabPage.astro';
+import FixtureSection from '../../../components/FixtureSection.astro';
+import CodeBlock from '../../../islands/CodeBlock';
+
+const nativeExample = `await page.getByLabel('Test environment').selectOption('staging');
+await expect(page.getByRole('status')).toContainText('staging selected');`;
+const comboExample = `const timezone = page.getByRole('combobox', { name: 'Timezone' });
+await timezone.press('ArrowDown');
+await timezone.press('Enter');
+await expect(timezone).toHaveValue('Asia/Kolkata');`;
+const apiExample = `await page.getByRole('button', { name: 'Load API locations' }).click();
+await page.getByLabel('Country').selectOption('India');
+await page.getByLabel('State').selectOption('Maharashtra');
+await page.getByLabel('City').selectOption('Mumbai');`;
+---
+
+<ComponentLabPage
+  title="Dropdown Components"
+  eyebrow="Component Lab A · Selection"
+  intro="Compare native selects with searchable and ARIA listboxes, then automate dependent and paged options loaded from the isolated Practice API."
+  canonicalPath="/components/dropdowns/"
+  fixtureId="FX-DROPDOWN-001"
+  anchor="fixture-dropdowns"
+  guideHref="https://testheon.com/playwright-api-testing/"
+  guideLabel="Read the API testing guide"
+  tasks={[
+    'Select single, multiple, and grouped native options.',
+    'Filter the searchable list and choose one visible result.',
+    'Operate the custom ARIA combobox entirely by keyboard.',
+    'Load Country, State, and City options from API customer data.',
+    'Wait for deterministic delayed options without sleeping.',
+    'Scroll the product list to load subsequent API pages.',
+  ]}
+  locatorHint="Use selectOption() for native selects. Use role=combobox and role=option for custom widgets, and assert the visible loading/result status when options arrive from the API."
+>
+  <FixtureSection
+    id="native-dropdowns"
+    title="Native, multi-select, and grouped options"
+    description="Native controls give Playwright reliable value and selected-option assertions."
+  >
+    <div class="form-grid">
+      <div class="field">
+        <label for="native-select">Test environment</label>
+        <select id="native-select">
+          <option value="">Choose environment</option>
+          <option value="development">Development</option>
+          <option value="staging">Staging</option>
+          <option value="production-mirror">Production mirror</option>
+        </select>
+        <p id="native-select-result" class="result" role="status">
+          No environment selected.
+        </p>
+      </div>
+      <div class="field">
+        <label for="multi-select">Browsers</label>
+        <select id="multi-select" multiple size="4">
+          <option value="Chromium">Chromium</option>
+          <option value="Firefox">Firefox</option>
+          <option value="WebKit">WebKit</option>
+          <option value="Mobile Chrome">Mobile Chrome</option>
+        </select>
+        <p id="multi-select-result" class="result" role="status">
+          Nothing selected.
+        </p>
+      </div>
+      <div class="field span-2">
+        <label for="grouped-select">Testing tool</label>
+        <select id="grouped-select">
+          <option value="">Choose tool</option>
+          <optgroup label="Browser automation">
+            <option>Playwright</option>
+            <option>Selenium</option>
+            <option>Cypress</option>
+          </optgroup>
+          <optgroup label="API testing">
+            <option>Postman</option>
+            <option>REST Assured</option>
+          </optgroup>
+        </select>
+        <p id="grouped-select-result" class="result" role="status">
+          No grouped option selected.
+        </p>
+      </div>
+    </div>
+  </FixtureSection>
+
+  <FixtureSection
+    id="searchable-dropdown"
+    title="Searchable dropdown"
+    description="Typing filters a static list while selection updates a separate status region."
+  >
+    <div class="field searchable-select">
+      <label for="searchable-select">QA discipline</label>
+      <input
+        id="searchable-select"
+        aria-controls="searchable-options"
+        autocomplete="off"
+      />
+      <div
+        id="searchable-options"
+        class="option-list"
+        role="listbox"
+        aria-label="QA disciplines"
+      >
+        <button type="button" role="option" aria-selected="false">
+          Accessibility
+        </button>
+        <button type="button" role="option" aria-selected="false">
+          API testing
+        </button>
+        <button type="button" role="option" aria-selected="false">
+          Performance
+        </button>
+        <button type="button" role="option" aria-selected="false">
+          Visual testing
+        </button>
+      </div>
+      <p id="searchable-result" class="result" role="status">
+        Type to filter disciplines.
+      </p>
+    </div>
+  </FixtureSection>
+
+  <FixtureSection
+    id="aria-combobox-section"
+    title="Custom ARIA combobox/listbox"
+    description="This non-native widget exposes combobox state, active descendant, options, and keyboard selection."
+  >
+    <div class="field">
+      <label for="aria-combobox">Timezone</label>
+      <input
+        id="aria-combobox"
+        role="combobox"
+        aria-expanded="false"
+        aria-autocomplete="list"
+        aria-controls="aria-listbox"
+        autocomplete="off"
+      />
+      <div
+        id="aria-listbox"
+        class="option-list"
+        role="listbox"
+        aria-label="Timezones"
+      >
+        <button
+          id="timezone-0"
+          type="button"
+          role="option"
+          aria-selected="false"
+        >
+          Asia/Kolkata
+        </button>
+        <button
+          id="timezone-1"
+          type="button"
+          role="option"
+          aria-selected="false"
+        >
+          Europe/London
+        </button>
+        <button
+          id="timezone-2"
+          type="button"
+          role="option"
+          aria-selected="false"
+        >
+          America/New_York
+        </button>
+      </div>
+      <p id="combobox-result" class="result" role="status">
+        Use Arrow keys and Enter.
+      </p>
+    </div>
+  </FixtureSection>
+
+  <FixtureSection
+    id="dependent-dropdowns"
+    title="Country → State → City from API"
+    description="The fixture reads synthetic customer cities from Chunk 3, then enables only valid dependent choices."
+  >
+    <button id="load-locations" class="fixture-button" type="button">
+      Load API locations
+    </button>
+    <div class="form-grid">
+      <div class="field">
+        <label for="country-select">Country</label>
+        <select id="country-select" disabled>
+          <option>Load locations first</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="state-select">State</label>
+        <select id="state-select" disabled>
+          <option>Choose country first</option>
+        </select>
+      </div>
+      <div class="field span-2">
+        <label for="city-select">City</label>
+        <select id="city-select" disabled>
+          <option>Choose state first</option>
+        </select>
+      </div>
+    </div>
+    <p id="dependent-result" class="result" role="status">
+      API locations not loaded.
+    </p>
+  </FixtureSection>
+
+  <FixtureSection
+    id="dynamic-options"
+    title="Options added after a controlled delay"
+    description="A 400 ms deterministic delay adds three options and enables the native select."
+  >
+    <div class="button-row">
+      <button id="load-dynamic-options" class="fixture-button" type="button">
+        Load browser engines
+      </button>
+      <div class="field">
+        <label for="dynamic-select">Delayed engine</label>
+        <select id="dynamic-select" disabled>
+          <option>Load options first</option>
+        </select>
+      </div>
+    </div>
+    <p id="dynamic-select-result" class="result" role="status">
+      Options not loaded.
+    </p>
+  </FixtureSection>
+
+  <FixtureSection
+    id="infinite-dropdown"
+    title="Infinite-scroll dropdown from paged API"
+    description="The list requests 15 products at a time and loads up to four pages when its scroll boundary is reached."
+  >
+    <button id="open-infinite-products" class="fixture-button" type="button">
+      Open product dropdown
+    </button>
+    <div
+      id="infinite-products"
+      class="infinite-list option-list"
+      role="listbox"
+      aria-label="Products from API"
+      tabindex="0"
+    ></div>
+    <p id="infinite-result" class="result" role="status">
+      Product dropdown is closed.
+    </p>
+  </FixtureSection>
+
+  <div slot="examples" class="example-stack">
+    <CodeBlock client:idle code={nativeExample} label="Native select" />
+    <CodeBlock
+      client:idle
+      code={comboExample}
+      label="ARIA combobox keyboard flow"
+    />
+    <CodeBlock client:idle code={apiExample} label="Dependent API options" />
+  </div>
+</ComponentLabPage>
+
+<script>
+  import '../../../scripts/dropdowns';
+</script>

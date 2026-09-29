@@ -1,0 +1,240 @@
+---
+import ComponentLabPage from '../../../components/ComponentLabPage.astro';
+import FixtureSection from '../../../components/FixtureSection.astro';
+import CodeBlock from '../../../islands/CodeBlock';
+
+const uploadExample = `await page.getByLabel('Single safe file').setInputFiles({
+  name: 'people.csv',
+  mimeType: 'text/csv',
+  buffer: Buffer.from('name,team\\nAsha,QA'),
+});
+await expect(page.getByTestId('upload-result')).toContainText('people.csv');`;
+const downloadExample = `const downloadPromise = page.waitForEvent('download');
+await page.getByRole('link', { name: 'Download static TXT' }).click();
+const download = await downloadPromise;
+expect(download.suggestedFilename()).toBe('testheon-practice-notes.txt');`;
+---
+
+<ComponentLabPage
+  title="Files Lab"
+  eyebrow="Component Lab H · Safe uploads and downloads"
+  intro="Automate single, multiple, dropzone, image, CSV, progress, rejection, and download flows backed by a deliberately non-executable upload pipeline."
+  canonicalPath="/components/files/"
+  fixtureId="FX-FILE-001"
+  anchor="fixture-files"
+  guideHref="https://testheon.com/playwright-e2e/"
+  guideLabel="Read the E2E guide"
+  tasks={[
+    'Upload one or several allowed files and assert server-verified metadata.',
+    'Drop a file, inspect an image preview, and parse a CSV into a safe text-only table.',
+    'Assert extension, MIME, content, path, size, quota, and executable-file rejection.',
+    'Observe upload progress and the per-session private-storage contract.',
+    'Download static and session-derived PDF, CSV, and TXT files by suggested filename.',
+    'Wait for a controlled delayed download and a download triggered after an API request.',
+  ]}
+  locatorHint="Use setInputFiles for native inputs and dispatch a DataTransfer only when practising a dropzone. Start waitForEvent('download') before clicking and assert suggestedFilename rather than a workstation path."
+>
+  <aside
+    class="fixture-note file-safety-contract"
+    aria-labelledby="file-safety-title"
+  >
+    <h2 id="file-safety-title">Server safety contract</h2>
+    <ul class="task-list">
+      <li>MIME and extension allowlists plus server-side content sniffing.</li>
+      <li>2 MiB per file, 5 files and 6 MiB per sandbox.</li>
+      <li>
+        Private storage outside the web root using random <code>.upload</code>{' '}
+        names.
+      </li>
+      <li>
+        No uploaded bytes are executed or served; previews are sanitized
+        metadata/text only.
+      </li>
+      <li>
+        Uploads expire after 10 minutes and are removed by request-time and cron
+        cleanup.
+      </li>
+    </ul>
+  </aside>
+
+  <FixtureSection
+    id="native-file-uploads"
+    title="Single and multiple uploads"
+    description="Native file inputs share the same server allowlist, storage quota, progress, and visible response."
+  >
+    <div class="form-grid">
+      <div class="field">
+        <label for="single-file">Single safe file</label>
+        <input
+          id="single-file"
+          type="file"
+          accept=".png,.jpg,.jpeg,.csv,.txt,.pdf"
+        />
+      </div>
+      <div class="field">
+        <label for="multiple-files">Multiple safe files</label>
+        <input
+          id="multiple-files"
+          type="file"
+          accept=".png,.jpg,.jpeg,.csv,.txt,.pdf"
+          multiple
+        />
+      </div>
+    </div>
+    <progress id="upload-progress" max="100" value="0">
+      0%
+    </progress>
+    <p
+      id="upload-result"
+      data-testid="upload-result"
+      class="result"
+      role="status"
+    >
+      No files uploaded.
+    </p>
+    <ul
+      id="uploaded-files"
+      class="result-list"
+      aria-label="Uploaded files"
+    ></ul>
+  </FixtureSection>
+
+  <FixtureSection
+    id="file-dropzone"
+    title="File dropzone"
+    description="The shared dropzone accepts drag/drop and keyboard activation, then uses the same secure upload path."
+  >
+    <div
+      id="shared-file-dropzone"
+      class="file-dropzone"
+      role="button"
+      tabindex="0"
+      aria-label="Drop safe files here"
+    >
+      Drop safe files here or press Enter to choose
+    </div>
+    <input
+      id="dropzone-file-input"
+      class="visually-hidden"
+      type="file"
+      aria-label="Dropzone file picker"
+      accept=".png,.jpg,.jpeg,.csv,.txt,.pdf"
+      multiple
+    />
+  </FixtureSection>
+
+  <FixtureSection
+    id="file-previews"
+    title="Image and CSV previews"
+    description="Images preview from the local selection; CSV cells are parsed and inserted with textContent, never raw HTML."
+  >
+    <img
+      id="image-preview"
+      class="image-preview"
+      alt="Selected safe image preview"
+      hidden
+    />
+    <div class="table-scroll">
+      <table id="csv-preview-table" hidden>
+        <caption>Sanitized CSV preview</caption>
+        <thead></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <p id="preview-result" class="result" role="status">
+      Select an image or CSV to preview it.
+    </p>
+  </FixtureSection>
+
+  <FixtureSection
+    id="upload-rejections"
+    title="Rejection paths"
+    description="Client guidance mirrors the authoritative server checks; renamed scripts, HTML, active SVG, traversal names, oversize files, and quota overflow are rejected."
+  >
+    <p>
+      Allowed: PNG, JPEG, CSV, plain TXT, and PDF. Maximum size: 2 MiB each. The
+      server returns a stable error code without storing rejected bytes.
+    </p>
+    <p id="rejection-result" class="result" role="status">
+      No rejected file observed.
+    </p>
+  </FixtureSection>
+
+  <FixtureSection
+    id="file-downloads"
+    title="Static and dynamic downloads"
+    description="Each response sends attachment disposition with a deterministic suggested filename."
+  >
+    <div class="button-row">
+      <a
+        class="fixture-button"
+        href="/practice/api/v1/files/download/static-pdf"
+      >
+        Download static PDF
+      </a>
+      <a
+        class="fixture-button"
+        href="/practice/api/v1/files/download/static-csv"
+      >
+        Download static CSV
+      </a>
+      <a
+        class="fixture-button"
+        href="/practice/api/v1/files/download/static-txt"
+      >
+        Download static TXT
+      </a>
+      <a
+        class="fixture-button fixture-button--secondary"
+        href="/practice/api/v1/files/download/dynamic-csv"
+      >
+        Download session CSV report
+      </a>
+      <a
+        class="fixture-button fixture-button--secondary"
+        href="/practice/api/v1/files/download/dynamic-pdf"
+      >
+        Download session PDF report
+      </a>
+    </div>
+    <div class="inline-control">
+      <label for="download-delay">Delayed download timer</label>
+      <select id="download-delay">
+        <option value="0">0 ms</option>
+        <option value="1000">1 second</option>
+      </select>
+      <a
+        id="delayed-download"
+        class="fixture-button"
+        href="/practice/api/v1/files/download/static-txt?delay=0"
+      >
+        Download after delay
+      </a>
+      <button id="api-then-download" class="fixture-button" type="button">
+        Request API then download report
+      </button>
+    </div>
+    <p id="download-result" class="result" role="status">
+      No API-triggered download requested.
+    </p>
+  </FixtureSection>
+
+  <div slot="examples" class="example-stack">
+    <CodeBlock
+      client:load
+      code={uploadExample}
+      language="typescript"
+      label="Upload example"
+    />
+    <CodeBlock
+      client:load
+      code={downloadExample}
+      language="typescript"
+      label="Download example"
+    />
+  </div>
+</ComponentLabPage>
+
+<script>
+  import '../../../scripts/files';
+</script>

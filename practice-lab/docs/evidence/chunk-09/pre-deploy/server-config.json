@@ -1,0 +1,35 @@
+{
+  "capturedAt": "2026-09-29T07:42:31.841Z",
+  "account": "u652010987",
+  "production": {
+    "domain": "testheon.com",
+    "rootHtaccessBytes": 1466,
+    "rootHtaccessSha256": "3f9689ed4759a5a35a33c4f7ccfb40613310fbc1b0f98387bfdc76f21ce00d24",
+    "wordpressMarkersPresent": true
+  },
+  "staging": {
+    "domain": "practice-staging.testheon.com",
+    "rootHtaccessBytes": 413,
+    "rootHtaccessSha256": "9186269b669a6a1ab7bc26d52b66c633e1ae616460974cd60ff394c45bcacaf6",
+    "activeRelease": "20260929T034048Z-ac085a",
+    "retainedReleases": [
+      "20260928T130939Z-f8497f",
+      "20260928T150416Z-7bb20e",
+      "20260929T034048Z-ac085a"
+    ],
+    "releaseControllerBytes": 3086,
+    "releaseControllerSha256": "00ebe9d6888c27d4d5e57bce22ad5fa36e13333ee96f49089e5cafc0aab67416",
+    "preparedStagingBuild": {
+      "releaseMarker": "local-build",
+      "fileCount": 82,
+      "bytes": 794326,
+      "artifactSha256": "5e05d5bffacfc6200f919e9841032451a3b35bdf3cbdad697b72254d6f0c0952"
+    },
+    "preparedRuntimeSha256": "edecb79f17bc6e44589b19bbdf295354e83a169675172775292d51f0c5eb2d00",
+    "preparedPracticeHtaccessSha256": "c5d30d9405a292cc9eba1d41b512a5aa5e1176addfe30b0834b7cb800fe68141",
+    "preparedApiRuntimeSha256": "077d64f059d9dcf1a84611eef3dcb9b7e8950b5d1bf7e9fd494ab69c0071edaa",
+    "preparedApiAuthSha256": "068e61b338cade1c14e9ece01857e14d2e666f8d02f6c9b62ead91e5d2e3d486",
+    "preparedApiStoreSha256": "29eb95f62cd3d8fb0e7ed216332eff1a2b57deeb966de27556d69b7ff060716c",
+    "preparedApiHtaccessSha256": "0995ee3c123f1d609e10868b7f54f0a7243e9d87f1632e25d2f8d04db8e4513d"
+  }
+}

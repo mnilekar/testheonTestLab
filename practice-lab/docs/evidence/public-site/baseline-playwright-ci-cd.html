@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="en-US" prefix="og: https://ogp.me/ns#">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="profile" href="https://gmpg.org/xfn/11"> 
+	
+<!-- Search Engine Optimization by Rank Math - https://rankmath.com/ -->
+<title>Playwright CI/CD: GitHub Actions, Jenkins &amp; Sharding</title>
+<meta name="description" content="Run Playwright CI/CD with GitHub Actions and Jenkins. Configure browsers, workers, sharding, retries, reports and retained failure artifacts."/>
+<meta name="robots" content="follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large"/>
+<link rel="canonical" href="https://testheon.com/playwright-ci-cd/" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Playwright CI/CD: GitHub Actions, Jenkins &amp; Sharding" />
+<meta property="og:description" content="Run Playwright CI/CD with GitHub Actions and Jenkins. Configure browsers, workers, sharding, retries, reports and retained failure artifacts." />
+<meta property="og:url" content="https://testheon.com/playwright-ci-cd/" />
+<meta property="og:site_name" content="AI Tools Weekly" />
+<meta property="article:section" content="QA &amp; Testing" />
+<meta property="og:updated_time" content="2026-09-26T19:09:21+00:00" />
+<meta property="og:image" content="https://testheon.com/wp-content/uploads/2026/09/playwright-ci-cd-pipeline-workflow.webp" />
+<meta property="og:image:secure_url" content="https://testheon.com/wp-content/uploads/2026/09/playwright-ci-cd-pipeline-workflow.webp" />
+<meta property="og:image:width" content="1600" />
+<meta property="og:image:height" content="900" />
+<meta property="og:image:alt" content="Playwright CI/CD workflow from commit through install and parallel test shards to merged reports and retained artifacts" />
+<meta property="og:image:type" content="image/webp" />
+<meta property="article:published_time" content="2026-09-26T19:09:18+00:00" />
+<meta property="article:modified_time" content="2026-09-26T19:09:21+00:00" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Playwright CI/CD: GitHub Actions, Jenkins &amp; Sharding" />
+<meta name="twitter:description" content="Run Playwright CI/CD with GitHub Actions and Jenkins. Configure browsers, workers, sharding, retries, reports and retained failure artifacts." />
+<meta name="twitter:image" content="https://testheon.com/wp-content/uploads/2026/09/playwright-ci-cd-pipeline-workflow.webp" />
+<meta name="twitter:label1" content="Written by" />
+<meta name="twitter:data1" content="Mayur Nilekar" />
+<meta name="twitter:label2" content="Time to read" />
+<meta name="twitter:data2" content="16 minutes" />
+<script type="application/ld+json" class="rank-math-schema">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://testheon.com/#organization","name":"AI Tools Weekly","url":"https://testheon.com","logo":{"@type":"ImageObject","@id":"https://testheon.com/#logo","url":"https://testheon.com/wp-content/uploads/2026/08/cropped-testheon-logo-150x150.png","contentUrl":"https://testheon.com/wp-content/uploads/2026/08/cropped-testheon-logo-150x150.png","caption":"AI Tools Weekly","inLanguage":"en-US"}},{"@type":"WebSite","@id":"https://testheon.com/#website","url":"https://testheon.com","name":"AI Tools Weekly","alternateName":"AIToolsWeekly","publisher":{"@id":"https://testheon.com/#organization"},"inLanguage":"en-US"},{"@type":"ImageObject","@id":"https://testheon.com/wp-content/uploads/2026/09/playwright-ci-cd-pipeline-workflow.webp","url":"https://testheon.com/wp-content/uploads/2026/09/playwright-ci-cd-pipeline-workflow.webp","width":"1600","height":"900","caption":"Playwright CI/CD workflow from commit through install and parallel test shards to merged reports and retained artifacts","inLanguage":"en-US"},{"@type":"BreadcrumbList","@id":"https://testheon.com/playwright-ci-cd/#breadcrumb","itemListElement":[{"@type":"ListItem","position":"1","item":{"@id":"https://testheon.com","name":"Home"}},{"@type":"ListItem","position":"2","item":{"@id":"https://testheon.com/category/qa-testing/","name":"QA &amp; Testing"}},{"@type":"ListItem","position":"3","item":{"@id":"https://testheon.com/playwright-ci-cd/","name":"Playwright CI/CD: GitHub Actions, Jenkins &#038; Parallel Execution"}}]},{"@type":"WebPage","@id":"https://testheon.com/playwright-ci-cd/#webpage","url":"https://testheon.com/playwright-ci-cd/","name":"Playwright CI/CD: GitHub Actions, Jenkins &amp; Sharding","datePublished":"2026-09-26T19:09:18+00:00","dateModified":"2026-09-26T19:09:21+00:00","isPartOf":{"@id":"https://testheon.com/#website"},"primaryImageOfPage":{"@id":"https://testheon.com/wp-content/uploads/2026/09/playwright-ci-cd-pipeline-workflow.webp"},"inLanguage":"en-US","breadcrumb":{"@id":"https://testheon.com/playwright-ci-cd/#breadcrumb"}},{"@type":"Person","@id":"https://testheon.com/author/nilekar-mayurgmail-com/","name":"Mayur Nilekar","url":"https://testheon.com/author/nilekar-mayurgmail-com/","image":{"@type":"ImageObject","@id":"https://secure.gravatar.com/avatar/d045e80d3361e5158515a5d4d6f80c872dd88850ce0601d4584bb480dd6cbc53?s=96&amp;d=mm&amp;r=g","url":"https://secure.gravatar.com/avatar/d045e80d3361e5158515a5d4d6f80c872dd88850ce0601d4584bb480dd6cbc53?s=96&amp;d=mm&amp;r=g","caption":"Mayur Nilekar","inLanguage":"en-US"},"sameAs":["https://testheon.com"],"worksFor":{"@id":"https://testheon.com/#organization"}},{"@type":"BlogPosting","headline":"Playwright CI/CD: GitHub Actions, Jenkins &amp; Sharding","keywords":"playwright ci cd","datePublished":"2026-09-26T19:09:18+00:00","dateModified":"2026-09-26T19:09:21+00:00","articleSection":"QA &amp; Testing","author":{"@id":"https://testheon.com/author/nilekar-mayurgmail-com/","name":"Mayur Nilekar"},"publisher":{"@id":"https://testheon.com/#organization"},"description":"Run Playwright CI/CD with GitHub Actions and Jenkins. Configure browsers, workers, sharding, retries, reports and retained failure artifacts.","name":"Playwright CI/CD: GitHub Actions, Jenkins &amp; Sharding","@id":"https://testheon.com/playwright-ci-cd/#richSnippet","isPartOf":{"@id":"https://testheon.com/playwright-ci-cd/#webpage"},"image":{"@id":"https://testheon.com/wp-content/uploads/2026/09/playwright-ci-cd-pipeline-workflow.webp"},"inLanguage":"en-US","mainEntityOfPage":{"@id":"https://testheon.com/playwright-ci-cd/#webpage"}}]}</script>
+<!-- /Rank Math WordPress SEO plugin -->
+
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link href='https://fonts.googleapis.com' rel='preconnect' />
+<link href='https://fonts.gstatic.com' crossorigin='anonymous' rel='preconnect' />
+<link rel="alternate" type="application/rss+xml" title="Testheon &raquo; Feed" href="https://testheon.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Testheon &raquo; Comments Feed" href="https://testheon.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Testheon &raquo; Playwright CI/CD: GitHub Actions, Jenkins &#038; Parallel Execution Comments Feed" href="https://testheon.com/playwright-ci-cd/feed/" />
+<link rel="alternate" title="oEmbed (JSON)" type="application/json+oembed" href="https://testheon.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Ftestheon.com%2Fplaywright-ci-cd%2F" />
+<link rel="alternate" title="oEmbed (XML)" type="text/xml+oembed" href="https://testheon.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Ftestheon.com%2Fplaywright-ci-cd%2F&#038;format=xml" />
+<style id="wp-img-auto-sizes-contain-inline-css">
+img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
+/*# sourceURL=wp-img-auto-sizes-contain-inline-css */
+</style>
+
+<link rel='stylesheet' id='astra-theme-css-css' href='https://testheon.com/wp-content/themes/astra/assets/css/minified/main.min.css?ver=4.13.8' media='all' />
+<style id="astra-theme-css-inline-css">
+:root{--ast-post-nav-space:0;--ast-container-default-xlg-padding:2.5em;--ast-container-default-lg-padding:2.5em;--ast-container-default-slg-padding:2em;--ast-container-default-md-padding:2.5em;--ast-container-default-sm-padding:2.5em;--ast-container-default-xs-padding:2.4em;--ast-container-default-xxs-padding:1.8em;--ast-code-block-background:#ECEFF3;--ast-comment-inputs-background:#F9FAFB;--ast-normal-container-width:1200px;--ast-narrow-container-width:750px;--ast-blog-title-font-weight:600;--ast-blog-meta-weight:600;--ast-global-color-primary:var(--ast-global-color-4);--ast-global-color-secondary:var(--ast-global-color-5);--ast-global-color-alternate-background:var(--ast-global-color-6);--ast-global-color-subtle-background:var(--ast-global-color-7);--ast-bg-style-guide:var( --ast-global-color-secondary,var(--ast-global-color-5) );--ast-shadow-style-guide:0px 0px 4px 0 #00000057;--ast-global-dark-bg-style:#fff;--ast-global-dark-lfs:#fbfbfb;--ast-widget-bg-color:#fafafa;--ast-wc-container-head-bg-color:#fbfbfb;--ast-title-layout-bg:#eeeeee;--ast-search-border-color:#e7e7e7;--ast-lifter-hover-bg:#e6e6e6;--ast-gallery-block-color:#000;--srfm-color-input-label:var(--ast-global-color-2);}html{font-size:100%;}a{color:var(--ast-global-color-0);}a:hover,a:focus{color:var(--ast-global-color-1);}body,button,input,select,textarea,.ast-button,.ast-custom-button{font-family:'Inter',sans-serif;font-weight:400;font-size:16px;font-size:1rem;line-height:var(--ast-body-line-height,1.65);}blockquote{color:var(--ast-global-color-3);}h1,h2,h3,h4,h5,h6,.entry-content :where(h1,h2,h3,h4,h5,h6),.site-title,.site-title a{font-family:'Poppins',sans-serif;font-weight:600;}.ast-site-identity .site-title a{color:var(--ast-global-color-2);}.site-title{font-size:26px;font-size:1.625rem;display:none;}header .custom-logo-link img{max-width:140px;width:140px;}.astra-logo-svg{width:140px;}.site-header .site-description{font-size:15px;font-size:0.9375rem;display:block;}.entry-title{font-size:20px;font-size:1.25rem;}.ast-blog-single-element.ast-taxonomy-container a{font-size:14px;font-size:0.875rem;}.ast-blog-meta-container{font-size:13px;font-size:0.8125rem;}.archive .ast-article-post .ast-article-inner,.blog .ast-article-post .ast-article-inner,.archive .ast-article-post .ast-article-inner:hover,.blog .ast-article-post .ast-article-inner:hover{border-top-left-radius:6px;border-top-right-radius:6px;border-bottom-right-radius:6px;border-bottom-left-radius:6px;overflow:hidden;}h1,.entry-content :where(h1){font-size:36px;font-size:2.25rem;font-weight:600;font-family:'Poppins',sans-serif;line-height:1.4em;}h2,.entry-content :where(h2){font-size:30px;font-size:1.875rem;font-weight:600;font-family:'Poppins',sans-serif;line-height:1.3em;}h3,.entry-content :where(h3){font-size:24px;font-size:1.5rem;font-weight:600;font-family:'Poppins',sans-serif;line-height:1.3em;}h4,.entry-content :where(h4){font-size:20px;font-size:1.25rem;line-height:1.2em;font-weight:600;font-family:'Poppins',sans-serif;}h5,.entry-content :where(h5){font-size:18px;font-size:1.125rem;line-height:1.2em;font-weight:600;font-family:'Poppins',sans-serif;}h6,.entry-content :where(h6){font-size:16px;font-size:1rem;line-height:1.25em;font-weight:600;font-family:'Poppins',sans-serif;}::selection{background-color:#10b981;color:#000000;}body,h1,h2,h3,h4,h5,h6,.entry-title a,.entry-content :where(h1,h2,h3,h4,h5,h6){color:var(--ast-global-color-3);}.tagcloud a:hover,.tagcloud a:focus,.tagcloud a.current-item{color:#ffffff;border-color:var(--ast-global-color-0);background-color:var(--ast-global-color-0);}input:focus,input[type="text"]:focus,input[type="email"]:focus,input[type="url"]:focus,input[type="password"]:focus,input[type="reset"]:focus,input[type="search"]:focus,textarea:focus{border-color:var(--ast-global-color-0);}input[type="radio"]:checked,input[type=reset],input[type="checkbox"]:checked,input[type="checkbox"]:hover:checked,input[type="checkbox"]:focus:checked,input[type=range]::-webkit-slider-thumb{border-color:var(--ast-global-color-0);background-color:var(--ast-global-color-0);box-shadow:none;}.site-footer a:hover + .post-count,.site-footer a:focus + .post-count{background:var(--ast-global-color-0);border-color:var(--ast-global-color-0);}.single .nav-links .nav-previous,.single .nav-links .nav-next{color:var(--ast-global-color-0);}.entry-meta,.entry-meta *{line-height:1.45;color:var(--ast-global-color-0);font-weight:600;}.entry-meta a:not(.ast-button):hover,.entry-meta a:not(.ast-button):hover *,.entry-meta a:not(.ast-button):focus,.entry-meta a:not(.ast-button):focus *,.page-links > .page-link,.page-links .page-link:hover,.post-navigation a:hover{color:var(--ast-global-color-1);}#cat option,.secondary .calendar_wrap thead a,.secondary .calendar_wrap thead a:visited{color:var(--ast-global-color-0);}.secondary .calendar_wrap #today,.ast-progress-val span{background:var(--ast-global-color-0);}.secondary a:hover + .post-count,.secondary a:focus + .post-count{background:var(--ast-global-color-0);border-color:var(--ast-global-color-0);}.calendar_wrap #today > a{color:#ffffff;}.page-links .page-link,.single .post-navigation a{color:var(--ast-global-color-3);}.ast-search-menu-icon .search-form button.search-submit{padding:0 4px;}.ast-search-menu-icon form.search-form{padding-right:0;}.ast-header-search .ast-search-menu-icon.ast-dropdown-active .search-form,.ast-header-search .ast-search-menu-icon.ast-dropdown-active .search-field:focus{transition:all 0.2s;}.search-form input.search-field:focus{outline:none;}.ast-mobile-header-content .ast-builder-layout-element:not(.ast-builder-menu):not(.ast-header-divider-element),.ast-mobile-popup-content .ast-builder-layout-element:not(.ast-builder-menu):not(.ast-header-divider-element){padding:15px 20px;}.ast-search-menu-icon .search-form button.search-submit:focus,.ast-theme-transparent-header .ast-header-search .ast-dropdown-active .ast-icon,.ast-theme-transparent-header .ast-inline-search .search-field:focus .ast-icon{color:var(--ast-global-color-1);}.ast-desktop .ast-header-search .slide-search .search-form{border:2px solid var(--ast-global-color-0);}.ast-header-search .slide-search .search-field{background-color:var(--ast-global-dark-bg-style);}.ast-archive-title{color:var(--ast-global-color-2);}.widget-title{font-size:22px;font-size:1.375rem;color:var(--ast-global-color-2);}.ast-single-post .entry-content a,.ast-comment-content a:not(.ast-comment-edit-reply-wrap a){text-decoration:underline;}.ast-single-post .entry-content .uagb-tab a,.ast-single-post .entry-content .uagb-ifb-cta a,.ast-single-post .entry-content .uabb-module-content a,.ast-single-post .entry-content .uagb-post-grid a,.ast-single-post .entry-content .uagb-timeline a,.ast-single-post .entry-content .uagb-toc__wrap a,.ast-single-post .entry-content .uagb-taxomony-box a,.entry-content .wp-block-latest-posts > li > a,.ast-single-post .entry-content .wp-block-file__button,a.ast-post-filter-single,.ast-single-post .ast-comment-content .comment-reply-link,.ast-single-post .ast-comment-content .comment-edit-link{text-decoration:none;}.ast-search-menu-icon.slide-search a:focus-visible:focus-visible,.astra-search-icon:focus-visible,#close:focus-visible,a:focus-visible,.ast-menu-toggle:focus-visible,.site .skip-link:focus-visible,.wp-block-loginout input:focus-visible,.wp-block-search.wp-block-search__button-inside .wp-block-search__inside-wrapper,.ast-header-navigation-arrow:focus-visible,.ast-orders-table__row .ast-orders-table__cell:focus-visible,a#ast-apply-coupon:focus-visible,#ast-apply-coupon:focus-visible,#close:focus-visible,.button.search-submit:focus-visible,#search_submit:focus,.normal-search:focus-visible,.ast-header-account-wrap:focus-visible,.astra-cart-drawer-close:focus,.ast-single-variation:focus,.ast-button:focus,.ast-builder-button-wrap:has(.ast-custom-button-link:focus),.ast-builder-button-wrap .ast-custom-button-link:focus{outline-style:dotted;outline-color:inherit;outline-width:thin;}input:focus,input[type="text"]:focus,input[type="email"]:focus,input[type="url"]:focus,input[type="password"]:focus,input[type="reset"]:focus,input[type="search"]:focus,input[type="number"]:focus,textarea:focus,.wp-block-search__input:focus,[data-section="section-header-mobile-trigger"] .ast-button-wrap .ast-mobile-menu-trigger-minimal:focus,.ast-mobile-popup-drawer.active .menu-toggle-close:focus,#ast-scroll-top:focus,#coupon_code:focus,#ast-coupon-code:focus{border-style:dotted;border-color:inherit;border-width:thin;}input{outline:none;}.ast-logo-title-inline .site-logo-img{padding-right:1em;}.site-logo-img img{ transition:all 0.2s linear;}body .ast-oembed-container *{position:absolute;top:0;width:100%;height:100%;left:0;}body .wp-block-embed-pocket-casts .ast-oembed-container *{position:unset;}.ast-single-post-featured-section + article {margin-top: 2em;}.site-content .ast-single-post-featured-section img {width: 100%;overflow: hidden;object-fit: cover;}.ast-separate-container .site-content .ast-single-post-featured-section + article {margin-top: -80px;z-index: 9;position: relative;border-radius: 4px;}@media (min-width: 922px) {.ast-no-sidebar .site-content .ast-article-image-container--wide {margin-left: -120px;margin-right: -120px;max-width: unset;width: unset;}.ast-left-sidebar .site-content .ast-article-image-container--wide,.ast-right-sidebar .site-content .ast-article-image-container--wide {margin-left: -10px;margin-right: -10px;}.site-content .ast-article-image-container--full {margin-left: calc( -50vw + 50%);margin-right: calc( -50vw + 50%);max-width: 100vw;width: 100vw;}.ast-left-sidebar .site-content .ast-article-image-container--full,.ast-right-sidebar .site-content .ast-article-image-container--full {margin-left: -10px;margin-right: -10px;max-width: inherit;width: auto;}}.site > .ast-single-related-posts-container {margin-top: 0;}@media (min-width: 922px) {.ast-desktop .ast-container--narrow {max-width: var(--ast-narrow-container-width);margin: 0 auto;}}input[type="text"],input[type="number"],input[type="email"],input[type="url"],input[type="password"],input[type="search"],input[type=reset],input[type=tel],input[type=date],select,textarea{font-size:16px;font-style:normal;font-weight:400;line-height:24px;width:100%;padding:12px 16px;border-radius:4px;box-shadow:0px 1px 2px 0px rgba(0,0,0,0.05);color:var(--ast-form-input-text,#475569);}input[type="text"],input[type="number"],input[type="email"],input[type="url"],input[type="password"],input[type="search"],input[type=reset],input[type=tel],input[type=date],select{height:40px;}input[type="date"]{border-width:1px;border-style:solid;border-color:var(--ast-border-color);background:var( --ast-global-color-secondary,var(--ast-global-color-5) );}input[type="text"]:focus,input[type="number"]:focus,input[type="email"]:focus,input[type="url"]:focus,input[type="password"]:focus,input[type="search"]:focus,input[type=reset]:focus,input[type="tel"]:focus,input[type="date"]:focus,select:focus,textarea:focus{border-color:#046BD2;box-shadow:none;outline:none;color:var(--ast-form-input-focus-text,#475569);}label,legend{color:var(--ast-global-color-2,#111827 );font-size:14px;font-style:normal;font-weight:500;line-height:20px;}select{padding:6px 10px;}fieldset{padding:30px;border-radius:4px;}button,.ast-button,.button,input[type="button"],input[type="reset"],input[type="submit"],a:where(.wp-block-button__link){border-radius:4px;box-shadow:0px 1px 2px 0px rgba(0,0,0,0.05);}:root{--ast-comment-inputs-background:#FFF;}::placeholder{color:var(--ast-form-field-color,#9CA3AF);}::-ms-input-placeholder{color:var(--ast-form-field-color,#9CA3AF);}@media (max-width:921.99px){#ast-desktop-header{display:none;}}@media (min-width:922px){#ast-mobile-header{display:none;}}.wp-block-buttons.aligncenter{justify-content:center;}@media (max-width:921px){.ast-theme-transparent-header #primary,.ast-theme-transparent-header #secondary{padding:0;}}@media (max-width:921px){.ast-plain-container.ast-no-sidebar #primary{padding:0;}}.ast-plain-container.ast-no-sidebar #primary{margin-top:0;margin-bottom:0;}@media (min-width:1200px){.ast-plain-container.ast-no-sidebar #primary{margin-top:60px;margin-bottom:60px;}}.wp-block-button.is-style-outline .wp-block-button__link{border-color:#10b981;}div.wp-block-button.is-style-outline > .wp-block-button__link:not(.has-text-color),div.wp-block-button.wp-block-button__link.is-style-outline:not(.has-text-color){color:#10b981;}.wp-block-button.is-style-outline .wp-block-button__link:hover,.wp-block-buttons .wp-block-button.is-style-outline .wp-block-button__link:focus,.wp-block-buttons .wp-block-button.is-style-outline > .wp-block-button__link:not(.has-text-color):hover,.wp-block-buttons .wp-block-button.wp-block-button__link.is-style-outline:not(.has-text-color):hover{color:#ffffff;background-color:var(--ast-global-color-1);border-color:var(--ast-global-color-1);}.post-page-numbers.current .page-link,.ast-pagination .page-numbers.current{color:#000000;border-color:#10b981;background-color:#10b981;}.wp-block-buttons .wp-block-button.is-style-outline .wp-block-button__link.wp-element-button,.ast-outline-button,.wp-block-uagb-buttons-child .uagb-buttons-repeater.ast-outline-button{border-color:#10b981;border-top-width:2px;border-right-width:2px;border-bottom-width:2px;border-left-width:2px;font-family:inherit;font-weight:500;font-size:16px;font-size:1rem;line-height:1em;padding-top:13px;padding-right:30px;padding-bottom:13px;padding-left:30px;}.wp-block-buttons .wp-block-button.is-style-outline > .wp-block-button__link:not(.has-text-color),.wp-block-buttons .wp-block-button.wp-block-button__link.is-style-outline:not(.has-text-color),.ast-outline-button{color:#10b981;}.wp-block-button.is-style-outline .wp-block-button__link:hover,.wp-block-buttons .wp-block-button.is-style-outline .wp-block-button__link:focus,.wp-block-buttons .wp-block-button.is-style-outline > .wp-block-button__link:not(.has-text-color):hover,.wp-block-buttons .wp-block-button.wp-block-button__link.is-style-outline:not(.has-text-color):hover,.ast-outline-button:hover,.ast-outline-button:focus,.wp-block-uagb-buttons-child .uagb-buttons-repeater.ast-outline-button:hover,.wp-block-uagb-buttons-child .uagb-buttons-repeater.ast-outline-button:focus{color:#ffffff;background-color:var(--ast-global-color-1);border-color:var(--ast-global-color-1);}.ast-single-post .entry-content a.ast-outline-button,.ast-single-post .entry-content .is-style-outline>.wp-block-button__link{text-decoration:none;}.wp-block-button .wp-block-button__link.wp-element-button.is-style-outline:not(.has-background),.wp-block-button.is-style-outline>.wp-block-button__link.wp-element-button:not(.has-background),.ast-outline-button{background-color:transparent;}.uagb-buttons-repeater.ast-outline-button{border-radius:9999px;}@media (max-width:921px){.wp-block-buttons .wp-block-button.is-style-outline .wp-block-button__link.wp-element-button,.ast-outline-button,.wp-block-uagb-buttons-child .uagb-buttons-repeater.ast-outline-button{padding-top:12px;padding-right:28px;padding-bottom:12px;padding-left:28px;}}@media (max-width:544px){.wp-block-buttons .wp-block-button.is-style-outline .wp-block-button__link.wp-element-button,.ast-outline-button,.wp-block-uagb-buttons-child .uagb-buttons-repeater.ast-outline-button{padding-top:10px;padding-right:24px;padding-bottom:10px;padding-left:24px;}}.entry-content[data-ast-blocks-layout] > figure{margin-bottom:1em;}h1.widget-title{font-weight:600;}h2.widget-title{font-weight:600;}h3.widget-title{font-weight:600;}#page{display:flex;flex-direction:column;min-height:100vh;}.ast-404-layout-1 h1.page-title{color:var(--ast-global-color-2);}.single .post-navigation a{line-height:1em;height:inherit;}.error-404 .page-sub-title{font-size:1.5rem;font-weight:inherit;}.search .site-content .content-area .search-form{margin-bottom:0;}#page .site-content{flex-grow:1;}.widget{margin-bottom:1.25em;}#secondary li{line-height:1.5em;}#secondary .wp-block-group h2{margin-bottom:0.7em;}#secondary h2{font-size:1.7rem;}.ast-separate-container .ast-article-post,.ast-separate-container .ast-article-single,.ast-separate-container .comment-respond{padding:2.5em;}.ast-separate-container .ast-article-single .ast-article-single{padding:0;}.ast-article-single .wp-block-post-template-is-layout-grid{padding-left:0;}.ast-separate-container .comments-title,.ast-narrow-container .comments-title{padding:1.5em 2em;}.ast-page-builder-template .comment-form-textarea,.ast-comment-formwrap .ast-grid-common-col{padding:0;}.ast-comment-formwrap{padding:0;display:inline-flex;column-gap:20px;width:100%;margin-left:0;margin-right:0;}.comments-area textarea#comment:focus,.comments-area textarea#comment:active,.comments-area .ast-comment-formwrap input[type="text"]:focus,.comments-area .ast-comment-formwrap input[type="text"]:active {box-shadow:none;outline:none;}.archive.ast-page-builder-template .entry-header{margin-top:2em;}.ast-page-builder-template .ast-comment-formwrap{width:100%;}.entry-title{margin-bottom:0.6em;}.ast-archive-description p{font-size:inherit;font-weight:inherit;line-height:inherit;}.ast-article-single figure,.ast-article-single img:not(figure img){box-shadow:0 0 30px 0 rgba(0,0,0,.15);-webkit-box-shadow:0 0 30px 0 rgba(0,0,0,.15);-moz-box-shadow:0 0 30px 0 rgba(0,0,0,.15);}.ast-separate-container .ast-comment-list li.depth-1,.hentry{margin-bottom:1.5em;}.site-content section.ast-archive-description{margin-bottom:2em;}@media (min-width:921px){.ast-left-sidebar.ast-page-builder-template #secondary,.archive.ast-right-sidebar.ast-page-builder-template .site-main{padding-left:20px;padding-right:20px;}}@media (max-width:544px){.ast-comment-formwrap.ast-row{column-gap:10px;display:inline-block;}#ast-commentform .ast-grid-common-col{position:relative;width:100%;}}@media (min-width:1201px){.ast-separate-container .ast-article-post,.ast-separate-container .ast-article-single,.ast-separate-container .ast-author-box,.ast-separate-container .ast-404-layout-1,.ast-separate-container .no-results{padding:2.5em;}}@media (max-width:921px){.ast-left-sidebar #content > .ast-container{display:flex;flex-direction:column-reverse;width:100%;}}@media (min-width:922px){.ast-separate-container.ast-right-sidebar #primary,.ast-separate-container.ast-left-sidebar #primary{border:0;}.search-no-results.ast-separate-container #primary{margin-bottom:4em;}}.wp-block-button .wp-block-button__link{color:#000000;}.wp-block-button .wp-block-button__link:hover,.wp-block-button .wp-block-button__link:focus{color:#ffffff;background-color:var(--ast-global-color-1);border-color:var(--ast-global-color-1);}.wp-block-button .wp-block-button__link,.wp-block-search .wp-block-search__button,body .wp-block-file .wp-block-file__button{border-color:#10b981;background-color:#10b981;color:#000000;font-family:inherit;font-weight:500;line-height:1em;font-size:16px;font-size:1rem;padding-top:15px;padding-right:30px;padding-bottom:15px;padding-left:30px;}.ast-single-post .entry-content .wp-block-button .wp-block-button__link,.ast-single-post .entry-content .wp-block-search .wp-block-search__button,body .entry-content .wp-block-file .wp-block-file__button{text-decoration:none;}@media (max-width:921px){.wp-block-button .wp-block-button__link,.wp-block-search .wp-block-search__button,body .wp-block-file .wp-block-file__button{padding-top:14px;padding-right:28px;padding-bottom:14px;padding-left:28px;}}@media (max-width:544px){.wp-block-button .wp-block-button__link,.wp-block-search .wp-block-search__button,body .wp-block-file .wp-block-file__button{padding-top:12px;padding-right:24px;padding-bottom:12px;padding-left:24px;}}.menu-toggle,button,.ast-button,.ast-custom-button,.button,input#submit,input[type="button"],input[type="submit"],input[type="reset"],#comments .submit,.search .search-submit,form[CLASS*="wp-block-search__"].wp-block-search .wp-block-search__inside-wrapper .wp-block-search__button,body .wp-block-file .wp-block-file__button,.search .search-submit{border-style:solid;border-top-width:0;border-right-width:0;border-left-width:0;border-bottom-width:0;color:#000000;border-color:#10b981;background-color:#10b981;padding-top:15px;padding-right:30px;padding-bottom:15px;padding-left:30px;font-family:inherit;font-weight:500;font-size:16px;font-size:1rem;line-height:1em;}button:focus,.menu-toggle:hover,button:hover,.ast-button:hover,.ast-custom-button:hover .button:hover,.ast-custom-button:hover ,input[type=reset]:hover,input[type=reset]:focus,input#submit:hover,input#submit:focus,input[type="button"]:hover,input[type="button"]:focus,input[type="submit"]:hover,input[type="submit"]:focus,form[CLASS*="wp-block-search__"].wp-block-search .wp-block-search__inside-wrapper .wp-block-search__button:hover,form[CLASS*="wp-block-search__"].wp-block-search .wp-block-search__inside-wrapper .wp-block-search__button:focus,body .wp-block-file .wp-block-file__button:hover,body .wp-block-file .wp-block-file__button:focus{color:#ffffff;background-color:var(--ast-global-color-1);border-color:var(--ast-global-color-1);}form[CLASS*="wp-block-search__"].wp-block-search .wp-block-search__inside-wrapper .wp-block-search__button.has-icon{padding-top:calc(15px - 3px);padding-right:calc(30px - 3px);padding-bottom:calc(15px - 3px);padding-left:calc(30px - 3px);}@media (max-width:921px){.menu-toggle,button,.ast-button,.ast-custom-button,.button,input#submit,input[type="button"],input[type="submit"],input[type="reset"],#comments .submit,.search .search-submit,form[CLASS*="wp-block-search__"].wp-block-search .wp-block-search__inside-wrapper .wp-block-search__button,body .wp-block-file .wp-block-file__button,.search .search-submit{padding-top:14px;padding-right:28px;padding-bottom:14px;padding-left:28px;}}@media (max-width:544px){.menu-toggle,button,.ast-button,.ast-custom-button,.button,input#submit,input[type="button"],input[type="submit"],input[type="reset"],#comments .submit,.search .search-submit,form[CLASS*="wp-block-search__"].wp-block-search .wp-block-search__inside-wrapper .wp-block-search__button,body .wp-block-file .wp-block-file__button,.search .search-submit{padding-top:12px;padding-right:24px;padding-bottom:12px;padding-left:24px;}}@media (max-width:921px){.ast-mobile-header-stack .main-header-bar .ast-search-menu-icon{display:inline-block;}.ast-header-break-point.ast-header-custom-item-outside .ast-mobile-header-stack .main-header-bar .ast-search-icon{margin:0;}.ast-comment-avatar-wrap img{max-width:2.5em;}.ast-comment-meta{padding:0 1.8888em 1.3333em;}}@media (min-width:544px){.ast-container{max-width:100%;}}@media (max-width:544px){.ast-separate-container .ast-article-post,.ast-separate-container .ast-article-single,.ast-separate-container .comments-title,.ast-separate-container .ast-archive-description{padding:1.5em 1em;}.ast-separate-container #content .ast-container{padding-left:0.54em;padding-right:0.54em;}.ast-separate-container .ast-comment-list .bypostauthor{padding:.5em;}.ast-search-menu-icon.ast-dropdown-active .search-field{width:170px;}} #ast-mobile-header .ast-site-header-cart-li a{pointer-events:none;}.ast-separate-container{background-color:var(--ast-global-color-5);background-image:none;}@media (max-width:921px){.site-title{display:none;}.site-header .site-description{display:block;}h1,.entry-content :where(h1){font-size:30px;font-size:1.875rem;}h2,.entry-content :where(h2){font-size:25px;font-size:1.5625rem;}h3,.entry-content :where(h3){font-size:20px;font-size:1.25rem;}.astra-logo-svg{width:110px;}header .custom-logo-link img,.ast-header-break-point .site-logo-img .custom-mobile-logo-link img{max-width:110px;width:110px;}}@media (max-width:544px){.site-title{display:none;}.site-header .site-description{display:block;}h1,.entry-content :where(h1){font-size:30px;font-size:1.875rem;}h2,.entry-content :where(h2){font-size:25px;font-size:1.5625rem;}h3,.entry-content :where(h3){font-size:20px;font-size:1.25rem;}header .custom-logo-link img,.ast-header-break-point .site-branding img,.ast-header-break-point .custom-logo-link img{max-width:110px;width:110px;}.astra-logo-svg{width:110px;}.ast-header-break-point .site-logo-img .custom-mobile-logo-link img{max-width:110px;}}@media (max-width:921px){html{font-size:91.2%;}}@media (max-width:544px){html{font-size:91.2%;}}@media (min-width:922px){.ast-container{max-width:1240px;}}@media (min-width:922px){.ast-narrow-container .site-content > .ast-container{max-width:750px;}}@media (min-width:922px){.ast-narrow-container .site-content > .ast-container{max-width:750px;}}@media (min-width:922px){.site-content .ast-container{display:flex;}}@media (max-width:921px){.site-content .ast-container{flex-direction:column;}}.entry-content :where(h1,h2,h3,h4,h5,h6){clear:none;}@media (min-width:922px){.main-header-menu .sub-menu .menu-item.ast-left-align-sub-menu:hover > .sub-menu,.main-header-menu .sub-menu .menu-item.ast-left-align-sub-menu.focus > .sub-menu{margin-left:-0px;}}.entry-content li > p{margin-bottom:0;}.site .comments-area{padding-bottom:2em;margin-top:2em;}.wp-block-file {display: flex;align-items: center;flex-wrap: wrap;justify-content: space-between;}.wp-block-pullquote {border: none;}.wp-block-pullquote blockquote::before {content: "\201D";font-family: "Helvetica",sans-serif;display: flex;transform: rotate( 180deg );font-size: 6rem;font-style: normal;line-height: 1;font-weight: bold;align-items: center;justify-content: center;}.has-text-align-right > blockquote::before {justify-content: flex-start;}.has-text-align-left > blockquote::before {justify-content: flex-end;}figure.wp-block-pullquote.is-style-solid-color blockquote {max-width: 100%;text-align: inherit;}:root {--wp--custom--ast-default-block-top-padding: 3em;--wp--custom--ast-default-block-right-padding: 3em;--wp--custom--ast-default-block-bottom-padding: 3em;--wp--custom--ast-default-block-left-padding: 3em;--wp--custom--ast-container-width: 1200px;--wp--custom--ast-content-width-size: 1200px;--wp--custom--ast-wide-width-size: calc(1200px + var(--wp--custom--ast-default-block-left-padding) + var(--wp--custom--ast-default-block-right-padding));}.ast-narrow-container {--wp--custom--ast-content-width-size: 750px;--wp--custom--ast-wide-width-size: 750px;}@media(max-width: 921px) {:root {--wp--custom--ast-default-block-top-padding: 3em;--wp--custom--ast-default-block-right-padding: 2em;--wp--custom--ast-default-block-bottom-padding: 3em;--wp--custom--ast-default-block-left-padding: 2em;}}@media(max-width: 544px) {:root {--wp--custom--ast-default-block-top-padding: 3em;--wp--custom--ast-default-block-right-padding: 1.5em;--wp--custom--ast-default-block-bottom-padding: 3em;--wp--custom--ast-default-block-left-padding: 1.5em;}}.entry-content > .wp-block-group,.entry-content > .wp-block-cover,.entry-content > .wp-block-columns {padding-top: var(--wp--custom--ast-default-block-top-padding);padding-right: var(--wp--custom--ast-default-block-right-padding);padding-bottom: var(--wp--custom--ast-default-block-bottom-padding);padding-left: var(--wp--custom--ast-default-block-left-padding);}.ast-plain-container.ast-no-sidebar .entry-content > .alignfull,.ast-page-builder-template .ast-no-sidebar .entry-content > .alignfull {margin-left: calc( -50vw + 50%);margin-right: calc( -50vw + 50%);max-width: 100vw;width: 100vw;}.ast-plain-container.ast-no-sidebar .entry-content .alignfull .alignfull,.ast-page-builder-template.ast-no-sidebar .entry-content .alignfull .alignfull,.ast-plain-container.ast-no-sidebar .entry-content .alignfull .alignwide,.ast-page-builder-template.ast-no-sidebar .entry-content .alignfull .alignwide,.ast-plain-container.ast-no-sidebar .entry-content .alignwide .alignfull,.ast-page-builder-template.ast-no-sidebar .entry-content .alignwide .alignfull,.ast-plain-container.ast-no-sidebar .entry-content .alignwide .alignwide,.ast-page-builder-template.ast-no-sidebar .entry-content .alignwide .alignwide,.ast-plain-container.ast-no-sidebar .entry-content .wp-block-column .alignfull,.ast-page-builder-template.ast-no-sidebar .entry-content .wp-block-column .alignfull,.ast-plain-container.ast-no-sidebar .entry-content .wp-block-column .alignwide,.ast-page-builder-template.ast-no-sidebar .entry-content .wp-block-column .alignwide {margin-left: auto;margin-right: auto;width: 100%;}[data-ast-blocks-layout] .wp-block-separator:not(.is-style-dots) {height: 0;}[data-ast-blocks-layout] .wp-block-separator {margin: 20px auto;}[data-ast-blocks-layout] .wp-block-separator:not(.is-style-wide):not(.is-style-dots) {max-width: 100px;}[data-ast-blocks-layout] .wp-block-separator.has-background {padding: 0;}.entry-content[data-ast-blocks-layout] > * {max-width: var(--wp--custom--ast-content-width-size);margin-left: auto;margin-right: auto;}.entry-content[data-ast-blocks-layout] > .alignwide {max-width: var(--wp--custom--ast-wide-width-size);}.entry-content[data-ast-blocks-layout] .alignfull {max-width: none;}.entry-content .wp-block-columns {margin-bottom: 0;}blockquote {margin: 1.5em;border-color: rgba(0,0,0,0.05);}.wp-block-quote:not(.has-text-align-right):not(.has-text-align-center) {border-left: 5px solid rgba(0,0,0,0.05);}.has-text-align-right > blockquote,blockquote.has-text-align-right {border-right: 5px solid rgba(0,0,0,0.05);}.has-text-align-left > blockquote,blockquote.has-text-align-left {border-left: 5px solid rgba(0,0,0,0.05);}.wp-block-site-tagline,.wp-block-latest-posts .read-more {margin-top: 15px;}.wp-block-loginout p label {display: block;}.wp-block-loginout p:not(.login-remember):not(.login-submit) input {width: 100%;}.wp-block-loginout input:focus {border-color: transparent;}.wp-block-loginout input:focus {outline: thin dotted;}.entry-content .wp-block-media-text .wp-block-media-text__content {padding: 0 0 0 8%;}.entry-content .wp-block-media-text.has-media-on-the-right .wp-block-media-text__content {padding: 0 8% 0 0;}.entry-content .wp-block-media-text.has-background .wp-block-media-text__content {padding: 8%;}.entry-content .wp-block-cover:not([class*="background-color"]):not(.has-text-color.has-link-color) .wp-block-cover__inner-container,.entry-content .wp-block-cover:not([class*="background-color"]) .wp-block-cover-image-text,.entry-content .wp-block-cover:not([class*="background-color"]) .wp-block-cover-text,.entry-content .wp-block-cover-image:not([class*="background-color"]) .wp-block-cover__inner-container,.entry-content .wp-block-cover-image:not([class*="background-color"]) .wp-block-cover-image-text,.entry-content .wp-block-cover-image:not([class*="background-color"]) .wp-block-cover-text {color: var(--ast-global-color-primary,var(--ast-global-color-5));}.wp-block-loginout .login-remember input {width: 1.1rem;height: 1.1rem;margin: 0 5px 4px 0;vertical-align: middle;}.wp-block-latest-posts > li > *:first-child,.wp-block-latest-posts:not(.is-grid) > li:first-child {margin-top: 0;}.entry-content > .wp-block-buttons,.entry-content > .wp-block-uagb-buttons {margin-bottom: 1.5em;}.wp-block-search__inside-wrapper .wp-block-search__input {padding: 0 10px;color: var(--ast-global-color-3);background: var(--ast-global-color-primary,var(--ast-global-color-5));border-color: var(--ast-border-color);}.wp-block-latest-posts .read-more {margin-bottom: 1.5em;}.wp-block-search__no-button .wp-block-search__inside-wrapper .wp-block-search__input {padding-top: 5px;padding-bottom: 5px;}.wp-block-latest-posts .wp-block-latest-posts__post-date,.wp-block-latest-posts .wp-block-latest-posts__post-author {font-size: 1rem;}.wp-block-latest-posts > li > *,.wp-block-latest-posts:not(.is-grid) > li {margin-top: 12px;margin-bottom: 12px;}.ast-page-builder-template .entry-content[data-ast-blocks-layout] > .alignwide:where(:not(.uagb-is-root-container):not(.spectra-is-root-container)) > * {max-width: var(--wp--custom--ast-wide-width-size);}.ast-page-builder-template .entry-content[data-ast-blocks-layout] > .inherit-container-width > *,.ast-page-builder-template .entry-content[data-ast-blocks-layout] > *:not(.wp-block-group):where(:not(.uagb-is-root-container):not(.spectra-is-root-container)) > *,.entry-content[data-ast-blocks-layout] > .wp-block-cover .wp-block-cover__inner-container {max-width: none ;margin-left: auto;margin-right: auto;}.ast-page-builder-template .entry-content[data-ast-blocks-layout] > *,.ast-page-builder-template .entry-content[data-ast-blocks-layout] > .alignfull:where(:not(.wp-block-group):not(.uagb-is-root-container):not(.spectra-is-root-container)) > * {max-width: none;}.entry-content[data-ast-blocks-layout] .wp-block-cover:not(.alignleft):not(.alignright) {width: auto;}@media(max-width: 1200px) {.ast-separate-container .entry-content > .alignfull,.ast-separate-container .entry-content[data-ast-blocks-layout] > .alignwide,.ast-plain-container .entry-content[data-ast-blocks-layout] > .alignwide,.ast-plain-container .entry-content .alignfull {margin-left: calc(-1 * min(var(--ast-container-default-xlg-padding),20px)) ;margin-right: calc(-1 * min(var(--ast-container-default-xlg-padding),20px));}}@media(min-width: 1201px) {.ast-separate-container .entry-content > .alignfull {margin-left: calc(-1 * var(--ast-container-default-xlg-padding) );margin-right: calc(-1 * var(--ast-container-default-xlg-padding) );}.ast-separate-container .entry-content[data-ast-blocks-layout] > .alignwide,.ast-plain-container .entry-content[data-ast-blocks-layout] > .alignwide {margin-left: auto;margin-right: auto;}}@media(min-width: 921px) {.ast-separate-container .entry-content .wp-block-group.alignwide:not(.inherit-container-width) > :where(:not(.alignleft):not(.alignright)),.ast-plain-container .entry-content .wp-block-group.alignwide:not(.inherit-container-width) > :where(:not(.alignleft):not(.alignright)) {max-width: calc( var(--wp--custom--ast-content-width-size) + 80px );}.ast-plain-container.ast-right-sidebar .entry-content[data-ast-blocks-layout] .alignfull,.ast-plain-container.ast-left-sidebar .entry-content[data-ast-blocks-layout] .alignfull {margin-left: -60px;margin-right: -60px;}}@media(min-width: 544px) {.entry-content > .alignleft {margin-right: 20px;}.entry-content > .alignright {margin-left: 20px;}}@media (max-width:544px){.wp-block-columns .wp-block-column:not(:last-child){margin-bottom:20px;}.wp-block-latest-posts{margin:0;}}@media( max-width: 600px ) {.entry-content .wp-block-media-text .wp-block-media-text__content,.entry-content .wp-block-media-text.has-media-on-the-right .wp-block-media-text__content {padding: 8% 0 0;}.entry-content .wp-block-media-text.has-background .wp-block-media-text__content {padding: 8%;}}.ast-page-builder-template .entry-header {padding-left: 0;}.ast-narrow-container .site-content .wp-block-uagb-image--align-full .wp-block-uagb-image__figure {max-width: 100%;margin-left: auto;margin-right: auto;}.entry-content ul,.entry-content ol {padding: revert;margin: revert;padding-left: 20px;}.entry-content ul.wc-block-product-template{padding: 0;}:root .has-ast-global-color-0-color{color:var(--ast-global-color-0);}:root .has-ast-global-color-0-background-color{background-color:var(--ast-global-color-0);}:root .wp-block-button .has-ast-global-color-0-color{color:var(--ast-global-color-0);}:root .wp-block-button .has-ast-global-color-0-background-color{background-color:var(--ast-global-color-0);}:root .has-ast-global-color-1-color{color:var(--ast-global-color-1);}:root .has-ast-global-color-1-background-color{background-color:var(--ast-global-color-1);}:root .wp-block-button .has-ast-global-color-1-color{color:var(--ast-global-color-1);}:root .wp-block-button .has-ast-global-color-1-background-color{background-color:var(--ast-global-color-1);}:root .has-ast-global-color-2-color{color:var(--ast-global-color-2);}:root .has-ast-global-color-2-background-color{background-color:var(--ast-global-color-2);}:root .wp-block-button .has-ast-global-color-2-color{color:var(--ast-global-color-2);}:root .wp-block-button .has-ast-global-color-2-background-color{background-color:var(--ast-global-color-2);}:root .has-ast-global-color-3-color{color:var(--ast-global-color-3);}:root .has-ast-global-color-3-background-color{background-color:var(--ast-global-color-3);}:root .wp-block-button .has-ast-global-color-3-color{color:var(--ast-global-color-3);}:root .wp-block-button .has-ast-global-color-3-background-color{background-color:var(--ast-global-color-3);}:root .has-ast-global-color-4-color{color:var(--ast-global-color-4);}:root .has-ast-global-color-4-background-color{background-color:var(--ast-global-color-4);}:root .wp-block-button .has-ast-global-color-4-color{color:var(--ast-global-color-4);}:root .wp-block-button .has-ast-global-color-4-background-color{background-color:var(--ast-global-color-4);}:root .has-ast-global-color-5-color{color:var(--ast-global-color-5);}:root .has-ast-global-color-5-background-color{background-color:var(--ast-global-color-5);}:root .wp-block-button .has-ast-global-color-5-color{color:var(--ast-global-color-5);}:root .wp-block-button .has-ast-global-color-5-background-color{background-color:var(--ast-global-color-5);}:root .has-ast-global-color-6-color{color:var(--ast-global-color-6);}:root .has-ast-global-color-6-background-color{background-color:var(--ast-global-color-6);}:root .wp-block-button .has-ast-global-color-6-color{color:var(--ast-global-color-6);}:root .wp-block-button .has-ast-global-color-6-background-color{background-color:var(--ast-global-color-6);}:root .has-ast-global-color-7-color{color:var(--ast-global-color-7);}:root .has-ast-global-color-7-background-color{background-color:var(--ast-global-color-7);}:root .wp-block-button .has-ast-global-color-7-color{color:var(--ast-global-color-7);}:root .wp-block-button .has-ast-global-color-7-background-color{background-color:var(--ast-global-color-7);}:root .has-ast-global-color-8-color{color:var(--ast-global-color-8);}:root .has-ast-global-color-8-background-color{background-color:var(--ast-global-color-8);}:root .wp-block-button .has-ast-global-color-8-color{color:var(--ast-global-color-8);}:root .wp-block-button .has-ast-global-color-8-background-color{background-color:var(--ast-global-color-8);}:root{--ast-global-color-0:#6528F7;--ast-global-color-1:#5511F8;--ast-global-color-2:#0F172A;--ast-global-color-3:#454F5E;--ast-global-color-4:#FFFFFF;--ast-global-color-5:#F2F0FE;--ast-global-color-6:#0D0614;--ast-global-color-7:#D8D8F5;--ast-global-color-8:#222222;}:root {--ast-border-color : var(--ast-global-color-7);}.ast-single-entry-banner {-js-display: flex;display: flex;flex-direction: column;justify-content: center;text-align: center;position: relative;background: var(--ast-title-layout-bg);}.ast-single-entry-banner[data-banner-layout="layout-1"] {max-width: 1200px;background: inherit;padding: 20px 0;}.ast-single-entry-banner[data-banner-width-type="custom"] {margin: 0 auto;width: 100%;}.ast-single-entry-banner + .site-content .entry-header {margin-bottom: 0;}.site .ast-author-avatar {--ast-author-avatar-size: ;}a.ast-underline-text {text-decoration: underline;}.ast-container > .ast-terms-link {position: relative;display: block;}a.ast-button.ast-badge-tax {padding: 4px 8px;border-radius: 3px;font-size: inherit;}header.entry-header{text-align:left;}header.entry-header .entry-title{font-weight:600;font-size:32px;font-size:2rem;}header.entry-header .entry-meta,header.entry-header .entry-meta *{font-weight:600;font-size:13px;font-size:0.8125rem;}header.entry-header > *:not(:last-child){margin-bottom:15px;}header.entry-header .post-thumb-img-content{text-align:center;}header.entry-header .post-thumb img,.ast-single-post-featured-section.post-thumb img{aspect-ratio:16/9;width:100%;height:100%;}@media (max-width:921px){header.entry-header{text-align:left;}}@media (max-width:544px){header.entry-header{text-align:left;}}.ast-archive-entry-banner {-js-display: flex;display: flex;flex-direction: column;justify-content: center;text-align: center;position: relative;background: var(--ast-title-layout-bg);}.ast-archive-entry-banner[data-banner-width-type="custom"] {margin: 0 auto;width: 100%;}.ast-archive-entry-banner[data-banner-layout="layout-1"] {background: inherit;padding: 20px 0;text-align: left;}body.archive .ast-archive-description{max-width:1200px;width:100%;text-align:left;padding-top:3em;padding-right:3em;padding-bottom:3em;padding-left:3em;}body.archive .ast-archive-description .ast-archive-title,body.archive .ast-archive-description .ast-archive-title *{font-weight:600;font-size:32px;font-size:2rem;}body.archive .ast-archive-description > *:not(:last-child){margin-bottom:10px;}@media (max-width:921px){body.archive .ast-archive-description{text-align:left;}}@media (max-width:544px){body.archive .ast-archive-description{text-align:left;}}.ast-breadcrumbs .trail-browse,.ast-breadcrumbs .trail-items,.ast-breadcrumbs .trail-items li{display:inline-block;margin:0;padding:0;border:none;background:inherit;text-indent:0;text-decoration:none;}.ast-breadcrumbs .trail-browse{font-size:inherit;font-style:inherit;font-weight:inherit;color:inherit;}.ast-breadcrumbs .trail-items{list-style:none;}.trail-items li::after{padding:0 0.3em;content:"\00bb";}.trail-items li:last-of-type::after{display:none;}h1,h2,h3,h4,h5,h6,.entry-content :where(h1,h2,h3,h4,h5,h6){color:var(--ast-global-color-2);}.entry-title a{color:var(--ast-global-color-2);}@media (max-width:921px){.ast-builder-grid-row-container.ast-builder-grid-row-tablet-3-firstrow .ast-builder-grid-row > *:first-child,.ast-builder-grid-row-container.ast-builder-grid-row-tablet-3-lastrow .ast-builder-grid-row > *:last-child{grid-column:1 / -1;}}@media (max-width:544px){.ast-builder-grid-row-container.ast-builder-grid-row-mobile-3-firstrow .ast-builder-grid-row > *:first-child,.ast-builder-grid-row-container.ast-builder-grid-row-mobile-3-lastrow .ast-builder-grid-row > *:last-child{grid-column:1 / -1;}}.ast-builder-layout-element[data-section="title_tagline"]{display:flex;}@media (max-width:921.99px){.ast-header-break-point .ast-builder-layout-element[data-section="title_tagline"]{display:flex;}}@media (max-width:544px){.ast-header-break-point .ast-builder-layout-element[data-section="title_tagline"]{display:flex;}}.ast-builder-menu-1{font-family:inherit;font-weight:inherit;}.ast-builder-menu-1 .menu-item > .menu-link{color:var(--ast-global-color-3);}.ast-builder-menu-1 .menu-item > .ast-menu-toggle{color:var(--ast-global-color-3);}.ast-builder-menu-1 .menu-link:hover,.ast-builder-menu-1 .main-header-menu > .menu-item:hover > .menu-link,.ast-builder-menu-1 .inline-on-mobile .ast-menu-toggle:hover,.ast-builder-menu-1 .inline-on-mobile .main-header-menu > .menu-item:hover > .ast-menu-toggle{color:var(--ast-global-color-1);}.ast-builder-menu-1 .ast-menu-toggle:hover,.ast-builder-menu-1 .main-header-menu > .menu-item:hover > .ast-menu-toggle{color:var(--ast-global-color-1);}.ast-builder-menu-1 .menu-item.current-menu-item > .menu-link,.ast-builder-menu-1 .inline-on-mobile .menu-item.current-menu-item > .ast-menu-toggle,.ast-builder-menu-1 .current-menu-ancestor > .menu-link{color:var(--ast-global-color-1);}.ast-builder-menu-1 .menu-item.current-menu-item > .ast-menu-toggle{color:var(--ast-global-color-1);}.ast-builder-menu-1 .sub-menu,.ast-builder-menu-1 .inline-on-mobile .sub-menu{border-top-width:2px;border-bottom-width:0px;border-right-width:0px;border-left-width:0px;border-color:#10b981;border-style:solid;}.ast-builder-menu-1 .sub-menu .sub-menu{top:-2px;}.ast-builder-menu-1 .main-header-menu > .menu-item > .sub-menu,.ast-builder-menu-1 .main-header-menu > .menu-item > .astra-full-megamenu-wrapper{margin-top:0px;}.ast-desktop .ast-builder-menu-1 .main-header-menu > .menu-item > .sub-menu:before,.ast-desktop .ast-builder-menu-1 .main-header-menu > .menu-item > .astra-full-megamenu-wrapper:before{height:calc( 0px + 2px + 5px );}.ast-desktop .ast-builder-menu-1 .menu-item .sub-menu .menu-link{border-style:none;}@media (max-width:921px){.ast-header-break-point .ast-builder-menu-1 .menu-item.menu-item-has-children > .ast-menu-toggle{top:0;}.ast-builder-menu-1 .inline-on-mobile .menu-item.menu-item-has-children > .ast-menu-toggle{right:-15px;}.ast-builder-menu-1 .menu-item-has-children > .menu-link:after{content:unset;}.ast-builder-menu-1 .main-header-menu > .menu-item > .sub-menu,.ast-builder-menu-1 .main-header-menu > .menu-item > .astra-full-megamenu-wrapper{margin-top:0;}}@media (max-width:544px){.ast-header-break-point .ast-builder-menu-1 .menu-item.menu-item-has-children > .ast-menu-toggle{top:0;}.ast-builder-menu-1 .main-header-menu > .menu-item > .sub-menu,.ast-builder-menu-1 .main-header-menu > .menu-item > .astra-full-megamenu-wrapper{margin-top:0;}}.ast-builder-menu-1{display:flex;}@media (max-width:921.99px){.ast-header-break-point .ast-builder-menu-1{display:flex;}}@media (max-width:544px){.ast-header-break-point .ast-builder-menu-1{display:flex;}}.site-below-footer-wrap{padding-top:20px;padding-bottom:20px;}.site-below-footer-wrap[data-section="section-below-footer-builder"]{background-color:var(--ast-global-color-4 );min-height:60px;border-style:solid;border-width:0px;border-top-width:1px;border-top-color:var( --ast-global-color-subtle-background,var(--ast-global-color-7) );}.site-below-footer-wrap[data-section="section-below-footer-builder"] .ast-builder-grid-row{max-width:1200px;min-height:60px;margin-left:auto;margin-right:auto;}.site-below-footer-wrap[data-section="section-below-footer-builder"] .ast-builder-grid-row,.site-below-footer-wrap[data-section="section-below-footer-builder"] .site-footer-section{align-items:center;}.site-below-footer-wrap[data-section="section-below-footer-builder"].ast-footer-row-inline .site-footer-section{display:flex;margin-bottom:0;}.ast-builder-grid-row-full .ast-builder-grid-row{grid-template-columns:1fr;}@media (max-width:921px){.site-below-footer-wrap[data-section="section-below-footer-builder"].ast-footer-row-tablet-inline .site-footer-section{display:flex;margin-bottom:0;}.site-below-footer-wrap[data-section="section-below-footer-builder"].ast-footer-row-tablet-stack .site-footer-section{display:block;margin-bottom:10px;}.ast-builder-grid-row-container.ast-builder-grid-row-tablet-full .ast-builder-grid-row{grid-template-columns:1fr;}}@media (max-width:544px){.site-below-footer-wrap[data-section="section-below-footer-builder"].ast-footer-row-mobile-inline .site-footer-section{display:flex;margin-bottom:0;}.site-below-footer-wrap[data-section="section-below-footer-builder"].ast-footer-row-mobile-stack .site-footer-section{display:block;margin-bottom:10px;}.ast-builder-grid-row-container.ast-builder-grid-row-mobile-full .ast-builder-grid-row{grid-template-columns:1fr;}}.site-below-footer-wrap[data-section="section-below-footer-builder"]{display:grid;}@media (max-width:921.99px){.ast-header-break-point .site-below-footer-wrap[data-section="section-below-footer-builder"]{display:grid;}}@media (max-width:544px){.ast-header-break-point .site-below-footer-wrap[data-section="section-below-footer-builder"]{display:grid;}}.ast-footer-copyright{text-align:center;}.ast-footer-copyright.site-footer-focus-item {color:var(--ast-global-color-3);}@media (max-width:921px){.ast-footer-copyright{text-align:center;}}@media (max-width:544px){.ast-footer-copyright{text-align:center;}}.ast-footer-copyright.site-footer-focus-item {font-size:16px;font-size:1rem;}.ast-footer-copyright.ast-builder-layout-element{display:flex;}@media (max-width:921.99px){.ast-header-break-point .ast-footer-copyright.ast-builder-layout-element{display:flex;}}@media (max-width:544px){.ast-header-break-point .ast-footer-copyright.ast-builder-layout-element{display:flex;}}.footer-widget-area.widget-area.site-footer-focus-item{width:auto;}.ast-footer-row-inline .footer-widget-area.widget-area.site-footer-focus-item{width:100%;}.ast-header-break-point .main-header-bar{border-bottom-width:1px;}@media (min-width:922px){.main-header-bar{border-bottom-width:1px;}}.main-header-menu .menu-item, #astra-footer-menu .menu-item, .main-header-bar .ast-masthead-custom-menu-items{-js-display:flex;display:flex;-webkit-box-pack:center;-webkit-justify-content:center;-moz-box-pack:center;-ms-flex-pack:center;justify-content:center;-webkit-box-orient:vertical;-webkit-box-direction:normal;-webkit-flex-direction:column;-moz-box-orient:vertical;-moz-box-direction:normal;-ms-flex-direction:column;flex-direction:column;}.main-header-menu > .menu-item > .menu-link, #astra-footer-menu > .menu-item > .menu-link{height:100%;-webkit-box-align:center;-webkit-align-items:center;-moz-box-align:center;-ms-flex-align:center;align-items:center;-js-display:flex;display:flex;}.ast-header-break-point .main-navigation ul .menu-item .menu-link .icon-arrow:first-of-type svg{top:.2em;margin-top:0px;margin-left:0px;width:.65em;transform:translate(0, -2px) rotateZ(270deg);}.ast-mobile-popup-content .ast-submenu-expanded > .ast-menu-toggle{transform:rotateX(180deg);overflow-y:auto;}@media (min-width:922px){.ast-builder-menu .main-navigation > ul > li:last-child a{margin-right:0;}}.ast-separate-container .ast-article-inner{background-color:var(--ast-global-color-4);background-image:none;}@media (max-width:921px){.ast-separate-container .ast-article-inner{background-color:var(--ast-global-color-4);background-image:none;}}@media (max-width:544px){.ast-separate-container .ast-article-inner{background-color:var(--ast-global-color-4);background-image:none;}}.ast-separate-container .ast-article-single:not(.ast-related-post), .ast-separate-container .error-404, .ast-separate-container .no-results, .single.ast-separate-container .site-main .ast-author-meta, .ast-separate-container .related-posts-title-wrapper, .ast-separate-container .comments-count-wrapper, .ast-box-layout.ast-plain-container .site-content, .ast-padded-layout.ast-plain-container .site-content, .ast-separate-container .ast-archive-description, .ast-separate-container .comments-area{background-color:var(--ast-global-color-4);background-image:none;}@media (max-width:921px){.ast-separate-container .ast-article-single:not(.ast-related-post), .ast-separate-container .error-404, .ast-separate-container .no-results, .single.ast-separate-container .site-main .ast-author-meta, .ast-separate-container .related-posts-title-wrapper, .ast-separate-container .comments-count-wrapper, .ast-box-layout.ast-plain-container .site-content, .ast-padded-layout.ast-plain-container .site-content, .ast-separate-container .ast-archive-description{background-color:var(--ast-global-color-4);background-image:none;}}@media (max-width:544px){.ast-separate-container .ast-article-single:not(.ast-related-post), .ast-separate-container .error-404, .ast-separate-container .no-results, .single.ast-separate-container .site-main .ast-author-meta, .ast-separate-container .related-posts-title-wrapper, .ast-separate-container .comments-count-wrapper, .ast-box-layout.ast-plain-container .site-content, .ast-padded-layout.ast-plain-container .site-content, .ast-separate-container .ast-archive-description{background-color:var(--ast-global-color-4);background-image:none;}}.ast-separate-container.ast-two-container #secondary .widget{background-color:var(--ast-global-color-4);background-image:none;}@media (max-width:921px){.ast-separate-container.ast-two-container #secondary .widget{background-color:var(--ast-global-color-4);background-image:none;}}@media (max-width:544px){.ast-separate-container.ast-two-container #secondary .widget{background-color:var(--ast-global-color-4);background-image:none;}}.ast-plain-container, .ast-page-builder-template{background-color:var(--ast-global-color-4);background-image:none;}@media (max-width:921px){.ast-plain-container, .ast-page-builder-template{background-color:var(--ast-global-color-4);background-image:none;}}@media (max-width:544px){.ast-plain-container, .ast-page-builder-template{background-color:var(--ast-global-color-4);background-image:none;}}
+		#ast-scroll-top {
+			display: none;
+			position: fixed;
+			text-align: center;
+			cursor: pointer;
+			z-index: 99;
+			width: 2.1em;
+			height: 2.1em;
+			line-height: 2.1;
+			color: #ffffff;
+			border-radius: 2px;
+			content: "";
+			outline: inherit;
+		}
+		@media (min-width: 769px) {
+			#ast-scroll-top {
+				content: "769";
+			}
+		}
+		#ast-scroll-top .ast-icon.icon-arrow svg {
+			margin-left: 0px;
+			vertical-align: middle;
+			transform: translate(0, -20%) rotate(180deg);
+			width: 1.6em;
+		}
+		.ast-scroll-to-top-right {
+			right: 30px;
+			bottom: 30px;
+		}
+		.ast-scroll-to-top-left {
+			left: 30px;
+			bottom: 30px;
+		}
+	#ast-scroll-top{background-color:var(--ast-global-color-0);font-size:15px;}@media (max-width:921px){#ast-scroll-top .ast-icon.icon-arrow svg{width:1em;}}.ast-mobile-header-content > *,.ast-desktop-header-content > * {padding: 10px 0;height: auto;}.ast-mobile-header-content > *:first-child,.ast-desktop-header-content > *:first-child {padding-top: 10px;}.ast-mobile-header-content > .ast-builder-menu,.ast-desktop-header-content > .ast-builder-menu {padding-top: 0;}.ast-mobile-header-content > *:last-child,.ast-desktop-header-content > *:last-child {padding-bottom: 0;}.ast-mobile-header-content .ast-search-menu-icon.ast-inline-search label,.ast-desktop-header-content .ast-search-menu-icon.ast-inline-search label {width: 100%;}.ast-desktop-header-content .main-header-bar-navigation .ast-submenu-expanded > .ast-menu-toggle::before {transform: rotateX(180deg);}#ast-desktop-header .ast-desktop-header-content,.ast-mobile-header-content .ast-search-icon,.ast-desktop-header-content .ast-search-icon,.ast-mobile-header-wrap .ast-mobile-header-content,.ast-main-header-nav-open.ast-popup-nav-open .ast-mobile-header-wrap .ast-mobile-header-content,.ast-main-header-nav-open.ast-popup-nav-open .ast-desktop-header-content {display: none;}.ast-main-header-nav-open.ast-header-break-point #ast-desktop-header .ast-desktop-header-content,.ast-main-header-nav-open.ast-header-break-point .ast-mobile-header-wrap .ast-mobile-header-content {display: block;}.ast-desktop .ast-desktop-header-content .astra-menu-animation-slide-up > .menu-item > .sub-menu,.ast-desktop .ast-desktop-header-content .astra-menu-animation-slide-up > .menu-item .menu-item > .sub-menu,.ast-desktop .ast-desktop-header-content .astra-menu-animation-slide-down > .menu-item > .sub-menu,.ast-desktop .ast-desktop-header-content .astra-menu-animation-slide-down > .menu-item .menu-item > .sub-menu,.ast-desktop .ast-desktop-header-content .astra-menu-animation-fade > .menu-item > .sub-menu,.ast-desktop .ast-desktop-header-content .astra-menu-animation-fade > .menu-item .menu-item > .sub-menu {opacity: 1;visibility: visible;}.ast-hfb-header.ast-default-menu-enable.ast-header-break-point .ast-mobile-header-wrap .ast-mobile-header-content .main-header-bar-navigation {width: unset;margin: unset;}.ast-mobile-header-content.content-align-flex-end .main-header-bar-navigation .menu-item-has-children > .ast-menu-toggle,.ast-desktop-header-content.content-align-flex-end .main-header-bar-navigation .menu-item-has-children > .ast-menu-toggle {left: calc( 20px - 0.907em);right: auto;}.ast-mobile-header-content .ast-search-menu-icon,.ast-mobile-header-content .ast-search-menu-icon.slide-search,.ast-desktop-header-content .ast-search-menu-icon,.ast-desktop-header-content .ast-search-menu-icon.slide-search {width: 100%;position: relative;display: block;right: auto;transform: none;}.ast-mobile-header-content .ast-search-menu-icon.slide-search .search-form,.ast-mobile-header-content .ast-search-menu-icon .search-form,.ast-desktop-header-content .ast-search-menu-icon.slide-search .search-form,.ast-desktop-header-content .ast-search-menu-icon .search-form {right: 0;visibility: visible;opacity: 1;position: relative;top: auto;transform: none;padding: 0;display: block;overflow: hidden;}.ast-mobile-header-content .ast-search-menu-icon.ast-inline-search .search-field,.ast-mobile-header-content .ast-search-menu-icon .search-field,.ast-desktop-header-content .ast-search-menu-icon.ast-inline-search .search-field,.ast-desktop-header-content .ast-search-menu-icon .search-field {width: 100%;padding-right: 5.5em;}.ast-mobile-header-content .ast-search-menu-icon .search-submit,.ast-desktop-header-content .ast-search-menu-icon .search-submit {display: block;position: absolute;height: 100%;top: 0;right: 0;padding: 0 1em;border-radius: 0;}.ast-hfb-header.ast-default-menu-enable.ast-header-break-point .ast-mobile-header-wrap .ast-mobile-header-content .main-header-bar-navigation ul .sub-menu .menu-link {padding-left: 30px;}.ast-hfb-header.ast-default-menu-enable.ast-header-break-point .ast-mobile-header-wrap .ast-mobile-header-content .main-header-bar-navigation .sub-menu .menu-item .menu-item .menu-link {padding-left: 40px;}.ast-mobile-popup-drawer.active .ast-mobile-popup-inner{background-color:#ffffff;;}.ast-mobile-header-wrap .ast-mobile-header-content, .ast-desktop-header-content{background-color:#ffffff;;}.ast-mobile-popup-content > *, .ast-mobile-header-content > *, .ast-desktop-popup-content > *, .ast-desktop-header-content > *{padding-top:0px;padding-bottom:0px;}.content-align-flex-start .ast-builder-layout-element{justify-content:flex-start;}.content-align-flex-start .main-header-menu{text-align:left;}.ast-desktop-header-content, .ast-mobile-header-content{position:absolute;width:100%;}.ast-mobile-popup-drawer.active .menu-toggle-close{color:#3a3a3a;}.ast-mobile-header-wrap .ast-primary-header-bar,.ast-primary-header-bar .site-primary-header-wrap{min-height:80px;}.ast-desktop:not(:has(.ast-header-sticked)) .ast-primary-header-bar .main-header-menu > .menu-item{line-height:80px;}.ast-header-break-point #masthead .ast-mobile-header-wrap .ast-primary-header-bar,.ast-header-break-point #masthead .ast-mobile-header-wrap .ast-below-header-bar,.ast-header-break-point #masthead .ast-mobile-header-wrap .ast-above-header-bar{padding-left:20px;padding-right:20px;}.ast-header-break-point .ast-primary-header-bar{border-bottom-width:1px;border-bottom-color:var( --ast-global-color-subtle-background,var(--ast-global-color-7) );border-bottom-style:solid;}@media (min-width:922px){.ast-primary-header-bar{border-bottom-width:1px;border-bottom-color:var( --ast-global-color-subtle-background,var(--ast-global-color-7) );border-bottom-style:solid;}}.ast-primary-header-bar{background-color:var( --ast-global-color-primary,var(--ast-global-color-4) );}.ast-primary-header-bar{display:block;}@media (max-width:921.99px){.ast-header-break-point .ast-primary-header-bar{display:grid;}}@media (max-width:544px){.ast-header-break-point .ast-primary-header-bar{display:grid;}}[data-section="section-header-mobile-trigger"] .ast-button-wrap .ast-mobile-menu-trigger-minimal{color:#10b981;border:none;background:transparent;}[data-section="section-header-mobile-trigger"] .ast-button-wrap .mobile-menu-toggle-icon .ast-mobile-svg{width:20px;height:20px;fill:#10b981;}[data-section="section-header-mobile-trigger"] .ast-button-wrap .mobile-menu-wrap .mobile-menu{color:#10b981;}.ast-builder-menu-mobile .main-navigation .main-header-menu .menu-item > .menu-link{color:var(--ast-global-color-3);}.ast-builder-menu-mobile .main-navigation .main-header-menu .menu-item > .ast-menu-toggle{color:var(--ast-global-color-3);}.ast-builder-menu-mobile .main-navigation .menu-link:hover, .ast-builder-menu-mobile .main-navigation .main-header-menu > .menu-item:hover > .menu-link, .ast-builder-menu-mobile .main-navigation .inline-on-mobile .ast-menu-toggle:hover, .ast-builder-menu-mobile .main-navigation .inline-on-mobile .main-header-menu > .menu-item:hover > .ast-menu-toggle{color:var(--ast-global-color-1);}.ast-builder-menu-mobile .menu-link:hover, .ast-builder-menu-mobile .main-header-menu > .menu-item:hover > .menu-link, .ast-builder-menu-mobile .main-navigation .inline-on-mobile .ast-menu-toggle:hover, .ast-builder-menu-mobile .main-navigation .inline-on-mobile .main-header-menu > .menu-item:hover > .ast-menu-toggle{color:var(--ast-global-color-1);}.ast-builder-menu-mobile .main-navigation .ast-menu-toggle:hover, .ast-builder-menu-mobile .main-navigation .main-header-menu > .menu-item:hover > .ast-menu-toggle{color:var(--ast-global-color-1);}.ast-builder-menu-mobile .main-navigation .menu-item.current-menu-item > .menu-link, .ast-builder-menu-mobile .main-navigation .inline-on-mobile .menu-item.current-menu-item > .ast-menu-toggle, .ast-builder-menu-mobile .main-navigation .menu-item.current-menu-ancestor > .menu-link, .ast-builder-menu-mobile .main-navigation .menu-item.current-menu-ancestor > .ast-menu-toggle{color:var(--ast-global-color-1);}.ast-builder-menu-mobile .main-navigation .menu-item.current-menu-item > .ast-menu-toggle{color:var(--ast-global-color-1);}.ast-builder-menu-mobile .main-navigation .menu-item.menu-item-has-children > .ast-menu-toggle{top:0;}.ast-builder-menu-mobile .main-navigation .menu-item-has-children > .menu-link:after{content:unset;}.ast-hfb-header .ast-builder-menu-mobile .main-header-menu, .ast-hfb-header .ast-builder-menu-mobile .main-navigation .menu-item .menu-link, .ast-hfb-header .ast-builder-menu-mobile .main-navigation .menu-item .sub-menu .menu-link{border-style:none;}.ast-builder-menu-mobile .main-navigation .menu-item.menu-item-has-children > .ast-menu-toggle{top:0;}@media (max-width:921px){.ast-builder-menu-mobile .main-navigation .main-header-menu .menu-item > .menu-link{color:var(--ast-global-color-3);}.ast-builder-menu-mobile .main-navigation .main-header-menu .menu-item > .ast-menu-toggle{color:var(--ast-global-color-3);}.ast-builder-menu-mobile .main-navigation .menu-link:hover, .ast-builder-menu-mobile .main-navigation .main-header-menu > .menu-item:hover > .menu-link, .ast-builder-menu-mobile .main-navigation .inline-on-mobile .ast-menu-toggle:hover, .ast-builder-menu-mobile .main-navigation .inline-on-mobile .main-header-menu > .menu-item:hover > .ast-menu-toggle{color:var(--ast-global-color-1);background:var(--ast-global-color-5);}.ast-builder-menu-mobile .main-navigation .ast-menu-toggle:hover, .ast-builder-menu-mobile .main-navigation .main-header-menu > .menu-item:hover > .ast-menu-toggle{color:var(--ast-global-color-1);}.ast-builder-menu-mobile .main-navigation .menu-item.current-menu-item > .menu-link, .ast-builder-menu-mobile .main-navigation .inline-on-mobile .menu-item.current-menu-item > .ast-menu-toggle, .ast-builder-menu-mobile .main-navigation .menu-item.current-menu-ancestor > .menu-link, .ast-builder-menu-mobile .main-navigation .menu-item.current-menu-ancestor > .ast-menu-toggle{color:var(--ast-global-color-1);background:var(--ast-global-color-5);}.ast-builder-menu-mobile .main-navigation .menu-item.current-menu-item > .ast-menu-toggle{color:var(--ast-global-color-1);}.ast-builder-menu-mobile .main-navigation .menu-item.menu-item-has-children > .ast-menu-toggle{top:0;}.ast-builder-menu-mobile .main-navigation .menu-item-has-children > .menu-link:after{content:unset;}.ast-builder-menu-mobile .main-navigation .main-header-menu , .ast-builder-menu-mobile .main-navigation .main-header-menu .menu-link, .ast-builder-menu-mobile .main-navigation .main-header-menu .sub-menu{background-color:var(--ast-global-color-4);}}@media (max-width:544px){.ast-builder-menu-mobile .main-navigation .menu-item.menu-item-has-children > .ast-menu-toggle{top:0;}}.ast-builder-menu-mobile .main-navigation{display:block;}@media (max-width:921.99px){.ast-header-break-point .ast-builder-menu-mobile .main-navigation{display:block;}}@media (max-width:544px){.ast-header-break-point .ast-builder-menu-mobile .main-navigation{display:block;}}.comment-reply-title{font-size:20px;font-size:1.25rem;}.ast-comment-meta{line-height:1.666666667;color:var(--ast-global-color-0);font-size:13px;font-size:0.8125rem;}.ast-comment-list #cancel-comment-reply-link{font-size:16px;font-size:1rem;}.comments-title {padding: 1em 0 0;}.comments-title {word-wrap: break-word;font-weight: 600; padding-bottom: 1em;}.ast-comment-list {margin: 0;word-wrap: break-word;padding-bottom: 0;list-style: none;}.ast-comment-list li {list-style: none;}.ast-comment-list .ast-comment-edit-reply-wrap {-js-display: flex;display: flex;justify-content: flex-end;}.ast-comment-list .comment-awaiting-moderation {margin-bottom: 0;}.ast-comment {padding: 0 ;}.ast-comment-info img {border-radius: 50%;}.ast-comment-cite-wrap cite {font-style: normal;}.comment-reply-title {font-weight: 600;line-height: 1.65;}.ast-comment-meta {margin-bottom: 0.5em;}.comments-area .comment-form-comment {width: 100%;border: none;margin: 0;padding: 0;}.comments-area .comment-notes,.comments-area .comment-textarea,.comments-area .form-allowed-tags {margin-bottom: 1.5em;}.comments-area .form-submit {margin-bottom: 0;}.comments-area textarea#comment,.comments-area .ast-comment-formwrap input[type="text"] {width: 100%;border-radius: 0;vertical-align: middle;margin-bottom: 10px;}.comments-area .no-comments {margin-top: 0.5em;margin-bottom: 0.5em;}.comments-area p.logged-in-as {margin-bottom: 1em;}.ast-separate-container .ast-comment-list {padding-bottom: 0;}.ast-separate-container .ast-comment-list li.depth-1 .children li,.ast-narrow-container .ast-comment-list li.depth-1 .children li {padding-bottom: 0;padding-top: 0;margin-bottom: 0;}.ast-separate-container .ast-comment-list .comment-respond {padding-top: 0;padding-bottom: 1em;background-color: transparent;}.ast-comment-list .comment .comment-respond {padding-bottom: 2em;border-bottom: none;}.ast-separate-container .ast-comment-list .bypostauthor,.ast-narrow-container .ast-comment-list .bypostauthor {padding: 2em;margin-bottom: 1em;}.ast-separate-container .ast-comment-list .bypostauthor li,.ast-narrow-container .ast-comment-list .bypostauthor li {background: transparent;margin-bottom: 0;padding: 0 0 0 2em;}.comment-content a {word-wrap: break-word;}.comment-form-legend {margin-bottom: unset;padding: 0 0.5em;}.comment-reply-title {padding-top: 0;margin-bottom: 1em;}.ast-comment {padding-top: 2.5em;padding-bottom: 2.5em;border-top: 1px solid var(--ast-single-post-border,var(--ast-border-color));}.ast-separate-container .ast-comment-list .comment + .comment,.ast-narrow-container .ast-comment-list .comment + .comment {padding-top: 0;padding-bottom: 0;}.ast-separate-container .ast-comment-list li.depth-1,.ast-narrow-container .ast-comment-list li.depth-1 {padding-left: 2.5em;padding-right: 2.5em;}.ast-plain-container .ast-comment,.ast-page-builder-template .ast-comment {padding: 2em 0;}.page.ast-page-builder-template .comments-area {margin-top: 2em;}.ast-comment-list .children {margin-left: 2em;}@media (max-width: 992px) {.ast-comment-list .children {margin-left: 1em;}}.ast-comment-list #cancel-comment-reply-link {white-space: nowrap;font-size: 13px;font-weight: normal;margin-left: 1em;}.ast-comment-info {display: flex;position: relative;}.ast-comment-meta {justify-content: right;padding: 0 3.4em 1.60em;}.comments-area #wp-comment-cookies-consent {margin-right: 10px;}.ast-page-builder-template .comments-area {padding-left: 20px;padding-right: 20px;margin-top: 0;margin-bottom: 2em;}.ast-separate-container .ast-comment-list .bypostauthor .bypostauthor {background: transparent;margin-bottom: 0;padding-right: 0;padding-bottom: 0;padding-top: 0;}@media (min-width:922px){.ast-separate-container .ast-comment-list li .comment-respond{padding-left:2.66666em;padding-right:2.66666em;}}@media (max-width:544px){.ast-separate-container .ast-comment-list li.depth-1{margin-bottom:0;}.ast-separate-container .ast-comment-list .bypostauthor{padding:.5em;}.ast-separate-container .ast-comment-list .bypostauthor li{padding:0 0 0 .5em;}.ast-comment-list .children{margin-left:0.66666em;}}
+				.ast-comment-cite-wrap cite {
+					font-weight: 600;
+					font-size: 1.2em;
+				}
+				.ast-comment-info img {
+					box-shadow: 0 0 5px 0 rgba(0,0,0,.15);
+					border: 1px solid var(--ast-single-post-border, var(--ast-border-color));
+				}
+				.ast-comment-info {
+					margin-bottom: 1em;
+				}
+				.logged-in span.ast-reply-link {
+					margin-right: 16px;
+				}
+				a.comment-edit-link, a.comment-reply-link {
+					font-size: 13px;
+					transition: all 0.2s;
+				}
+				header.ast-comment-meta {
+					text-transform: inherit;
+				}
+				.ast-page-builder-template .ast-comment-list .children {
+					margin-top: 0em;
+				}
+				.ast-page-builder-template .ast-comment-meta {
+					padding: 0 22px;
+				}
+				.ast-comment-content.comment p {
+					margin-bottom: 16px;
+				}
+				.ast-comment-list .ast-comment-edit-reply-wrap {
+					justify-content: flex-start;
+					align-items: center;
+				}
+				.comment-awaiting-moderation {
+					margin-top: 20px;
+				}
+				.entry-content ul li, .entry-content ol li {
+					margin-bottom: 10px;
+				}
+				.comment-respond {
+					padding-top: 2em;
+					padding-bottom: 2em;
+				}
+				.ast-comment-list + .comment-respond {
+					border-top: 1px solid var(--ast-single-post-border, var(--ast-border-color));
+					padding-bottom: 0;
+				}
+				.comment .comment-reply-title {
+					display: flex;
+					align-items: center;
+					justify-content: space-between;
+				}
+				@media(min-width: 545px) {
+					header.ast-comment-meta {
+						display: flex;
+						width: 100%;
+						margin-bottom: 0;
+						padding-bottom: 0;
+						align-items: center;
+					}
+					a.comment-reply-link {
+						padding: 1px 10px;
+						display: block;
+						border-radius: 3px;
+						border: none;
+					}
+					.ast-separate-container .ast-comment-list li.depth-1, .ast-narrow-container .ast-comment-list li.depth-1 {
+						margin-bottom: 0;
+					}
+					.ast-comment-time {
+						display: flex;
+						margin-left: auto;
+						font-weight: 500;
+					}
+					section.ast-comment-content.comment {
+						padding-left: 50px;
+					}
+					.ast-comment .comment-reply-link:hover {
+						background: #10b981;
+						color: #fff;
+					}
+					.ast-comment .comment-edit-link:hover {
+						text-decoration: underline;
+					}
+					svg.ast-reply-icon {
+						fill: currentColor;
+						margin-right: 5px;
+						padding-top: 2px;
+						transition: none;
+					}
+					.comment-reply-link:hover .ast-reply-icon {
+						fill: #fff;
+					}
+				}
+				@media(min-width: 921px) {
+					.ast-comment-cite-wrap {
+						margin-left: -7px;
+					}
+					section.ast-comment-content.comment {
+						padding-left: 70px;
+					}
+				}
+			@media (max-width:921px){.ast-comment-avatar-wrap img{max-width:2.5em;}.comments-area{margin-top:1.5em;}.ast-comment-meta{padding:0 1.8888em 1.3333em;}.ast-comment-avatar-wrap{margin-right:0.5em;}}:root {--ast-single-post-border: #e1e8ed;}.entry-content > * {margin-bottom: 1.5em;}.entry-content :where(h1,h2,h3,h4,h5,h6) {margin-top: 1.5em;margin-bottom: calc(0.3em + 10px);}code,kbd,samp {background: var(--ast-code-block-background);padding: 3px 6px;}.ast-row.comment-textarea fieldset.comment-form-comment {border: none;padding: unset;margin-bottom: 1.5em;}.entry-content .wp-block-image,.entry-content .wp-block-embed {margin-top: 2em;margin-bottom: 3em;}:root {--ast-single-post-nav-padding: 3em 0 1em;}.single .post-navigation a p {margin-top: 0.5em;margin-bottom: 0;text-transform: initial;line-height: 1.65em;font-weight: normal;}.single .post-navigation a .ast-post-nav {font-weight: 600;display: block;text-transform: uppercase;font-size: 0.85em;letter-spacing: 0.05em;}.single .post-navigation a svg {top: .125em;width: 1em;height: 1em;position: relative;fill: currentColor;}.page-links .page-link:hover,.single .post-navigation a:hover {color: var(--ast-global-color-1);}@media( min-width: 320px ) {.single .post-navigation .nav-previous a {text-align: left;padding-right: 20px;}.single .post-navigation .nav-next a {text-align: right;padding-left: 20px;}.comment-navigation .nav-previous:after,.post-navigation .nav-previous:after {position: absolute;content: "";top: 25%;right: 0;width: 1px;height: 50%;background: var(--ast-single-post-border,var(--ast-border-color));}}@media( max-width: 544px ) {.single .post-navigation .nav-links {-js-display: inline-flex;display: inline-flex;width: 100%;padding-left: 20px; padding-right: 20px;}.single .post-navigation a p {display: none;}.single .post-navigation .nav-previous {margin-bottom: 0;}}@media( min-width: 421px ) {.single .post-navigation a {max-width: 80%;width: 100%;}.post-navigation a {font-weight: 500;font-size: 16px;}}
+/*# sourceURL=astra-theme-css-inline-css */
+</style>
+<link rel='stylesheet' id='astra-google-fonts-css' href='https://fonts.googleapis.com/css?family=Inter:400%2C|Poppins:600%2C&#038;display=swap&#038;ver=4.13.8' media='all' />
+<style id="wp-emoji-styles-inline-css">
+
+	img.wp-smiley, img.emoji {
+		display: inline !important;
+		border: none !important;
+		box-shadow: none !important;
+		height: 1em !important;
+		width: 1em !important;
+		margin: 0 0.07em !important;
+		vertical-align: -0.1em !important;
+		background: none !important;
+		padding: 0 !important;
+	}
+/*# sourceURL=wp-emoji-styles-inline-css */
+</style>
+<style id="wp-block-library-inline-css">
+:root{--wp-block-synced-color:#7a00df;--wp-block-synced-color--rgb:122,0,223;--wp-bound-block-color:var(--wp-block-synced-color);--wp-editor-canvas-background:#ddd;--wp-admin-theme-color:#007cba;--wp-admin-theme-color--rgb:0,124,186;--wp-admin-theme-color-darker-10:#006ba1;--wp-admin-theme-color-darker-10--rgb:0,107,160.5;--wp-admin-theme-color-darker-20:#005a87;--wp-admin-theme-color-darker-20--rgb:0,90,135;--wp-admin-border-width-focus:2px}@media (min-resolution:192dpi){:root{--wp-admin-border-width-focus:1.5px}}.wp-element-button{cursor:pointer}:root .has-very-light-gray-background-color{background-color:#eee}:root .has-very-dark-gray-background-color{background-color:#313131}:root .has-very-light-gray-color{color:#eee}:root .has-very-dark-gray-color{color:#313131}:root .has-vivid-green-cyan-to-vivid-cyan-blue-gradient-background{background:linear-gradient(135deg,#00d084,#0693e3)}:root .has-purple-crush-gradient-background{background:linear-gradient(135deg,#34e2e4,#4721fb 50%,#ab1dfe)}:root .has-hazy-dawn-gradient-background{background:linear-gradient(135deg,#faaca8,#dad0ec)}:root .has-subdued-olive-gradient-background{background:linear-gradient(135deg,#fafae1,#67a671)}:root .has-atomic-cream-gradient-background{background:linear-gradient(135deg,#fdd79a,#004a59)}:root .has-nightshade-gradient-background{background:linear-gradient(135deg,#330968,#31cdcf)}:root .has-midnight-gradient-background{background:linear-gradient(135deg,#020381,#2874fc)}:root{--wp--preset--font-size--normal:16px;--wp--preset--font-size--huge:42px}.has-regular-font-size{font-size:1em}.has-larger-font-size{font-size:2.625em}.has-normal-font-size{font-size:var(--wp--preset--font-size--normal)}.has-huge-font-size{font-size:var(--wp--preset--font-size--huge)}:root .has-text-align-center{text-align:center}:root .has-text-align-left{text-align:left}:root .has-text-align-right{text-align:right}.has-fit-text{white-space:nowrap!important}#end-resizable-editor-section{display:none}.aligncenter{clear:both}.items-justified-left{justify-content:flex-start}.items-justified-center{justify-content:center}.items-justified-right{justify-content:flex-end}.items-justified-space-between{justify-content:space-between}.screen-reader-text{word-wrap:normal!important;border:0;clip-path:inset(50%);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px;word-break:normal!important}.screen-reader-text:focus{background-color:#ddd;clip-path:none;color:#444;display:block;font-size:1em;height:auto;left:5px;line-height:normal;padding:15px 23px 14px;text-decoration:none;top:5px;width:auto;z-index:100000}html :where(.has-border-color){border-style:solid}html :where([style^=border-color],[style*=";border-color"],[style*="; border-color"]){border-style:solid}html :where([style^=border-top-color],[style*=";border-top-color"],[style*="; border-top-color"]){border-top-style:solid}html :where([style^=border-right-color],[style*=";border-right-color"],[style*="; border-right-color"]){border-right-style:solid}html :where([style^=border-bottom-color],[style*=";border-bottom-color"],[style*="; border-bottom-color"]){border-bottom-style:solid}html :where([style^=border-left-color],[style*=";border-left-color"],[style*="; border-left-color"]){border-left-style:solid}html :where([style^=border-width],[style*=";border-width"],[style*="; border-width"]){border-style:solid}html :where([style^=border-top-width],[style*=";border-top-width"],[style*="; border-top-width"]){border-top-style:solid}html :where([style^=border-right-width],[style*=";border-right-width"],[style*="; border-right-width"]){border-right-style:solid}html :where([style^=border-bottom-width],[style*=";border-bottom-width"],[style*="; border-bottom-width"]){border-bottom-style:solid}html :where([style^=border-left-width],[style*=";border-left-width"],[style*="; border-left-width"]){border-left-style:solid}html :where(img[class*=wp-image-]){height:auto;max-width:100%}:where(figure){margin:0 0 1em}html :where(.is-position-sticky){--wp-admin--admin-bar--position-offset:var(--wp-admin--admin-bar--height,0px)}@media screen and (max-width:600px){html :where(.is-position-sticky){--wp-admin--admin-bar--position-offset:0px}}
+
+/*# sourceURL=/wp-includes/css/dist/block-library/common.min.css */
+</style>
+
+<style id="global-styles-inline-css">
+:root{--wp--preset--aspect-ratio--square: 1;--wp--preset--aspect-ratio--4-3: 4/3;--wp--preset--aspect-ratio--3-4: 3/4;--wp--preset--aspect-ratio--3-2: 3/2;--wp--preset--aspect-ratio--2-3: 2/3;--wp--preset--aspect-ratio--16-9: 16/9;--wp--preset--aspect-ratio--9-16: 9/16;--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--color--ast-global-color-0: var(--ast-global-color-0);--wp--preset--color--ast-global-color-1: var(--ast-global-color-1);--wp--preset--color--ast-global-color-2: var(--ast-global-color-2);--wp--preset--color--ast-global-color-3: var(--ast-global-color-3);--wp--preset--color--ast-global-color-4: var(--ast-global-color-4);--wp--preset--color--ast-global-color-5: var(--ast-global-color-5);--wp--preset--color--ast-global-color-6: var(--ast-global-color-6);--wp--preset--color--ast-global-color-7: var(--ast-global-color-7);--wp--preset--color--ast-global-color-8: var(--ast-global-color-8);--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgb(6,147,227) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgb(252,185,0) 0%,rgb(255,105,0) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgb(255,105,0) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgb(255, 255, 255), 6px 6px rgb(0, 0, 0);--wp--preset--shadow--crisp: 6px 6px 0px rgb(0, 0, 0);}.wp-block-button{--wp--preset--dimension--25: 25%;--wp--preset--dimension--50: 50%;--wp--preset--dimension--75: 75%;--wp--preset--dimension--100: 100%;}:root { --wp--style--global--content-size: var(--wp--custom--ast-content-width-size);--wp--style--global--wide-size: var(--wp--custom--ast-wide-width-size); }:where(body) { margin: 0; }.wp-site-blocks > .alignleft { float: left; margin-right: 2em; }.wp-site-blocks > .alignright { float: right; margin-left: 2em; }.wp-site-blocks > .aligncenter { justify-content: center; margin-left: auto; margin-right: auto; }:where(.wp-site-blocks) > * { margin-block-start: 24px; margin-block-end: 0; }:where(.wp-site-blocks) > :first-child { margin-block-start: 0; }:where(.wp-site-blocks) > :last-child { margin-block-end: 0; }:root { --wp--style--block-gap: 24px; }:root :where(.is-layout-flow) > :first-child{margin-block-start: 0;}:root :where(.is-layout-flow) > :last-child{margin-block-end: 0;}:root :where(.is-layout-flow) > *{margin-block-start: 24px;margin-block-end: 0;}:root :where(.is-layout-constrained) > :first-child{margin-block-start: 0;}:root :where(.is-layout-constrained) > :last-child{margin-block-end: 0;}:root :where(.is-layout-constrained) > *{margin-block-start: 24px;margin-block-end: 0;}:root :where(.is-layout-flex){gap: 24px;}:root :where(.is-layout-grid){gap: 24px;}.is-layout-flow > .alignleft{float: left;margin-inline-start: 0;margin-inline-end: 2em;}.is-layout-flow > .alignright{float: right;margin-inline-start: 2em;margin-inline-end: 0;}.is-layout-flow > .aligncenter{margin-left: auto !important;margin-right: auto !important;}.is-layout-constrained > .alignleft{float: left;margin-inline-start: 0;margin-inline-end: 2em;}.is-layout-constrained > .alignright{float: right;margin-inline-start: 2em;margin-inline-end: 0;}.is-layout-constrained > .aligncenter{margin-left: auto !important;margin-right: auto !important;}.is-layout-constrained > :where(:not(.alignleft):not(.alignright):not(.alignfull)){max-width: var(--wp--style--global--content-size);margin-left: auto !important;margin-right: auto !important;}.is-layout-constrained > .alignwide{max-width: var(--wp--style--global--wide-size);}body .is-layout-flex{display: flex;}.is-layout-flex{flex-wrap: wrap;align-items: center;}.is-layout-flex > :is(*, div){margin: 0;}body .is-layout-grid{display: grid;}.is-layout-grid > :is(*, div){margin: 0;}body{padding-top: 0px;padding-right: 0px;padding-bottom: 0px;padding-left: 0px;}a:where(:not(.wp-element-button)){text-decoration: none;}:root :where(.wp-element-button, .wp-block-button__link){background-color: #32373c;border-width: 0;color: #fff;font-family: inherit;font-size: inherit;font-style: inherit;font-weight: inherit;letter-spacing: inherit;line-height: inherit;padding-top: calc(0.667em + 2px);padding-right: calc(1.333em + 2px);padding-bottom: calc(0.667em + 2px);padding-left: calc(1.333em + 2px);text-decoration: none;text-transform: inherit;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-ast-global-color-0-color{color: var(--wp--preset--color--ast-global-color-0) !important;}.has-ast-global-color-1-color{color: var(--wp--preset--color--ast-global-color-1) !important;}.has-ast-global-color-2-color{color: var(--wp--preset--color--ast-global-color-2) !important;}.has-ast-global-color-3-color{color: var(--wp--preset--color--ast-global-color-3) !important;}.has-ast-global-color-4-color{color: var(--wp--preset--color--ast-global-color-4) !important;}.has-ast-global-color-5-color{color: var(--wp--preset--color--ast-global-color-5) !important;}.has-ast-global-color-6-color{color: var(--wp--preset--color--ast-global-color-6) !important;}.has-ast-global-color-7-color{color: var(--wp--preset--color--ast-global-color-7) !important;}.has-ast-global-color-8-color{color: var(--wp--preset--color--ast-global-color-8) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-ast-global-color-0-background-color{background-color: var(--wp--preset--color--ast-global-color-0) !important;}.has-ast-global-color-1-background-color{background-color: var(--wp--preset--color--ast-global-color-1) !important;}.has-ast-global-color-2-background-color{background-color: var(--wp--preset--color--ast-global-color-2) !important;}.has-ast-global-color-3-background-color{background-color: var(--wp--preset--color--ast-global-color-3) !important;}.has-ast-global-color-4-background-color{background-color: var(--wp--preset--color--ast-global-color-4) !important;}.has-ast-global-color-5-background-color{background-color: var(--wp--preset--color--ast-global-color-5) !important;}.has-ast-global-color-6-background-color{background-color: var(--wp--preset--color--ast-global-color-6) !important;}.has-ast-global-color-7-background-color{background-color: var(--wp--preset--color--ast-global-color-7) !important;}.has-ast-global-color-8-background-color{background-color: var(--wp--preset--color--ast-global-color-8) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-ast-global-color-0-border-color{border-color: var(--wp--preset--color--ast-global-color-0) !important;}.has-ast-global-color-1-border-color{border-color: var(--wp--preset--color--ast-global-color-1) !important;}.has-ast-global-color-2-border-color{border-color: var(--wp--preset--color--ast-global-color-2) !important;}.has-ast-global-color-3-border-color{border-color: var(--wp--preset--color--ast-global-color-3) !important;}.has-ast-global-color-4-border-color{border-color: var(--wp--preset--color--ast-global-color-4) !important;}.has-ast-global-color-5-border-color{border-color: var(--wp--preset--color--ast-global-color-5) !important;}.has-ast-global-color-6-border-color{border-color: var(--wp--preset--color--ast-global-color-6) !important;}.has-ast-global-color-7-border-color{border-color: var(--wp--preset--color--ast-global-color-7) !important;}.has-ast-global-color-8-border-color{border-color: var(--wp--preset--color--ast-global-color-8) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+/*# sourceURL=global-styles-inline-css */
+</style>
+
+<link rel='stylesheet' id='eztoc-css' href='https://testheon.com/wp-content/plugins/easy-table-of-contents/assets/css/screen.min.css?ver=2.0.87' media='all' />
+<style id="eztoc-inline-css">
+div#ez-toc-container .ez-toc-title, .ez-toc-split-section .ez-toc-title {font-size: 120%;}div#ez-toc-container .ez-toc-title, .ez-toc-split-section .ez-toc-title {font-weight: 500;}div#ez-toc-container ul li , div#ez-toc-container ul li a, .ez-toc-split-section ul li , .ez-toc-split-section ul li a {font-size: 95%;}div#ez-toc-container ul li , div#ez-toc-container ul li a, .ez-toc-split-section ul li , .ez-toc-split-section ul li a {font-weight: 500;}div#ez-toc-container nav ul ul li, .ez-toc-split-section nav ul ul li {font-size: 90%;}.ez-toc-box-title {font-weight: bold; margin-bottom: 10px; text-align: center; text-transform: uppercase; letter-spacing: 1px; color: #666; padding-bottom: 5px;position:absolute;top:-4%;left:5%;background-color: inherit;transition: top 0.3s ease;}.ez-toc-box-title.toc-closed {top:-25%;}
+.ez-toc-container-direction {direction: ltr;}.ez-toc-counter ul{counter-reset: item ;}.ez-toc-counter nav ul li a::before {content: counters(item, '.', decimal) '. ';display: inline-block;counter-increment: item;flex-grow: 0;flex-shrink: 0;margin-right: .2em; float: left; }.ez-toc-widget-direction {direction: ltr;}.ez-toc-widget-container ul{counter-reset: item ;}.ez-toc-widget-container nav ul li a::before {content: counters(item, '.', decimal) '. ';display: inline-block;counter-increment: item;flex-grow: 0;flex-shrink: 0;margin-right: .2em; float: left; }
+/*# sourceURL=eztoc-inline-css */
+</style>
+<link rel='stylesheet' id='hostinger-reach-subscription-block-css' href='https://testheon.com/wp-content/plugins/hostinger-reach/frontend/dist/blocks/subscription.css?ver=1788075676' media='all' />
+<script id="jquery-core-js" src="https://testheon.com/wp-includes/js/jquery/jquery.min.js?ver=3.7.1"></script>
+<script id="jquery-migrate-js" src="https://testheon.com/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"></script>
+<link rel="https://api.w.org/" href="https://testheon.com/wp-json/" /><link rel="alternate" title="JSON" type="application/json" href="https://testheon.com/wp-json/wp/v2/posts/265" /><link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://testheon.com/xmlrpc.php?rsd" />
+<meta name="generator" content="WordPress 7.1.2" />
+<link rel='shortlink' href='https://testheon.com/?p=265' />
+	<style>img#wpstats{display:none}</style>
+		<link rel="pingback" href="https://testheon.com/xmlrpc.php">
+<link rel="icon" href="https://testheon.com/wp-content/uploads/2026/08/cropped-Favicon_Testheon-32x32.png" sizes="32x32" />
+<link rel="icon" href="https://testheon.com/wp-content/uploads/2026/08/cropped-Favicon_Testheon-192x192.png" sizes="192x192" />
+<link rel="apple-touch-icon" href="https://testheon.com/wp-content/uploads/2026/08/cropped-Favicon_Testheon-180x180.png" />
+<meta name="msapplication-TileImage" content="https://testheon.com/wp-content/uploads/2026/08/cropped-Favicon_Testheon-270x270.png" />
+<style id="wp-custom-css">
+/* ================================================
+   TESTHEON — Complete CSS Fix
+   Replace all previous CSS with this block
+   ================================================ */
+
+/* --- CACHE BUSTER --- */
+/* v2.0 */
+
+/* ---- AUTHOR PHOTO: circular, small, centered ---- */
+img[src*="mayur-nilekar"] {
+  width: 120px !important;
+  height: 120px !important;
+  max-width: 120px !important;
+  object-fit: cover !important;
+  border-radius: 50% !important;
+  display: block !important;
+  margin: 0 auto 20px auto !important;
+  border: 3px solid #e5e7eb !important;
+}
+
+/* ---- HERO LOGO: small, centered ---- */
+img[src*="testheon-logo.png"] {
+  width: 80px !important;
+  max-width: 80px !important;
+  height: auto !important;
+  display: block !important;
+  margin: 0 auto 16px auto !important;
+}
+
+/* ---- HEADER LOGO: constrained size ---- */
+.site-header img,
+.ast-site-header-wrap img,
+.custom-logo,
+img[src*="cropped-testheon-logo"] {
+  max-height: 48px !important;
+  width: auto !important;
+  height: auto !important;
+  max-width: 160px !important;
+}
+
+/* ---- HIDE DUPLICATE HEADER (second copy) ---- */
+.ast-above-header-wrap {
+  display: none !important;
+}
+
+/* ---- SITE BACKGROUND: white ---- */
+body, .site {
+  background-color: #ffffff !important;
+}
+
+/* ---- BLOG CARDS ---- */
+.ast-article-post,
+.ast-archive-post,
+article.type-post {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+  margin-bottom: 28px;
+}
+
+.ast-article-post:hover,
+.ast-archive-post:hover,
+article.type-post:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.14);
+}
+
+/* ---- BLOG CARD IMAGES: fixed height, no stretch ---- */
+.ast-article-post .post-thumb img,
+.ast-archive-post .post-thumb img,
+article.type-post .post-thumb img {
+  width: 100% !important;
+  height: 200px !important;
+  object-fit: cover !important;
+  border-radius: 0 !important;
+}
+
+/* ---- BLOG CARD IMAGE: mobile ---- */
+@media (max-width: 768px) {
+  .ast-article-post .post-thumb img,
+  .ast-archive-post .post-thumb img {
+    height: 160px !important;
+  }
+}
+
+/* ---- CATEGORY TAG ---- */
+.cat-links a {
+  background: #eef2ff !important;
+  color: #4338ca !important;
+  padding: 4px 12px !important;
+  border-radius: 20px !important;
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  text-decoration: none !important;
+}
+
+/* ---- POST TITLE ---- */
+.entry-title a {
+  color: #1a1a2e !important;
+  text-decoration: none !important;
+}
+.entry-title a:hover {
+  color: #2563eb !important;
+}
+
+/* ---- EXCERPT ---- */
+.entry-summary p, 
+.entry-content p {
+  color: #6b7280;
+  font-size: 0.9rem;
+  line-height: 1.65;
+}
+
+/* ---- META (author/date) ---- */
+.entry-meta {
+  font-size: 0.82rem !important;
+  color: #9ca3af !important;
+}
+
+.entry-meta img {
+  width: 28px !important;
+  height: 28px !important;
+  border-radius: 50% !important;
+  object-fit: cover !important;
+}
+
+/* ---- PAGINATION ---- */
+.page-numbers {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 40px !important;
+  height: 40px !important;
+  margin: 0 4px !important;
+  border-radius: 8px !important;
+  background: #f3f4f6 !important;
+  color: #374151 !important;
+  text-decoration: none !important;
+  font-weight: 600 !important;
+  transition: all 0.2s ease !important;
+}
+
+.page-numbers.current,
+.page-numbers:hover {
+  background: #2563eb !important;
+  color: white !important;
+}
+
+/* ---- HOMEPAGE SERIES CARDS ---- */
+.wp-block-group {
+  border-radius: 10px;
+}
+
+/* ---- BUTTONS ---- */
+.wp-block-button__link {
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  padding: 12px 24px !important;
+}
+
+/* ---- MOBILE: stack buttons vertically ---- */
+@media (max-width: 600px) {
+  .wp-block-buttons {
+    flex-direction: column !important;
+    align-items: center !important;
+  }
+  
+  .wp-block-button {
+    width: 100% !important;
+    text-align: center !important;
+  }
+
+  img[src*="mayur-nilekar"] {
+    width: 90px !important;
+    height: 90px !important;
+    max-width: 90px !important;
+  }
+}
+
+/* ---- TABLET: adjust card layout ---- */
+@media (max-width: 1024px) and (min-width: 769px) {
+  img[src*="mayur-nilekar"] {
+    width: 100px !important;
+    height: 100px !important;
+    max-width: 100px !important;
+  }
+}
+
+/* ---- SEARCH BAR ---- */
+.search-field {
+  border: 2px solid #e5e7eb !important;
+  border-radius: 8px !important;
+  padding: 10px 16px !important;
+}
+.search-field:focus {
+  border-color: #2563eb !important;
+  outline: none !important;
+}
+</style>
+</head>
+
+<body itemtype='https://schema.org/Blog' itemscope='itemscope' class="wp-singular post-template-default single single-post postid-265 single-format-standard wp-custom-logo wp-embed-responsive wp-theme-astra ast-desktop ast-narrow-container ast-separate-container ast-no-sidebar astra-4.13.8 ast-blog-single-style-1 ast-single-post ast-replace-site-logo-transparent ast-inherit-site-logo-transparent ast-hfb-header ast-normal-title-enabled">
+			<script>
+			(function(){if(window.matchMedia('(max-width:921.99px)').matches){document.body.classList.add('ast-header-break-point');document.body.classList.remove('ast-desktop');}})();
+			</script>
+			
+<a
+	class="skip-link screen-reader-text"
+	href="#content">
+		Skip to content</a>
+
+<div
+class="hfeed site" id="page">
+			<header
+		class="site-header header-main-layout-1 ast-primary-menu-enabled ast-logo-title-inline ast-hide-custom-menu-mobile ast-builder-menu-toggle-icon ast-mobile-header-inline" id="masthead" itemtype="https://schema.org/WPHeader" itemscope="itemscope" itemid="#masthead"		>
+			<div id="ast-desktop-header" data-toggle-type="dropdown">
+		<div class="ast-main-header-wrap main-header-bar-wrap ">
+		<div class="ast-primary-header-bar ast-primary-header main-header-bar site-header-focus-item" data-section="section-primary-header-builder">
+						<div class="site-primary-header-wrap ast-builder-grid-row-container site-header-focus-item ast-container" data-section="section-primary-header-builder">
+				<div class="ast-builder-grid-row ast-builder-grid-row-has-sides ast-builder-grid-row-no-center">
+											<div class="site-header-primary-section-left site-header-section ast-flex site-header-section-left">
+									<div class="ast-builder-layout-element ast-flex site-header-focus-item" data-section="title_tagline">
+							<div
+				class="site-branding ast-site-identity" itemtype="https://schema.org/Organization" itemscope="itemscope"				>
+					<span class="site-logo-img"><a href="https://testheon.com/" class="custom-logo-link" rel="home"><img width="1535" height="512" src="https://testheon.com/wp-content/uploads/2026/08/cropped-testheon-logo.png" class="custom-logo" alt="Testheon logo" decoding="async" fetchpriority="high" srcset="https://testheon.com/wp-content/uploads/2026/08/cropped-testheon-logo.png 1535w, https://testheon.com/wp-content/uploads/2026/08/cropped-testheon-logo-300x100.png 300w, https://testheon.com/wp-content/uploads/2026/08/cropped-testheon-logo-1024x342.png 1024w, https://testheon.com/wp-content/uploads/2026/08/cropped-testheon-logo-768x256.png 768w, https://testheon.com/wp-content/uploads/2026/08/cropped-testheon-logo-150x50.png 150w" sizes="(max-width: 1535px) 100vw, 1535px" /></a></span><div class="ast-site-title-wrap">
+						
+						<p class="site-description" itemprop="description">
+				QA Engineering, AI Testing &amp; Automation for the Next Generation
+			</p>
+				</div>				</div>
+			<!-- .site-branding -->
+					</div>
+								</div>
+																								<div class="site-header-primary-section-right site-header-section ast-flex ast-grid-right-section">
+										<div class="ast-builder-menu-1 ast-builder-menu ast-flex ast-builder-menu-1-focus-item ast-builder-layout-element site-header-focus-item" data-section="section-hb-menu-1">
+			<div class="ast-main-header-bar-alignment"><div class="main-header-bar-navigation ast-flex-1"><nav class="site-navigation ast-flex-grow-1 navigation-accessibility" id="primary-site-navigation" aria-label="Primary Site Navigation" itemtype="https://schema.org/SiteNavigationElement" itemscope="itemscope"><div id="ast-hf-menu-1" class="main-navigation ast-inline-flex"><ul class="main-header-menu ast-menu-shadow ast-nav-menu ast-flex  submenu-with-border stack-on-mobile"><li class="page_item page-item-68 current-menu-parent menu-item current-menu-parent"><a href="https://testheon.com/blog/" class="menu-link">Blog</a></li><li class="page_item page-item-256 menu-item"><a href="https://testheon.com/" class="menu-link">Home</a></li><li class="page_item page-item-3 menu-item"><a href="https://testheon.com/privacy-policy/" class="menu-link">Privacy Policy</a></li></ul></div></nav></div></div>		</div>
+									</div>
+												</div>
+					</div>
+								</div>
+			</div>
+	</div> <!-- Main Header Bar Wrap -->
+<div id="ast-mobile-header" class="ast-mobile-header-wrap " data-type="dropdown">
+		<div class="ast-main-header-wrap main-header-bar-wrap" >
+		<div class="ast-primary-header-bar ast-primary-header main-header-bar site-primary-header-wrap site-header-focus-item ast-builder-grid-row-layout-default ast-builder-grid-row-tablet-layout-default ast-builder-grid-row-mobile-layout-default" data-section="section-primary-header-builder">
+									<div class="ast-builder-grid-row ast-builder-grid-row-has-sides ast-builder-grid-row-no-center">
+													<div class="site-header-primary-section-left site-header-section ast-flex site-header-section-left">
+										<div class="ast-builder-layout-element ast-flex site-header-focus-item" data-section="title_tagline">
+							<div
+				class="site-branding ast-site-identity" itemtype="https://schema.org/Organization" itemscope="itemscope"				>
+					<span class="site-logo-img"><a href="https://testheon.com/" class="custom-logo-link" rel="home"><img width="1535" height="512" src="https://testheon.com/wp-content/uploads/2026/08/cropped-testheon-logo.png" class="custom-logo" alt="Testheon logo" decoding="async" srcset="https://testheon.com/wp-content/uploads/2026/08/cropped-testheon-logo.png 1535w, https://testheon.com/wp-content/uploads/2026/08/cropped-testheon-logo-300x100.png 300w, https://testheon.com/wp-content/uploads/2026/08/cropped-testheon-logo-1024x342.png 1024w, https://testheon.com/wp-content/uploads/2026/08/cropped-testheon-logo-768x256.png 768w, https://testheon.com/wp-content/uploads/2026/08/cropped-testheon-logo-150x50.png 150w" sizes="(max-width: 1535px) 100vw, 1535px" /></a></span><div class="ast-site-title-wrap">
+						
+						<p class="site-description" itemprop="description">
+				QA Engineering, AI Testing &amp; Automation for the Next Generation
+			</p>
+				</div>				</div>
+			<!-- .site-branding -->
+					</div>
+									</div>
+																									<div class="site-header-primary-section-right site-header-section ast-flex ast-grid-right-section">
+										<div class="ast-builder-layout-element ast-flex site-header-focus-item" data-section="section-header-mobile-trigger">
+						<div class="ast-button-wrap">
+				<button
+					type="button"
+					class="menu-toggle main-header-menu-toggle ast-mobile-menu-trigger-minimal"
+					aria-expanded="false"
+					aria-label="Main menu toggle"
+														>
+					<span class="mobile-menu-toggle-icon">
+						<span aria-hidden="true" class="ahfb-svg-iconset ast-inline-flex svg-baseline"><svg class='ast-mobile-svg ast-menu-svg' fill='currentColor' version='1.1' xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path d='M3 13h18c0.552 0 1-0.448 1-1s-0.448-1-1-1h-18c-0.552 0-1 0.448-1 1s0.448 1 1 1zM3 7h18c0.552 0 1-0.448 1-1s-0.448-1-1-1h-18c-0.552 0-1 0.448-1 1s0.448 1 1 1zM3 19h18c0.552 0 1-0.448 1-1s-0.448-1-1-1h-18c-0.552 0-1 0.448-1 1s0.448 1 1 1z'></path></svg></span><span aria-hidden="true" class="ahfb-svg-iconset ast-inline-flex svg-baseline"><svg class='ast-mobile-svg ast-close-svg' fill='currentColor' version='1.1' xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path d='M5.293 6.707l5.293 5.293-5.293 5.293c-0.391 0.391-0.391 1.024 0 1.414s1.024 0.391 1.414 0l5.293-5.293 5.293 5.293c0.391 0.391 1.024 0.391 1.414 0s0.391-1.024 0-1.414l-5.293-5.293 5.293-5.293c0.391-0.391 0.391-1.024 0-1.414s-1.024-0.391-1.414 0l-5.293 5.293-5.293-5.293c-0.391-0.391-1.024-0.391-1.414 0s-0.391 1.024 0 1.414z'></path></svg></span>					</span>
+									</button>
+			</div>
+					</div>
+									</div>
+											</div>
+						</div>
+	</div>
+				<div class="ast-mobile-header-content content-align-flex-start ">
+						<div class="ast-builder-menu-mobile ast-builder-menu ast-builder-menu-mobile-focus-item ast-builder-layout-element site-header-focus-item" data-section="section-header-mobile-menu">
+			<div class="ast-main-header-bar-alignment"><div class="main-header-bar-navigation"><nav class="site-navigation ast-flex-grow-1 navigation-accessibility" id="ast-mobile-site-navigation" aria-label="Site Navigation" itemtype="https://schema.org/SiteNavigationElement" itemscope="itemscope"><div id="ast-hf-mobile-menu" class="main-navigation"><ul class="main-header-menu ast-nav-menu ast-flex  submenu-with-border astra-menu-animation-fade  stack-on-mobile"><li class="page_item page-item-68 current-menu-parent menu-item current-menu-parent"><a href="https://testheon.com/blog/" class="menu-link">Blog</a></li><li class="page_item page-item-256 menu-item"><a href="https://testheon.com/" class="menu-link">Home</a></li><li class="page_item page-item-3 menu-item"><a href="https://testheon.com/privacy-policy/" class="menu-link">Privacy Policy</a></li></ul></div></nav></div></div>		</div>
+					</div>
+			</div>
+		</header><!-- #masthead -->
+			<div id="content" class="site-content">
+		<div class="ast-container">
+		
+
+	<div id="primary" class="content-area primary">
+
+		
+					<main id="main" class="site-main">
+				
+
+<article
+class="post-265 post type-post status-publish format-standard has-post-thumbnail hentry category-qa-testing ast-article-single" id="post-265" itemtype="https://schema.org/CreativeWork" itemscope="itemscope">
+
+	
+	
+<div class="ast-post-format- single-layout-1">
+
+	
+	
+		<header class="entry-header ">
+
+			
+			<h1 class="entry-title" itemprop="headline">Playwright CI/CD: GitHub Actions, Jenkins &#038; Parallel Execution</h1><div class="entry-meta">By <span class="posted-by vcard author" itemtype="https://schema.org/Person" itemscope="itemscope" itemprop="author">			<a title="View all posts by Mayur Nilekar"
+				href="https://testheon.com/author/nilekar-mayurgmail-com/" rel="author"
+				class="url fn n" itemprop="url"				>
+				<span
+				class="author-name" itemprop="name"				>
+				Mayur Nilekar			</span>
+			</a>
+		</span>
+
+		 / <span class="posted-on"><span class="published" itemprop="datePublished"> September 26, 2026 </span></span></div>
+			
+		</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content clear"
+	itemprop="text"	>
+
+		
+		<p><strong>Playwright CI/CD</strong> turns a local browser suite into a repeatable quality gate. A reliable pipeline installs the locked Node dependencies and matching browser dependencies, runs tests headlessly on a known runner, scales deliberately with workers or shards, and preserves reports, traces and screenshots when something fails. The YAML or Jenkinsfile is only one part; isolation and evidence make the result trustworthy.</p>
+<p>This guide uses Playwright Test with TypeScript and covers GitHub Actions and Jenkins. It assumes the tests already run locally. If you need that foundation first, begin with the <a href="https://testheon.com/playwright-automation/">Playwright automation guide</a>. For repository structure and environment configuration, use the <a href="https://testheon.com/playwright-framework/">Playwright framework guide</a>.</p>
+<div style="background:#f3f4f6;border-left:4px solid #2563eb;border-radius:8px;padding:16px 18px;margin:24px 0;">
+  <strong>Quick answer:</strong> start CI with one worker, a clean <code>npm ci</code> install and <code>npx playwright install --with-deps</code>. Add a small retry policy and a trace on the first retry. When the suite is stable and its data is isolated, scale across CI jobs with <code>--shard=x/y</code>, merge blob reports, and retain one reviewable HTML report.
+</div>
+<div id="ez-toc-container" class="ez-toc-v2_0_87 counter-hierarchy ez-toc-counter ez-toc-grey ez-toc-container-direction">
+<div class="ez-toc-title-container">
+<p class="ez-toc-title" style="cursor:inherit">Table of Contents</p>
+<span class="ez-toc-title-toggle"><a href="#" class="ez-toc-pull-right ez-toc-btn ez-toc-btn-xs ez-toc-btn-default ez-toc-toggle" aria-label="Toggle Table of Content"><span class="ez-toc-js-icon-con"><span class=""><span class="eztoc-hide" style="display:none;">Toggle</span><span class="ez-toc-icon-toggle-span"><svg style="fill: #999;color:#999" xmlns="http://www.w3.org/2000/svg" class="list-377408" width="20px" height="20px" viewBox="0 0 24 24" fill="none"><path d="M6 6H4v2h2V6zm14 0H8v2h12V6zM4 11h2v2H4v-2zm16 0H8v2h12v-2zM4 16h2v2H4v-2zm16 0H8v2h12v-2z" fill="currentColor"></path></svg><svg style="fill: #999;color:#999" class="arrow-unsorted-368013" xmlns="http://www.w3.org/2000/svg" width="10px" height="10px" viewBox="0 0 24 24" version="1.2" baseProfile="tiny"><path d="M18.2 9.3l-6.2-6.3-6.2 6.3c-.2.2-.3.4-.3.7s.1.5.3.7c.2.2.4.3.7.3h11c.3 0 .5-.1.7-.3.2-.2.3-.5.3-.7s-.1-.5-.3-.7zM5.8 14.7l6.2 6.3 6.2-6.3c.2-.2.3-.5.3-.7s-.1-.5-.3-.7c-.2-.2-.4-.3-.7-.3h-11c-.3 0-.5.1-.7.3-.2.2-.3.5-.3.7s.1.5.3.7z"/></svg></span></span></span></a></span></div>
+<nav><ul class='ez-toc-list ez-toc-list-level-1 ' ><li class='ez-toc-page-1 ez-toc-heading-level-2'><a class="ez-toc-link ez-toc-heading-1" href="#How_a_Playwright_CICD_pipeline_works" >How a Playwright CI/CD pipeline works</a></li><li class='ez-toc-page-1 ez-toc-heading-level-2'><a class="ez-toc-link ez-toc-heading-2" href="#Prepare_Playwright_for_headless_pipeline_execution" >Prepare Playwright for headless pipeline execution</a><ul class='ez-toc-list-level-3' ><li class='ez-toc-heading-level-3'><a class="ez-toc-link ez-toc-heading-3" href="#Do_not_treat_browser_caching_as_the_default_optimization" >Do not treat browser caching as the default optimization</a></li></ul></li><li class='ez-toc-page-1 ez-toc-heading-level-2'><a class="ez-toc-link ez-toc-heading-4" href="#Use_one_CI-aware_Playwright_configuration" >Use one CI-aware Playwright configuration</a></li><li class='ez-toc-page-1 ez-toc-heading-level-2'><a class="ez-toc-link ez-toc-heading-5" href="#GitHub_Actions_run_Playwright_in_four_shards" >GitHub Actions: run Playwright in four shards</a><ul class='ez-toc-list-level-3' ><li class='ez-toc-heading-level-3'><a class="ez-toc-link ez-toc-heading-6" href="#When_should_you_change_the_shard_count" >When should you change the shard count?</a></li></ul></li><li class='ez-toc-page-1 ez-toc-heading-level-2'><a class="ez-toc-link ez-toc-heading-7" href="#Jenkins_run_Playwright_in_a_controlled_Docker_agent" >Jenkins: run Playwright in a controlled Docker agent</a><ul class='ez-toc-list-level-3' ><li class='ez-toc-heading-level-3'><a class="ez-toc-link ez-toc-heading-8" href="#How_to_shard_on_Jenkins" >How to shard on Jenkins</a></li></ul></li><li class='ez-toc-page-1 ez-toc-heading-level-2'><a class="ez-toc-link ez-toc-heading-9" href="#Workers_versus_sharding_choose_the_right_parallelism" >Workers versus sharding: choose the right parallelism</a><ul class='ez-toc-list-level-3' ><li class='ez-toc-heading-level-3'><a class="ez-toc-link ez-toc-heading-10" href="#Isolate_data_before_increasing_concurrency" >Isolate data before increasing concurrency</a></li></ul></li><li class='ez-toc-page-1 ez-toc-heading-level-2'><a class="ez-toc-link ez-toc-heading-11" href="#Set_a_retry_policy_that_exposes_flakiness" >Set a retry policy that exposes flakiness</a></li><li class='ez-toc-page-1 ez-toc-heading-level-2'><a class="ez-toc-link ez-toc-heading-12" href="#Design_reports_and_artifact_retention_for_investigation" >Design reports and artifact retention for investigation</a></li><li class='ez-toc-page-1 ez-toc-heading-level-2'><a class="ez-toc-link ez-toc-heading-13" href="#Investigate_a_failed_Playwright_pipeline_in_order" >Investigate a failed Playwright pipeline in order</a></li><li class='ez-toc-page-1 ez-toc-heading-level-2'><a class="ez-toc-link ez-toc-heading-14" href="#GitHub_Actions_or_Jenkins_for_Playwright" >GitHub Actions or Jenkins for Playwright?</a></li><li class='ez-toc-page-1 ez-toc-heading-level-2'><a class="ez-toc-link ez-toc-heading-15" href="#Common_Playwright_CICD_anti-patterns" >Common Playwright CI/CD anti-patterns</a></li><li class='ez-toc-page-1 ez-toc-heading-level-2'><a class="ez-toc-link ez-toc-heading-16" href="#Use_AI_to_triage_CI_evidence_not_declare_quality" >Use AI to triage CI evidence, not declare quality</a></li><li class='ez-toc-page-1 ez-toc-heading-level-2'><a class="ez-toc-link ez-toc-heading-17" href="#Playwright_CICD_FAQ" >Playwright CI/CD FAQ</a><ul class='ez-toc-list-level-3' ><li class='ez-toc-heading-level-3'><a class="ez-toc-link ez-toc-heading-18" href="#Does_Playwright_run_headless_in_CI_by_default" >Does Playwright run headless in CI by default?</a></li><li class='ez-toc-page-1 ez-toc-heading-level-3'><a class="ez-toc-link ez-toc-heading-19" href="#How_many_Playwright_workers_should_CI_use" >How many Playwright workers should CI use?</a></li><li class='ez-toc-page-1 ez-toc-heading-level-3'><a class="ez-toc-link ez-toc-heading-20" href="#What_is_the_difference_between_Playwright_workers_and_shards" >What is the difference between Playwright workers and shards?</a></li><li class='ez-toc-page-1 ez-toc-heading-level-3'><a class="ez-toc-link ez-toc-heading-21" href="#How_do_I_merge_Playwright_reports_from_parallel_jobs" >How do I merge Playwright reports from parallel jobs?</a></li><li class='ez-toc-page-1 ez-toc-heading-level-3'><a class="ez-toc-link ez-toc-heading-22" href="#Should_Playwright_retry_failed_tests_in_CI" >Should Playwright retry failed tests in CI?</a></li><li class='ez-toc-page-1 ez-toc-heading-level-3'><a class="ez-toc-link ez-toc-heading-23" href="#How_long_should_Playwright_artifacts_be_retained" >How long should Playwright artifacts be retained?</a></li></ul></li><li class='ez-toc-page-1 ez-toc-heading-level-2'><a class="ez-toc-link ez-toc-heading-24" href="#Build_the_pipeline_in_the_right_order" >Build the pipeline in the right order</a></li></ul></nav></div>
+<h2><span class="ez-toc-section" id="How_a_Playwright_CICD_pipeline_works"></span>How a Playwright CI/CD pipeline works<span class="ez-toc-section-end"></span></h2>
+<p>A useful pipeline has five contracts. Each one answers a different failure question.</p>
+<div class="wp-block-table" style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
+<table>
+<thead>
+<tr>
+<th>Contract</th>
+<th>What the pipeline controls</th>
+<th>Failure it prevents</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Runner</td>
+<td>OS, Node version, browser libraries and fonts</td>
+<td>“Works on my machine” environment drift</td>
+</tr>
+<tr>
+<td>Install</td>
+<td>Lockfile, Playwright package and browser binaries</td>
+<td>Unreviewed dependency or browser changes</td>
+</tr>
+<tr>
+<td>Execution</td>
+<td>Projects, workers, shards, timeouts and retries</td>
+<td>Resource contention and hidden flaky behavior</td>
+</tr>
+<tr>
+<td>Evidence</td>
+<td>JUnit, HTML, traces, screenshots and videos</td>
+<td>A red job with no practical diagnosis path</td>
+</tr>
+<tr>
+<td>Retention</td>
+<td>Where artifacts live, who can read them and for how long</td>
+<td>Missing evidence or unnecessary exposure of sensitive data</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The official <a href="https://playwright.dev/docs/ci" target="_blank" rel="noopener">Playwright CI guide</a> gives the minimal sequence: ensure the agent can run browsers, install packages with <code>npm ci</code>, install browsers and operating-system dependencies with <code>npx playwright install --with-deps</code>, then run <code>npx playwright test</code>. Playwright launches browsers headlessly by default, so a normal CI job does not need a display server.</p>
+<p>Headed execution on Linux requires Xvfb. Keep that as a focused diagnostic lane when visual observation is genuinely needed; do not make headed mode the default simply to resemble a developer laptop.</p>
+<figure class="wp-block-image size-full" style="overflow-x:auto"><img decoding="async" src="https://testheon.com/wp-content/uploads/2026/09/playwright-ci-cd-pipeline-workflow.webp" alt="Playwright CI/CD workflow from commit through install and parallel test shards to merged reports and retained artifacts" width="1600" height="900" style="min-width:620px;display:block" /><figcaption>A production Playwright pipeline separates execution from evidence: all shards feed one merged report, while retained artifacts make failures reviewable. On a small screen, scroll horizontally to follow the complete flow.</figcaption></figure>
+<h2><span class="ez-toc-section" id="Prepare_Playwright_for_headless_pipeline_execution"></span>Prepare Playwright for headless pipeline execution<span class="ez-toc-section-end"></span></h2>
+<p>A lockfile is part of the test environment. Commit it, use <code>npm ci</code> in automation, and review dependency upgrades. An ordinary Linux runner can install the exact browsers and host libraries required by the repository:</p>
+<div class="code-window-wrapper" style="position:relative;max-width:100%;">
+<pre style="max-height:400px;overflow:auto;-webkit-overflow-scrolling:touch;white-space:pre;"><code class="language-bash">npm ci
+npx playwright install --with-deps
+npx playwright test</code></pre>
+</div>
+<p>A version-matched Playwright Docker image is another option, especially for self-managed Jenkins agents or stable screenshot baselines. Replace <code>X.Y.Z</code> with the version compatible with the repository’s installed <code>@playwright/test</code> package:</p>
+<div class="code-window-wrapper" style="position:relative;max-width:100%;">
+<pre style="max-height:400px;overflow:auto;-webkit-overflow-scrolling:touch;white-space:pre;"><code class="language-text">mcr.microsoft.com/playwright:vX.Y.Z-noble</code></pre>
+</div>
+<p>Do not float the image independently of the package. A mismatch can leave the runner without the expected browser executable or silently change browser behavior. Pinning the environment is especially important for the <a href="https://testheon.com/playwright-visual-testing/">Playwright visual testing workflow</a>, where the OS, browser, fonts and rendering path affect pixels.</p>
+<h3><span class="ez-toc-section" id="Do_not_treat_browser_caching_as_the_default_optimization"></span>Do not treat browser caching as the default optimization<span class="ez-toc-section-end"></span></h3>
+<p>Playwright’s CI documentation does not recommend caching browser binaries by default: restoring that cache can take about as long as downloading the browsers, and Linux operating-system dependencies still need installation. Cache package-manager downloads when that produces measured value, but do not confuse a dependency cache with a test artifact. A cache speeds another run; an artifact preserves evidence from this run.</p>
+<h2><span class="ez-toc-section" id="Use_one_CI-aware_Playwright_configuration"></span>Use one CI-aware Playwright configuration<span class="ez-toc-section-end"></span></h2>
+<p>Keep the runner rules in version control instead of scattering flags across provider files. This example uses blob output for GitHub shards, JUnit plus HTML for Jenkins, and an ordinary HTML report for local runs:</p>
+<div class="code-window-wrapper" style="position:relative;max-width:100%;">
+<pre style="max-height:520px;overflow:auto;-webkit-overflow-scrolling:touch;white-space:pre;"><code class="language-ts">import { defineConfig } from '@playwright/test';
+
+const isCI = Boolean(process.env.CI);
+const isJenkins = Boolean(process.env.JENKINS_URL);
+
+export default defineConfig({
+  testDir: './tests',
+  fullyParallel: true,
+  forbidOnly: isCI,
+  retries: isCI ? 2 : 0,
+  workers: isCI ? 1 : undefined,
+
+  reporter: isCI
+    ? isJenkins
+      ? [
+          ['line'],
+          ['junit', { outputFile: 'test-results/junit.xml' }],
+          ['html', { open: 'never' }],
+        ]
+      : [['blob']]
+    : [['html', { open: 'never' }]],
+
+  use: {
+    trace: 'on-first-retry',
+    screenshot: 'only-on-failure',
+    video: 'retain-on-failure',
+  },
+});</code></pre>
+</div>
+<p><code>forbidOnly</code> blocks an accidentally committed <code>test.only</code>. Two retries are an example policy, not a universal target. The official default is no retries. A test that fails first and passes on retry is classified as flaky; the team should track and fix that signal rather than call the run fully healthy.</p>
+<p>The trace setting follows Playwright’s CI recommendation: capture on the first retry. Tracing every test is expensive and creates a large sensitive artifact set. A retained screenshot or video can add context, but the <a href="https://testheon.com/playwright-trace-viewer/">Playwright Trace Viewer</a> usually gives the strongest failure evidence because it connects actions, DOM snapshots, network, console and source.</p>
+<h2><span class="ez-toc-section" id="GitHub_Actions_run_Playwright_in_four_shards"></span>GitHub Actions: run Playwright in four shards<span class="ez-toc-section-end"></span></h2>
+<p>The following workflow follows the current official Playwright sharding pattern. Four matrix jobs run independently, each uploads a uniquely named blob report, and a final job merges the blobs into one HTML report. <code>fail-fast: false</code> lets all shards finish so one early failure does not erase evidence from the rest of the suite.</p>
+<div class="code-window-wrapper" style="position:relative;max-width:100%;">
+<pre style="max-height:720px;overflow:auto;-webkit-overflow-scrolling:touch;white-space:pre;"><code class="language-yaml">name: Playwright Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  playwright-tests:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        shardIndex: [1, 2, 3, 4]
+        shardTotal: [4]
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: lts/*
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Run Playwright shard
+        run: &gt;-
+          npx playwright test
+          --shard=$&#123;&#123; matrix.shardIndex &#125;&#125;/$&#123;&#123; matrix.shardTotal &#125;&#125;
+
+      - name: Upload blob report
+        if: $&#123;&#123; !cancelled() &#125;&#125;
+        uses: actions/upload-artifact@v4
+        with:
+          name: blob-report-$&#123;&#123; matrix.shardIndex &#125;&#125;
+          path: blob-report
+          retention-days: 1
+
+  merge-reports:
+    if: $&#123;&#123; !cancelled() &#125;&#125;
+    needs: [playwright-tests]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: lts/*
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Download blob reports
+        uses: actions/download-artifact@v5
+        with:
+          path: all-blob-reports
+          pattern: blob-report-*
+          merge-multiple: true
+
+      - name: Merge Playwright reports
+        run: &gt;-
+          npx playwright merge-reports
+          --reporter html
+          ./all-blob-reports
+
+      - name: Upload merged HTML report
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-$&#123;&#123; github.run_attempt &#125;&#125;
+          path: playwright-report
+          retention-days: 14</code></pre>
+</div>
+<p>The shard blob files include the shard identity, so they can share one download directory without clashing. The merge command creates the standard <code>playwright-report</code> directory. Uploading intermediate blobs for one day and the human-readable report for 14 days is a sensible example split; adjust it to incident-response, audit and data-classification needs.</p>
+<p>GitHub supports repository and organization retention limits, so a workflow’s <code>retention-days</code> cannot exceed the governing policy. Artifact action major versions also change over time. Recheck the official <a href="https://playwright.dev/docs/test-sharding" target="_blank" rel="noopener">Playwright sharding example</a> and <a href="https://docs.github.com/actions/configuring-and-managing-workflows/persisting-workflow-data-using-artifacts" target="_blank" rel="noopener">GitHub artifact guidance</a> when adopting this workflow.</p>
+<h3><span class="ez-toc-section" id="When_should_you_change_the_shard_count"></span>When should you change the shard count?<span class="ez-toc-section-end"></span></h3>
+<p>Do not assume twice as many shards halves the total feedback time. Measure queue delay, install time, test duration, merge time and runner cost. Increase shards when test execution dominates and jobs start promptly. Reduce them when setup or queue time dominates, or when the application under test cannot support the resulting load.</p>
+<p>If an organization limits concurrent matrix jobs, GitHub Actions also supports <code>strategy.max-parallel</code>. That controls how many generated jobs run at once; it does not change the Playwright shard definition. Keep <code>shardTotal</code> aligned with the number of shard identities even when runner availability serializes some jobs.</p>
+<h2><span class="ez-toc-section" id="Jenkins_run_Playwright_in_a_controlled_Docker_agent"></span>Jenkins: run Playwright in a controlled Docker agent<span class="ez-toc-section-end"></span></h2>
+<p>Jenkins is a strong fit when a team owns its build agents, network routes and credential integrations. That control also means the team owns Docker availability, plugins, agent capacity and image updates. The official Playwright CI guide demonstrates a Jenkins Docker agent; Jenkins requires the Docker Pipeline plugin for this Declarative syntax.</p>
+<p>This production-oriented baseline adds a timeout, retention policy, JUnit result publishing and failure artifacts. Replace the image placeholder with the Playwright version matching the repository package:</p>
+<div class="code-window-wrapper" style="position:relative;max-width:100%;">
+<pre style="max-height:640px;overflow:auto;-webkit-overflow-scrolling:touch;white-space:pre;"><code class="language-groovy">pipeline {
+  agent {
+    docker {
+      image 'mcr.microsoft.com/playwright:vX.Y.Z-noble'
+    }
+  }
+
+  options {
+    timeout(time: 60, unit: 'MINUTES')
+    buildDiscarder(logRotator(numToKeepStr: '30'))
+  }
+
+  environment {
+    CI = 'true'
+  }
+
+  stages {
+    stage('Install') {
+      steps {
+        sh 'npm ci'
+      }
+    }
+
+    stage('Playwright E2E') {
+      steps {
+        sh 'npx playwright test'
+      }
+    }
+  }
+
+  post {
+    always {
+      junit allowEmptyResults: true,
+        testResults: 'test-results/junit.xml'
+
+      archiveArtifacts allowEmptyArchive: true,
+        artifacts: 'playwright-report/**,test-results/**'
+    }
+  }
+}</code></pre>
+</div>
+<p>The Jenkins environment normally exposes <code>JENKINS_URL</code>, so the earlier Playwright configuration selects line, JUnit and HTML reporters. The <code>post { always { ... } }</code> block runs whether the test stage passes or fails. That detail matters: a report uploaded only on success is least available when engineers need it.</p>
+<p><code>junit</code> gives Jenkins structured test history rather than a wall of console text. <code>archiveArtifacts</code> preserves the HTML report and test attachments with the retained build. Jenkins documents build artifacts as basic reporting and archival—not a replacement for an external artifact repository when volume, lifecycle or compliance requirements demand one.</p>
+<h3><span class="ez-toc-section" id="How_to_shard_on_Jenkins"></span>How to shard on Jenkins<span class="ez-toc-section-end"></span></h3>
+<p>The Playwright command does not change:</p>
+<div class="code-window-wrapper" style="position:relative;max-width:100%;">
+<pre style="max-height:400px;overflow:auto;-webkit-overflow-scrolling:touch;white-space:pre;"><code class="language-bash">npx playwright test --shard=1/4
+npx playwright test --shard=2/4
+npx playwright test --shard=3/4
+npx playwright test --shard=4/4</code></pre>
+</div>
+<p>Run those commands as parallel Jenkins stages or generated jobs on separate agents, not four processes competing blindly on one small node. Give each branch a distinct blob artifact, gather the blobs in a merge stage, and run <code>npx playwright merge-reports --reporter html</code>. Jenkins installations vary in controller topology, agents and plugins, so keep the provider orchestration local while preserving the same Playwright contract used in GitHub Actions.</p>
+<h2><span class="ez-toc-section" id="Workers_versus_sharding_choose_the_right_parallelism"></span>Workers versus sharding: choose the right parallelism<span class="ez-toc-section-end"></span></h2>
+<p>A worker and a shard are not synonyms. Playwright workers are operating-system processes on one machine. Shards divide the suite across separate CI jobs or machines. A shard can itself use multiple workers.</p>
+<div class="wp-block-table" style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
+<table>
+<thead>
+<tr>
+<th>Control</th>
+<th>Resource boundary</th>
+<th>Best first use</th>
+<th>Main risk</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>workers: 1</code></td>
+<td>One runner, sequential worker capacity</td>
+<td>Stable CI baseline and diagnosis</td>
+<td>Long elapsed time for a large suite</td>
+</tr>
+<tr>
+<td>Multiple workers</td>
+<td>CPU and memory on one runner</td>
+<td>Powerful self-hosted agent with isolated tests</td>
+<td>Browser/resource contention</td>
+</tr>
+<tr>
+<td><code>--shard=x/y</code></td>
+<td>Multiple CI jobs or machines</td>
+<td>Scaling a stable suite horizontally</td>
+<td>Queue cost, imbalance and shared backend load</td>
+</tr>
+<tr>
+<td><code>fullyParallel: true</code></td>
+<td>Individual tests eligible for distribution</td>
+<td>More even shard balance</td>
+<td>Exposes hidden test dependencies</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Official Playwright CI guidance recommends one worker for stability and reproducibility, then suggests sharding for wider parallelization. That is a good default. A two-core hosted runner with four busy browser workers may be slower and less predictable than one worker. More concurrency is valuable only when the agent and application under test can support it.</p>
+<p>With <code>fullyParallel: true</code>, Playwright can balance individual tests across shards. Without it, sharding uses file-level granularity, and one very large spec can become the long tail. Fully parallel execution is not a free switch: tests must stop relying on another test’s order or shared side effects.</p>
+<h3><span class="ez-toc-section" id="Isolate_data_before_increasing_concurrency"></span>Isolate data before increasing concurrency<span class="ez-toc-section-end"></span></h3>
+<p>BrowserContext isolation keeps cookies and in-memory browser state separate. It does not isolate a shared account, order, file, mailbox or database row. Two tests editing the same record can race even when their pages are perfectly isolated.</p>
+<ul>
+<li>Create unique data from the test or worker identity.</li>
+<li>Use dedicated accounts per worker when workflows mutate account state.</li>
+<li>Write files through test-scoped output paths.</li>
+<li>Make cleanup idempotent so retrying setup does not corrupt the environment.</li>
+<li>Protect truly singleton resources with an explicit serial lane or lock.</li>
+</ul>
+<p>The <a href="https://testheon.com/playwright-fixtures/">Playwright fixtures guide</a> owns reusable test- and worker-scoped setup. Fixing data ownership there is more durable than lowering concurrency whenever a race appears.</p>
+<h2><span class="ez-toc-section" id="Set_a_retry_policy_that_exposes_flakiness"></span>Set a retry policy that exposes flakiness<span class="ez-toc-section-end"></span></h2>
+<p>Playwright retries a failed test in a fresh worker process. That protects later tests from the failed worker’s browser and in-memory state. It does not roll back the application database or external services. Cleanup and unique data still matter.</p>
+<p>Use a small CI-only retry count to collect diagnostic evidence and separate deterministic failures from intermittent behavior. Then treat all three result classes deliberately:</p>
+<ul>
+<li><strong>Passed:</strong> succeeded on the first run.</li>
+<li><strong>Flaky:</strong> failed first, then passed on a retry.</li>
+<li><strong>Failed:</strong> exhausted the configured retries.</li>
+</ul>
+<p>A flaky result should create work, ownership and a deadline. If the dashboard collapses flaky into green, retries become a masking system. Do not add retries to compensate for missing assertions, arbitrary timeouts, environment shortages or shared test data.</p>
+<p>For a catastrophically broken environment, consider Playwright’s <code>maxFailures</code> or the CLI <code>--max-failures</code> option to stop wasting runners after a chosen number of failures. Pick that number from suite size and triage value, not from a copied template.</p>
+<h2><span class="ez-toc-section" id="Design_reports_and_artifact_retention_for_investigation"></span>Design reports and artifact retention for investigation<span class="ez-toc-section-end"></span></h2>
+<p>A useful CI failure must answer: which commit, environment, browser project, shard, attempt and assertion failed—and what did the application do immediately before it failed?</p>
+<div class="wp-block-table" style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
+<table>
+<thead>
+<tr>
+<th>Evidence</th>
+<th>Purpose</th>
+<th>Retention approach</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>JUnit XML</td>
+<td>Provider-native test counts, history and failed cases</td>
+<td>Follow build/report history policy</td>
+</tr>
+<tr>
+<td>Blob report</td>
+<td>Mergeable shard result plus attachments</td>
+<td>Short-lived after successful merge</td>
+</tr>
+<tr>
+<td>HTML report</td>
+<td>Human review of the complete run</td>
+<td>Long enough for normal triage and review</td>
+</tr>
+<tr>
+<td>Trace</td>
+<td>Actions, DOM snapshots, network, console and source</td>
+<td>First retry or failed runs; restrict access</td>
+</tr>
+<tr>
+<td>Screenshot/video</td>
+<td>Visual symptom and temporal context</td>
+<td>Failure-only unless a documented need exists</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Upload evidence on failure, not only on success. In GitHub Actions, <code>if: $&#123;&#123; !cancelled() &#125;&#125;</code> keeps the artifact step eligible after a failed test command. In Jenkins, <code>post { always }</code> provides the same intent. A cancelled run may be incomplete, so treating cancellation separately is reasonable.</p>
+<p>Artifacts can contain internal URLs, source snippets, request payloads, user names and screenshots. Traces may expose more application context than a console log. Use synthetic test data, private artifact stores, access controls and the shortest useful retention. Never archive storage-state files, cookies, raw tokens, secret files or credential output.</p>
+<h2><span class="ez-toc-section" id="Investigate_a_failed_Playwright_pipeline_in_order"></span>Investigate a failed Playwright pipeline in order<span class="ez-toc-section-end"></span></h2>
+<ol>
+<li><strong>Classify the layer.</strong> Did checkout/install fail, could the browser launch, was the application unavailable, or did a test assertion fail?</li>
+<li><strong>Record identity.</strong> Note commit SHA, environment, Playwright project, shard and retry attempt.</li>
+<li><strong>Find the first meaningful error.</strong> Ignore the cascade caused by an earlier setup or navigation failure.</li>
+<li><strong>Open the merged report.</strong> Use the test attachment and trace rather than relying on the provider log alone.</li>
+<li><strong>Compare attempts.</strong> A retry-only pass points to flakiness, contention or shared state—not success.</li>
+<li><strong>Reproduce narrowly.</strong> Run the smallest test and project with the same environment and config.</li>
+<li><strong>Fix the owning layer.</strong> Separate a product defect from a test defect, data race or runner drift.</li>
+<li><strong>Rerun the normal path.</strong> Prove the fix without debug-only flags or hidden state.</li>
+</ol>
+<p>The <a href="https://testheon.com/playwright-e2e/">real-world Playwright E2E guide</a> shows how setup, UI actions, backend validation and cleanup fit together. CI should execute that workflow consistently, not replace its assertions with a green process exit.</p>
+<h2><span class="ez-toc-section" id="GitHub_Actions_or_Jenkins_for_Playwright"></span>GitHub Actions or Jenkins for Playwright?<span class="ez-toc-section-end"></span></h2>
+<p>GitHub Actions gives a repository-native matrix, simple pull-request integration and managed artifact actions. Jenkins gives self-managed agents, network placement, plugins and deep enterprise integration. Neither provider makes a weak suite reliable.</p>
+<div class="wp-block-table" style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
+<table>
+<thead>
+<tr>
+<th>Question</th>
+<th>GitHub Actions tends to fit</th>
+<th>Jenkins tends to fit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Where is the code?</td>
+<td>GitHub repository and pull-request workflow</td>
+<td>Mixed SCM or established internal pipelines</td>
+</tr>
+<tr>
+<td>Who manages agents?</td>
+<td>GitHub-hosted or standardized self-hosted runners</td>
+<td>Platform team owns custom agents and networks</td>
+</tr>
+<tr>
+<td>How is sharding expressed?</td>
+<td>Matrix jobs and a merge job</td>
+<td>Parallel stages/jobs designed for the local estate</td>
+</tr>
+<tr>
+<td>How are results stored?</td>
+<td>Workflow artifacts and checks</td>
+<td>JUnit history, archived artifacts or external store</td>
+</tr>
+<tr>
+<td>Main operating burden</td>
+<td>Workflow/action lifecycle and runner spend</td>
+<td>Controller, plugins, agents, images and capacity</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Keep the Playwright layer portable: one lockfile, one versioned config, the same test command, isolated data and standard outputs. Provider files should schedule that contract, supply approved secrets and transport evidence.</p>
+<h2><span class="ez-toc-section" id="Common_Playwright_CICD_anti-patterns"></span>Common Playwright CI/CD anti-patterns<span class="ez-toc-section-end"></span></h2>
+<ul>
+<li><strong>Starting with maximum parallelism.</strong> Establish a stable one-worker baseline before measuring workers and shards.</li>
+<li><strong>Floating the runner.</strong> Unreviewed Node, browser, image or font changes create diagnostic noise.</li>
+<li><strong>Caching everything.</strong> Browser caches may not save time and do not provide OS dependencies.</li>
+<li><strong>Retrying until green.</strong> High retry counts hide ownership and waste runner capacity.</li>
+<li><strong>Uploading only on success.</strong> The failure evidence disappears exactly when needed.</li>
+<li><strong>Keeping every artifact forever.</strong> Cost and data exposure increase without proportional QA value.</li>
+<li><strong>Sharing one mutable account.</strong> Parallel tests race on server-side state even with isolated browser contexts.</li>
+<li><strong>Printing secrets for debugging.</strong> Masked logs are not a license to echo credentials or storage state.</li>
+</ul>
+<h2><span class="ez-toc-section" id="Use_AI_to_triage_CI_evidence_not_declare_quality"></span>Use AI to triage CI evidence, not declare quality<span class="ez-toc-section-end"></span></h2>
+<p>A repository-aware coding agent can compare a redacted pipeline log with the Playwright config, failed test and trace summary, then propose the smallest diagnostic step. It should not rotate secrets, change infrastructure, raise retries or delete evidence without human authority.</p>
+<details class="testheon-ai-prompt">
+<summary>📋 Copy this Playwright CI failure-triage prompt</summary>
+<pre style="max-height:440px;overflow:auto;-webkit-overflow-scrolling:touch;white-space:pre;"><code>Review this Playwright CI failure.
+
+Inputs I will provide:
+- redacted provider log and failed test output;
+- Playwright config and relevant workflow/Jenkinsfile section;
+- commit, project, shard, attempt and runner metadata;
+- redacted HTML-report or trace observations.
+
+Tasks:
+1. Classify the failure layer: install, browser launch, application,
+   test code, product behavior, shared data, resource contention,
+   reporter/artifact handling or unknown.
+2. Cite evidence for and against each plausible cause.
+3. Propose the smallest read-only diagnostic action first.
+4. Separate product fixes, test fixes and CI-infrastructure fixes.
+5. Do not increase retries, add fixed sleeps, disable assertions,
+   expose secrets or invent Playwright/provider APIs to make it green.
+6. Flag commands or syntax that need current official verification.
+
+Output:
+- classification and confidence;
+- evidence table;
+- minimal reproduction plan;
+- proposed fix, if justified;
+- validation and rollback checks.</code></pre>
+</details>
+<p>Before sharing evidence with an external AI service, remove tokens, cookies, storage state, private URLs, customer data and confidential source unless the organization explicitly approves that data flow. A QA engineer must inspect the original artifacts, verify suggested syntax against current official documentation and rerun the focused test in the same controlled environment.</p>
+<h2><span class="ez-toc-section" id="Playwright_CICD_FAQ"></span>Playwright CI/CD FAQ<span class="ez-toc-section-end"></span></h2>
+<h3><span class="ez-toc-section" id="Does_Playwright_run_headless_in_CI_by_default"></span>Does Playwright run headless in CI by default?<span class="ez-toc-section-end"></span></h3>
+<p>Yes. Playwright launches browsers headlessly by default. Headed Linux runs need Xvfb and are better treated as a focused diagnostic option than the standard pipeline mode.</p>
+<h3><span class="ez-toc-section" id="How_many_Playwright_workers_should_CI_use"></span>How many Playwright workers should CI use?<span class="ez-toc-section-end"></span></h3>
+<p>Start with one worker for stability, as the official CI guide recommends. Increase workers only on agents with measured CPU and memory headroom and after tests and backend data are isolated.</p>
+<h3><span class="ez-toc-section" id="What_is_the_difference_between_Playwright_workers_and_shards"></span>What is the difference between Playwright workers and shards?<span class="ez-toc-section-end"></span></h3>
+<p>Workers are parallel Playwright processes on one runner. Shards divide the suite across multiple CI jobs or machines using <code>--shard=x/y</code>. Each shard may still use one or more workers.</p>
+<h3><span class="ez-toc-section" id="How_do_I_merge_Playwright_reports_from_parallel_jobs"></span>How do I merge Playwright reports from parallel jobs?<span class="ez-toc-section-end"></span></h3>
+<p>Configure the blob reporter on CI, upload each shard’s blob output, download all blobs into one directory, then run <code>npx playwright merge-reports --reporter html ./all-blob-reports</code>.</p>
+<h3><span class="ez-toc-section" id="Should_Playwright_retry_failed_tests_in_CI"></span>Should Playwright retry failed tests in CI?<span class="ez-toc-section-end"></span></h3>
+<p>A small CI-only retry count can distinguish deterministic failures from intermittent behavior and capture a first-retry trace. Treat a retry-only pass as flaky work, not as an ordinary green result.</p>
+<h3><span class="ez-toc-section" id="How_long_should_Playwright_artifacts_be_retained"></span>How long should Playwright artifacts be retained?<span class="ez-toc-section-end"></span></h3>
+<p>Retain intermediate blob reports only long enough to merge them. Keep the merged HTML report and failure evidence long enough for normal investigation, while considering cost, privacy and organizational retention rules.</p>
+<h2><span class="ez-toc-section" id="Build_the_pipeline_in_the_right_order"></span>Build the pipeline in the right order<span class="ez-toc-section-end"></span></h2>
+<p>First make one clean runner boring: locked dependencies, matching browsers, one worker, deterministic data and a useful failure trace. Then add provider-native reports and retention. Only after that should you shard the suite and tune concurrency.</p>
+<p>This order preserves trust while reducing feedback time. A fast pipeline without isolation produces faster uncertainty; a stable pipeline with merged evidence gives the team a quality gate it can explain. Return to the <a href="https://testheon.com/playwright-automation/">Playwright automation hub</a> for the broader learning path.</p>
+
+		
+		
+			</div><!-- .entry-content .clear -->
+</div>
+
+	
+</article><!-- #post-## -->
+
+<nav class="navigation post-navigation" aria-label="Posts">
+				<div class="nav-links"><div class="nav-previous"><a title="Playwright Visual Testing: Screenshot &amp; Regression Guide" href="https://testheon.com/playwright-visual-testing/" rel="prev"><span class="ast-post-nav" aria-hidden="true"><span aria-hidden="true" class="ahfb-svg-iconset ast-inline-flex svg-baseline"><svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'><path d='M134.059 296H436c6.627 0 12-5.373 12-12v-56c0-6.627-5.373-12-12-12H134.059v-46.059c0-21.382-25.851-32.09-40.971-16.971L7.029 239.029c-9.373 9.373-9.373 24.569 0 33.941l86.059 86.059c15.119 15.119 40.971 4.411 40.971-16.971V296z'></path></svg></span> Previous</span> <p> Playwright Visual Testing: Screenshot &#038; Regression Guide </p></a></div></div>
+		</nav>		<div id="comments" class="comments-area comment-form-position-below ">
+	
+	
+	
+	
+		<div id="respond" class="comment-respond">
+		<h3 id="reply-title" class="comment-reply-title">Leave a Comment <small><a rel="nofollow" id="cancel-comment-reply-link" href="/playwright-ci-cd/#respond" style="display:none;">Cancel Reply</a></small></h3><form action="https://testheon.com/wp-comments-post.php" method="post" id="ast-commentform" class="comment-form"><p class="comment-notes"><span id="email-notes">Your email address will not be published.</span> <span class="required-field-message">Required fields are marked <span class="required">*</span></span></p><div class="ast-row comment-textarea"><fieldset class="comment-form-comment"><legend class ="comment-form-legend"></legend><div class="comment-form-textarea ast-grid-common-col"><label for="comment" class="screen-reader-text">Type here..</label><textarea id="comment" name="comment" placeholder="Type here.." cols="45" rows="8" aria-required="true"></textarea></div></fieldset></div><div class="ast-comment-formwrap ast-row">
+			<p class="comment-form-author ast-grid-common-col ast-width-lg-33 ast-width-md-4 ast-float">
+				<label for="author" class="screen-reader-text">Name*</label>
+				<input id="author" name="author" type="text"
+					value=""
+					placeholder="Name*"
+					size="30" aria-required='true' autocomplete="name" />
+			</p>
+<p class="comment-form-email ast-grid-common-col ast-width-lg-33 ast-width-md-4 ast-float">
+			<label for="email" class="screen-reader-text">Email*</label>
+			<input id="email" name="email" type="text"
+				value=""
+				placeholder="Email*"
+				size="30" aria-required='true' autocomplete="email" />
+		</p>
+<p class="comment-form-url ast-grid-common-col ast-width-lg-33 ast-width-md-4 ast-float">
+			<label for="url" class="screen-reader-text">Website</label>
+			<input id="url" name="url" type="text"
+				value=""
+				placeholder="Website"
+				size="30" autocomplete="url" />
+		</p>
+		</div>
+<p class="comment-form-cookies-consent"><input id="wp-comment-cookies-consent" name="wp-comment-cookies-consent" type="checkbox" value="yes" /> <label for="wp-comment-cookies-consent">Save my name, email, and website in this browser for the next time I comment.</label></p>
+<p class="comment-subscription-form"><input type="checkbox" name="subscribe_comments" id="subscribe_comments" value="subscribe" style="width: auto; -moz-appearance: checkbox; -webkit-appearance: checkbox;" /> <label class="subscribe-label" id="subscribe-label" for="subscribe_comments">Notify me of follow-up comments by email.</label></p><p class="comment-subscription-form"><input type="checkbox" name="subscribe_blog" id="subscribe_blog" value="subscribe" style="width: auto; -moz-appearance: checkbox; -webkit-appearance: checkbox;" /> <label class="subscribe-label" id="subscribe-blog-label" for="subscribe_blog">Notify me of new posts by email.</label></p><p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="Post Comment" /> <input type='hidden' name='comment_post_ID' value='265' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+</p></form>	</div><!-- #respond -->
+	
+	
+</div><!-- #comments -->
+
+			</main><!-- #main -->
+			
+		
+	</div><!-- #primary -->
+
+
+	</div> <!-- ast-container -->
+	</div><!-- #content -->
+<footer
+class="site-footer" id="colophon" itemtype="https://schema.org/WPFooter" itemscope="itemscope" itemid="#colophon">
+			<div class="site-below-footer-wrap ast-builder-grid-row-container site-footer-focus-item ast-builder-grid-row-full ast-builder-grid-row-tablet-full ast-builder-grid-row-mobile-full ast-footer-row-stack ast-footer-row-tablet-stack ast-footer-row-mobile-stack" data-section="section-below-footer-builder">
+	<div class="ast-builder-grid-row-container-inner">
+					<div class="ast-builder-footer-grid-columns site-below-footer-inner-wrap ast-builder-grid-row">
+											<div class="site-footer-below-section-1 site-footer-section site-footer-section-1">
+								<div class="ast-builder-layout-element ast-flex site-footer-focus-item ast-footer-copyright" data-section="section-footer-builder">
+				<div class="ast-footer-copyright"><p>Copyright &copy; 2026 Testheon | Powered by <a href="https://wpastra.com" rel="nofollow noopener" target="_blank">Astra WordPress Theme</a></p>
+</div>			</div>
+						</div>
+										</div>
+			</div>
+
+</div>
+	</footer><!-- #colophon -->
+	</div><!-- #page -->
+<script type="speculationrules">
+{"prefetch":[{"source":"document","where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":["/wp-*.php","/wp-admin/*","/wp-content/uploads/*","/wp-content/*","/wp-content/plugins/*","/wp-content/themes/astra/*","/*\\?(.+)"]}},{"not":{"selector_matches":"a[rel~=\"nofollow\"]"}},{"not":{"selector_matches":".no-prefetch, .no-prefetch a"}}]},"eagerness":"conservative"}]}
+</script>
+
+<div id="ast-scroll-top" tabindex="0" class="ast-scroll-top-icon ast-scroll-to-top-right" data-on-devices="both">
+	<span class="ast-icon icon-arrow"><svg class="ast-arrow-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="26px" height="16.043px" viewbox="57 35.171 26 16.043" enable-background="new 57 35.171 26 16.043" xml:space="preserve">
+                <path d="M57.5,38.193l12.5,12.5l12.5-12.5l-2.5-2.5l-10,10l-10-10L57.5,38.193z" />
+                </svg></span>	<span class="screen-reader-text">Scroll to Top</span>
+</div>
+			<script>
+			/(trident|msie)/i.test(navigator.userAgent)&&document.getElementById&&window.addEventListener&&window.addEventListener("hashchange",function(){var t,e=location.hash.substring(1);/^[A-z0-9_-]+$/.test(e)&&(t=document.getElementById(e))&&(/^(?:a|select|input|button|textarea)$/i.test(t.tagName)||(t.tabIndex=-1),t.focus())},!1);
+			</script>
+			<script async data-wp-strategy="async" fetchpriority="low" id="comment-reply-js" src="https://testheon.com/wp-includes/js/comment-reply.min.js?ver=7.1.2"></script>
+<script id="astra-theme-js-js-extra">
+var astra = {"break_point":"921","isRtl":"","is_scroll_to_id":"1","is_scroll_to_top":"1","is_header_footer_builder_active":"1","responsive_cart_click":"flyout","is_dark_palette":""};
+//# sourceURL=astra-theme-js-js-extra
+</script>
+<script id="astra-theme-js-js" src="https://testheon.com/wp-content/themes/astra/assets/js/minified/frontend.min.js?ver=4.13.8"></script>
+<script id="eztoc-scroll-scriptjs-js-extra">
+var eztoc_smooth_local = {"scroll_offset":"30","add_request_uri":"","add_self_reference_link":""};
+//# sourceURL=eztoc-scroll-scriptjs-js-extra
+</script>
+<script id="eztoc-scroll-scriptjs-js" src="https://testheon.com/wp-content/plugins/easy-table-of-contents/assets/js/smooth_scroll.min.js?ver=2.0.87"></script>
+<script id="eztoc-js-cookie-js" src="https://testheon.com/wp-content/plugins/easy-table-of-contents/vendor/js-cookie/js.cookie.min.js?ver=2.2.1"></script>
+<script id="eztoc-jquery-sticky-kit-js" src="https://testheon.com/wp-content/plugins/easy-table-of-contents/vendor/sticky-kit/jquery.sticky-kit.min.js?ver=1.9.2"></script>
+<script id="eztoc-js-js-extra">
+var ezTOC = {"smooth_scroll":"1","visibility_hide_by_default":"","scroll_offset":"30","fallbackIcon":"\u003Cspan class=\"\"\u003E\u003Cspan class=\"eztoc-hide\" style=\"display:none;\"\u003EToggle\u003C/span\u003E\u003Cspan class=\"ez-toc-icon-toggle-span\"\u003E\u003Csvg style=\"fill: #999;color:#999\" xmlns=\"http://www.w3.org/2000/svg\" class=\"list-377408\" width=\"20px\" height=\"20px\" viewBox=\"0 0 24 24\" fill=\"none\"\u003E\u003Cpath d=\"M6 6H4v2h2V6zm14 0H8v2h12V6zM4 11h2v2H4v-2zm16 0H8v2h12v-2zM4 16h2v2H4v-2zm16 0H8v2h12v-2z\" fill=\"currentColor\"\u003E\u003C/path\u003E\u003C/svg\u003E\u003Csvg style=\"fill: #999;color:#999\" class=\"arrow-unsorted-368013\" xmlns=\"http://www.w3.org/2000/svg\" width=\"10px\" height=\"10px\" viewBox=\"0 0 24 24\" version=\"1.2\" baseProfile=\"tiny\"\u003E\u003Cpath d=\"M18.2 9.3l-6.2-6.3-6.2 6.3c-.2.2-.3.4-.3.7s.1.5.3.7c.2.2.4.3.7.3h11c.3 0 .5-.1.7-.3.2-.2.3-.5.3-.7s-.1-.5-.3-.7zM5.8 14.7l6.2 6.3 6.2-6.3c.2-.2.3-.5.3-.7s-.1-.5-.3-.7c-.2-.2-.4-.3-.7-.3h-11c-.3 0-.5.1-.7.3-.2.2-.3.5-.3.7s.1.5.3.7z\"/\u003E\u003C/svg\u003E\u003C/span\u003E\u003C/span\u003E","chamomile_theme_is_on":""};
+//# sourceURL=eztoc-js-js-extra
+</script>
+<script id="eztoc-js-js" src="https://testheon.com/wp-content/plugins/easy-table-of-contents/assets/js/front.min.js?ver=2.0.87-1788075662"></script>
+<script id="hostinger-reach-subscription-block-view-js-extra">
+var hostinger_reach_subscription_block_data = {"endpoint":"https://testheon.com/wp-json/hostinger-reach/v1/contact","nonce":"a03a0f0eff","translations":{"thanks":"Thanks for subscribing.","error":"Something went wrong. Please try again."}};
+//# sourceURL=hostinger-reach-subscription-block-view-js-extra
+</script>
+<script id="hostinger-reach-subscription-block-view-js" src="https://testheon.com/wp-content/plugins/hostinger-reach/frontend/dist/blocks/subscription-view.js?ver=1788075676"></script>
+<script id="jetpack-stats-js-before">
+_stq = window._stq || [];
+_stq.push([ "view", {"v":"ext","blog":"257048767","post":"265","tz":"0","srv":"testheon.com","j":"1:16.1.3"} ]);
+_stq.push([ "clickTrackerInit", "257048767", "265" ]);
+//# sourceURL=jetpack-stats-js-before
+</script>
+<script data-wp-strategy="defer" defer fetchpriority="low" id="jetpack-stats-js" src="https://stats.wp.com/e-202639.js"></script>
+<script id="wp-emoji-settings" type="application/json">
+{"baseUrl":"https://s.w.org/images/core/emoji/17.0.2/72x72/","ext":".png","svgUrl":"https://s.w.org/images/core/emoji/17.0.2/svg/","svgExt":".svg","source":{"concatemoji":"https://testheon.com/wp-includes/js/wp-emoji-release.min.js?ver=7.1.2"}}
+</script>
+<script type="module">
+/*! This file is auto-generated */
+var e="script#wp-emoji-settings",t=document.querySelector(e);if(!(t instanceof HTMLScriptElement))throw new Error("Element missing: "+e);const r=JSON.parse(t.text),s=(window._wpemojiSettings=r,"wpEmojiSettingsSupports"),o=["flag","emoji"];function i(e){try{var t={supportTests:e,timestamp:(new Date).valueOf()};sessionStorage.setItem(s,JSON.stringify(t))}catch(e){}}function c(e,t,n){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);t=new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data);e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(n,0,0);const r=new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data);return t.every((e,t)=>e===r[t])}function p(e,t){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);var n=e.getImageData(16,16,1,1);for(let e=0;e<n.data.length;e++)if(0!==n.data[e])return!1;return!0}function u(e,t,n,r){switch(t){case"flag":return n(e,"\ud83c\udff3\ufe0f\u200d\u26a7\ufe0f","\ud83c\udff3\ufe0f\u200b\u26a7\ufe0f")?!1:!n(e,"\ud83c\udde8\ud83c\uddf6","\ud83c\udde8\u200b\ud83c\uddf6")&&!n(e,"\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc65\udb40\udc6e\udb40\udc67\udb40\udc7f","\ud83c\udff4\u200b\udb40\udc67\u200b\udb40\udc62\u200b\udb40\udc65\u200b\udb40\udc6e\u200b\udb40\udc67\u200b\udb40\udc7f");case"emoji":return!r(e,"\ud83e\u1fac8")}return!1}function f(e,t,n,r){let a;const s=(a="undefined"!=typeof WorkerGlobalScope&&self instanceof WorkerGlobalScope?new OffscreenCanvas(300,150):document.createElement("canvas")).getContext("2d",{willReadFrequently:!0}),o=(s.textBaseline="top",s.font="600 32px Arial",{});return e.forEach(e=>{o[e]=t(s,e,n,r)}),o}function a(e){var t=document.createElement("script");t.src=e,t.defer=!0,document.head.appendChild(t)}r.supports={everything:!0,everythingExceptFlag:!0},new Promise(t=>{let n=function(){try{var e=JSON.parse(sessionStorage.getItem(s));if("object"==typeof e&&"number"==typeof e.timestamp&&(new Date).valueOf()<e.timestamp+604800&&"object"==typeof e.supportTests)return e.supportTests}catch(e){}return null}();if(!n){if("undefined"!=typeof Worker&&"undefined"!=typeof OffscreenCanvas&&"undefined"!=typeof URL&&URL.createObjectURL&&"undefined"!=typeof Blob)try{var e="postMessage("+f.toString()+"("+[JSON.stringify(o),u.toString(),c.toString(),p.toString()].join(",")+"));",r=new Blob([e],{type:"text/javascript"});const a=new Worker(URL.createObjectURL(r),{name:"wpTestEmojiSupports"});return void(a.onmessage=e=>{i(n=e.data),a.terminate(),t(n)})}catch(e){}i(n=f(o,u,c,p))}t(n)}).then(e=>{for(const n in e)r.supports[n]=e[n],r.supports.everything=r.supports.everything&&r.supports[n],"flag"!==n&&(r.supports.everythingExceptFlag=r.supports.everythingExceptFlag&&r.supports[n]);var t;r.supports.everythingExceptFlag=r.supports.everythingExceptFlag&&!r.supports.flag,r.supports.everything||((t=r.source||{}).concatemoji?a(t.concatemoji):t.wpemoji&&t.twemoji&&(a(t.twemoji),a(t.wpemoji)))});
+//# sourceURL=https://testheon.com/wp-includes/js/wp-emoji-loader.min.js
+</script>
+	</body>
+</html>
+
+
+<!-- Page cached by LiteSpeed Cache 7.9.1 on 2026-09-26 19:09:26 -->

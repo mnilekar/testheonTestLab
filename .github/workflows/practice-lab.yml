@@ -1,0 +1,87 @@
+name: Practice Lab CI
+
+on:
+  pull_request:
+    paths:
+      - 'practice-lab/**'
+      - '.github/workflows/practice-lab.yml'
+  push:
+    paths:
+      - 'practice-lab/**'
+      - '.github/workflows/practice-lab.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: practice-lab
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.19.0
+          run_install: false
+
+      - name: Install Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 24.13.1
+          cache: pnpm
+          cache-dependency-path: practice-lab/pnpm-lock.yaml
+
+      - name: Install PHP 8.3
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: pdo_sqlite
+          coverage: none
+
+      - name: Install frozen dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Check formatting
+        run: pnpm format
+
+      - name: Strict type-check
+        run: pnpm typecheck
+
+      - name: Unit and release integration tests
+        run: pnpm unit
+
+      - name: Validate generated API artifacts
+        run: pnpm api:validate
+
+      - name: Lint PHP runtime
+        run: find deploy/runtime -name '*.php' -print0 | xargs -0 -n1 php -l
+
+      - name: Build static site
+        run: pnpm build
+
+      - name: Install Playwright Chromium
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Run built-site E2E smoke
+        env:
+          PW_CHANNEL: ''
+        run: pnpm e2e
+
+      - name: Validate fixture manifest
+        run: pnpm manifest:validate
+
+      - name: Preserve review screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: practice-lab-review-screenshots
+          path: practice-lab/docs/reports/assets/
+          if-no-files-found: error
