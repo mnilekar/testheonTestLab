@@ -108,6 +108,16 @@ const path = Astro.url.pathname;
               </a>
             </li>
             <li>
+              <a
+                href="/practice/challenges/"
+                aria-current={
+                  path.startsWith('/practice/challenges/') ? 'page' : undefined
+                }
+              >
+                Challenges
+              </a>
+            </li>
+            <li>
               <a href="https://testheon.com/blog/">Testheon blog</a>
             </li>
           </ul>

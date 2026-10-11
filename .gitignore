@@ -11,6 +11,7 @@ coverage/
 practice-lab/.astro/
 practice-lab/dist/
 practice-lab/node_modules/
+practice-lab/node_modules-corrupt/
 practice-lab/playwright-report/
 practice-lab/test-results/
 practice-lab/.env

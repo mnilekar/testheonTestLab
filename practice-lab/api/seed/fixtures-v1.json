@@ -1740,11 +1740,11 @@
     "products": [
       {
         "id": "prd-001",
-        "name": "Electronics product 1",
+        "name": "Arka 14 Laptop",
         "sku": "SKU-0001",
         "category": "Electronics",
-        "price": 199,
-        "stock": 0,
+        "price": 49999,
+        "stock": 12,
         "rating": 2.5,
         "currency": "INR"
       },
@@ -2544,12 +2544,12 @@
         "id": "ord-001",
         "customerId": "cus-001",
         "status": "cancelled",
-        "total": 1083,
+        "total": 50883,
         "items": [
           {
             "productId": "prd-001",
             "quantity": 1,
-            "price": 199
+            "price": 49999
           },
           {
             "productId": "prd-006",
@@ -3019,7 +3019,7 @@
         "id": "ord-026",
         "customerId": "cus-026",
         "status": "pending",
-        "total": 21147,
+        "total": 70947,
         "items": [
           {
             "productId": "prd-076",
@@ -3029,7 +3029,7 @@
           {
             "productId": "prd-001",
             "quantity": 1,
-            "price": 199
+            "price": 49999
           }
         ],
         "createdAt": "2026-01-26T00:00:00.000Z"
@@ -4064,12 +4064,12 @@
         "id": "ord-081",
         "customerId": "cus-021",
         "status": "cancelled",
-        "total": 1481,
+        "total": 150881,
         "items": [
           {
             "productId": "prd-001",
             "quantity": 3,
-            "price": 199
+            "price": 49999
           },
           {
             "productId": "prd-006",
@@ -4539,7 +4539,7 @@
         "id": "ord-106",
         "customerId": "cus-046",
         "status": "delivered",
-        "total": 10673,
+        "total": 60473,
         "items": [
           {
             "productId": "prd-076",
@@ -4549,7 +4549,7 @@
           {
             "productId": "prd-001",
             "quantity": 1,
-            "price": 199
+            "price": 49999
           }
         ],
         "createdAt": "2026-04-16T00:00:00.000Z"

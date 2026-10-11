@@ -17,9 +17,12 @@ const mime = new Map([
   ['.html', 'text/html; charset=utf-8'],
   ['.js', 'text/javascript; charset=utf-8'],
   ['.json', 'application/json; charset=utf-8'],
+  ['.csv', 'text/csv; charset=utf-8'],
+  ['.md', 'text/markdown; charset=utf-8'],
   ['.svg', 'image/svg+xml'],
   ['.txt', 'text/plain; charset=utf-8'],
   ['.woff2', 'font/woff2'],
+  ['.zip', 'application/zip'],
 ]);
 
 function safeFilePath(pathname) {

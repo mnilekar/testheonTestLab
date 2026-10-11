@@ -155,6 +155,9 @@ await expect(page.getByTestId('signed-in-user')).toContainText('manager_user');`
       <section class="auth-card" aria-labelledby="session-title">
         <p class="eyebrow">Server session</p>
         <h2 id="session-title">Current identity</h2>
+        <h3 id="account-dashboard-heading" hidden>
+          Account dashboard
+        </h3>
         <p
           id="signed-in-user"
           data-testid="signed-in-user"

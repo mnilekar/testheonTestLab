@@ -1,0 +1,177 @@
+---
+import DifficultyBadge from '../../components/DifficultyBadge.astro';
+import LabLayout from '../../layouts/LabLayout.astro';
+import {
+  allSkills,
+  challenges,
+  uniqueChallengeValues,
+} from '../../lib/challenges';
+
+const difficulties = ['Beginner', 'Intermediate', 'Advanced', 'Expert'];
+const features = uniqueChallengeValues('feature');
+const applications = uniqueChallengeValues('application');
+const technologies = uniqueChallengeValues('technology');
+---
+
+<LabLayout
+  title="Playwright challenges"
+  description="Choose from 28 real Playwright challenges covering locators, UI workflows, APIs, authentication, network mocking, debugging, and ecommerce."
+  canonicalPath="/challenges/"
+  breadcrumbs={[
+    { label: 'Practice Lab', href: '/practice/' },
+    { label: 'Challenges' },
+  ]}
+>
+  <section class="hero challenge-hero">
+    <div class="container hero__grid">
+      <div>
+        <p class="eyebrow">28 executable exercises · TypeScript first</p>
+        <h1>Playwright challenges</h1>
+        <p class="lede">
+          Build from resilient locators to API-assisted setup, reusable
+          authentication, network failure handling, and realistic ecommerce
+          flows.
+        </p>
+      </div>
+      <aside class="hero-note" aria-label="Challenge distribution">
+        <strong>8 Beginner · 9 Intermediate · 7 Advanced · 4 Expert</strong>
+        <p>
+          Every challenge uses a stable Lab fixture, progressive hints, and a
+          collapsed solution approach.
+        </p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container challenge-layout">
+      <aside class="challenge-filter-panel" aria-labelledby="filter-heading">
+        <h2 id="filter-heading">Filter challenges</h2>
+        <form id="challenge-filters">
+          <label>
+            Difficulty
+            <select name="difficulty">
+              <option value="">All difficulties</option>
+              {difficulties.map((item) => (
+                <option value={item.toLowerCase()}>{item}</option>
+              ))}
+            </select>
+          </label>
+          <label>
+            Skill
+            <select name="skill">
+              <option value="">All skills</option>
+              {allSkills.map((item) => (
+                <option value={item.toLowerCase()}>{item}</option>
+              ))}
+            </select>
+          </label>
+          <label>
+            Feature
+            <select name="feature">
+              <option value="">All features</option>
+              {features.map((item) => (
+                <option value={item.toLowerCase()}>{item}</option>
+              ))}
+            </select>
+          </label>
+          <label>
+            Application
+            <select name="application">
+              <option value="">All applications</option>
+              {applications.map((item) => (
+                <option value={item.toLowerCase()}>{item}</option>
+              ))}
+            </select>
+          </label>
+          <label>
+            Technology
+            <select name="technology">
+              <option value="">All technologies</option>
+              {technologies.map((item) => (
+                <option value={item.toLowerCase()}>{item}</option>
+              ))}
+            </select>
+          </label>
+          <button class="button button--secondary" type="reset">
+            Clear filters
+          </button>
+        </form>
+        <p id="challenge-filter-status" class="result" role="status">
+          All {challenges.length} challenges shown.
+        </p>
+      </aside>
+
+      <div>
+        <div class="challenge-cards" aria-label="Challenge catalogue">
+          {challenges.map((challenge) => (
+            <article
+              class="challenge-card"
+              data-challenge-card
+              data-difficulty={challenge.difficulty.toLowerCase()}
+              data-skills={challenge.skills
+                .map((item) => item.toLowerCase())
+                .join('|')}
+              data-feature={challenge.feature.toLowerCase()}
+              data-application={challenge.application.toLowerCase()}
+              data-technology={challenge.technology.toLowerCase()}
+            >
+              <div class="challenge-card__meta">
+                <DifficultyBadge level={challenge.difficulty} />
+                <span>{challenge.id}</span>
+                <span>{challenge.estimatedMinutes} min</span>
+              </div>
+              <h2>
+                <a href={`/practice/challenges/${challenge.slug}/`}>
+                  {challenge.title}
+                </a>
+              </h2>
+              <p>{challenge.objective}</p>
+              <ul class="tag-list" aria-label="Skills">
+                {challenge.skills.map((skill) => (
+                  <li>{skill}</li>
+                ))}
+              </ul>
+            </article>
+          ))}
+        </div>
+
+        <section class="download-panel" aria-labelledby="starter-downloads">
+          <p class="eyebrow">Starter projects</p>
+          <h2 id="starter-downloads">Download and run locally</h2>
+          <p>
+            TypeScript is the complete cloneable starter. Python and Java
+            include setup pointers and three equivalent examples each.
+          </p>
+          <div class="hero__actions">
+            <a
+              class="button button--primary"
+              download
+              href="/practice/downloads/playwright-ts-starter.zip"
+            >
+              TypeScript starter ZIP
+            </a>
+            <a
+              class="button button--secondary"
+              download
+              href="/practice/downloads/playwright-python-starter.zip"
+            >
+              Python examples ZIP
+            </a>
+            <a
+              class="button button--secondary"
+              download
+              href="/practice/downloads/playwright-java-starter.zip"
+            >
+              Java examples ZIP
+            </a>
+          </div>
+        </section>
+      </div>
+    </div>
+  </section>
+</LabLayout>
+
+<script>
+  import '../../scripts/challenge-filters';
+</script>

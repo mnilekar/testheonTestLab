@@ -18,6 +18,14 @@ interface RecordEnvelope<T> {
   error?: { code?: string; message?: string };
 }
 
+interface ApiCustomer {
+  id: string;
+  name: string;
+  email: string;
+  city: string;
+  tier: string;
+}
+
 let employees = seedEmployees.map(enrichEmployee);
 let csrfToken = '';
 
@@ -680,6 +688,49 @@ query<HTMLButtonElement>('#start-async-update').addEventListener(
       trigger.disabled = false;
     }, delay);
   },
+);
+
+async function renderCustomerTable(): Promise<void> {
+  result('#customer-table-result', 'Loading customers from this sandbox…');
+  try {
+    const response = await fetch(
+      '/practice/api/v1/customers?page=1&limit=100&sort=id',
+      { credentials: 'same-origin' },
+    );
+    if (!response.ok)
+      throw new Error(`Customer API returned ${response.status}`);
+    const payload = (await response.json()) as ListEnvelope<ApiCustomer>;
+    const rows = payload.data ?? [];
+    const body = query<HTMLTableSectionElement>(
+      '#customer-api-table-grid tbody',
+    );
+    body.replaceChildren();
+    for (const customer of rows) {
+      const row = body.insertRow();
+      row.dataset.customerId = customer.id;
+      cell(row, customer.id, { header: true });
+      cell(row, customer.name);
+      cell(row, customer.email);
+      cell(row, customer.city);
+      cell(row, customer.tier);
+    }
+    result(
+      '#customer-table-result',
+      `${rows.length} customers loaded.`,
+      'success',
+    );
+  } catch (error) {
+    result(
+      '#customer-table-result',
+      error instanceof Error ? error.message : 'Customer load failed.',
+      'error',
+    );
+  }
+}
+
+query<HTMLButtonElement>('#refresh-customer-table').addEventListener(
+  'click',
+  () => void renderCustomerTable(),
 );
 
 query<HTMLButtonElement>('#reset-table-sandbox').addEventListener(

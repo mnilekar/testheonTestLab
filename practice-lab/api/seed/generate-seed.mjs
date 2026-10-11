@@ -153,11 +153,14 @@ export function buildSeed(seed = defaultSeed) {
 
   const products = Array.from({ length: 80 }, (_, index) => ({
     id: id('prd', index),
-    name: `${categories[index % categories.length]} product ${index + 1}`,
+    name:
+      index === 0
+        ? 'Arka 14 Laptop'
+        : `${categories[index % categories.length]} product ${index + 1}`,
     sku: `SKU-${String(index + 1).padStart(4, '0')}`,
     category: categories[index % categories.length],
-    price: 199 + ((index * 137) % 24_000),
-    stock: index % 12 === 0 ? 0 : (index * 7) % 90,
+    price: index === 0 ? 49_999 : 199 + ((index * 137) % 24_000),
+    stock: index === 0 ? 12 : index % 12 === 0 ? 0 : (index * 7) % 90,
     rating: Number((2.5 + ((index * 17) % 25) / 10).toFixed(1)),
     currency: 'INR',
   }));

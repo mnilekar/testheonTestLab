@@ -1,5 +1,6 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
+import manifest from '../fixtures/manifest.json' with { type: 'json' };
 
 const dist = resolve('dist');
 const target = process.env.PUBLIC_DEPLOY_TARGET ?? 'local';
@@ -17,7 +18,7 @@ const release = {
   target,
   robots,
   generatedAt: new Date().toISOString(),
-  manifestVersion: '1.0.0',
+  manifestVersion: manifest.manifestVersion,
 };
 
 await writeFile(
@@ -42,6 +43,9 @@ const securityHeaders = [
         '  Header always set Cache-Control "no-store, private"',
       ]
     : []),
+  '  <FilesMatch "\\.(zip|csv|md|json)$">',
+  '    Header always set X-Robots-Tag "noindex, nofollow"',
+  '  </FilesMatch>',
   '</IfModule>',
   '',
 ].join('\n');

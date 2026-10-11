@@ -1,7 +1,7 @@
 {
   "$schema": "./manifest.schema.json",
-  "manifestVersion": "1.6.0",
-  "updatedAt": "2026-09-29",
+  "manifestVersion": "1.7.0",
+  "updatedAt": "2026-10-11",
   "fixtures": [
     {
       "id": "FX-INPUT-001",
@@ -13,8 +13,14 @@
       "difficulty": "Beginner",
       "component": "InputFixtures",
       "behavior": "Native, masked, disabled, readonly, dynamic, validated, debounced, autosuggest and keyboard autocomplete inputs expose deterministic visible state.",
-      "defaults": { "debounceMs": 300, "dynamicEnabled": false },
-      "controls": { "phoneDigits": 10, "cardDigits": 16 },
+      "defaults": {
+        "debounceMs": 300,
+        "dynamicEnabled": false
+      },
+      "controls": {
+        "phoneDigits": 10,
+        "cardDigits": 16
+      },
       "seedVersion": "1.0.0",
       "intentionalDefects": [
         "The placeholder-only input has no associated label."
@@ -28,7 +34,7 @@
         "examples/playwright-ts/inputs.spec.ts"
       ],
       "guideLinks": ["https://testheon.com/playwright-locators/"],
-      "challengeLinks": []
+      "challengeLinks": ["/practice/challenges/fill-labelled-profile-fields/"]
     },
     {
       "id": "FX-BUTTON-001",
@@ -40,8 +46,13 @@
       "difficulty": "Intermediate",
       "component": "ButtonFixtures",
       "behavior": "Native actions, form buttons, enabled conditions, gestures, bounded delay, DOM replacement, duplicate labels, nested scope and delayed appearance report visible outcomes.",
-      "defaults": { "delayMs": 100, "longPressMs": 650 },
-      "controls": { "delayOptions": [100, 500, 1000] },
+      "defaults": {
+        "delayMs": 100,
+        "longPressMs": 650
+      },
+      "controls": {
+        "delayOptions": [100, 500, 1000]
+      },
       "seedVersion": "1.0.0",
       "intentionalDefects": ["One icon-only button has no accessible name."],
       "expectedOutcomes": [
@@ -65,8 +76,12 @@
       "difficulty": "Intermediate",
       "component": "ChoiceFixtures",
       "behavior": "Native single, grouped, disabled, dynamic, indeterminate, hierarchical, generated, conditional and duplicate-label choices expose deterministic state.",
-      "defaults": { "selected": [] },
-      "controls": { "generatedSuites": ["Smoke", "Regression", "Visual"] },
+      "defaults": {
+        "selected": []
+      },
+      "controls": {
+        "generatedSuites": ["Smoke", "Regression", "Visual"]
+      },
       "seedVersion": "1.0.0",
       "intentionalDefects": [],
       "expectedOutcomes": [
@@ -90,8 +105,13 @@
       "difficulty": "Intermediate",
       "component": "DropdownFixtures",
       "behavior": "Native, multi, grouped, searchable and ARIA listboxes support selection while dependent locations and infinite products load from the isolated API.",
-      "defaults": { "dynamicDelayMs": 400, "productPageSize": 15 },
-      "controls": { "maxProductPages": 4 },
+      "defaults": {
+        "dynamicDelayMs": 400,
+        "productPageSize": 15
+      },
+      "controls": {
+        "maxProductPages": 4
+      },
       "seedVersion": "1.0.0",
       "intentionalDefects": [],
       "expectedOutcomes": [
@@ -115,8 +135,12 @@
       "difficulty": "Advanced",
       "component": "ApiBackedForms",
       "behavior": "Six realistic forms expose required and conditional client validation, inline and summary errors, API success, simulated server errors and duplicate-data conflict behavior.",
-      "defaults": { "serverSimulation": "success" },
-      "controls": { "simulatedStatuses": [409, 422, 500, 503] },
+      "defaults": {
+        "serverSimulation": "success"
+      },
+      "controls": {
+        "simulatedStatuses": [409, 422, 500, 503]
+      },
       "seedVersion": "1.0.0",
       "intentionalDefects": [
         "The login form validates UI only; real authentication is reserved for Chunk 8."
@@ -134,7 +158,12 @@
         "https://testheon.com/playwright-api-testing/",
         "https://testheon.com/playwright-authentication/"
       ],
-      "challengeLinks": []
+      "challengeLinks": [
+        "/practice/challenges/assert-registration-validation/",
+        "/practice/challenges/create-and-fetch-user-api/",
+        "/practice/challenges/create-customer-api-verify-table/",
+        "/practice/challenges/prove-sandbox-isolation-reset/"
+      ]
     },
     {
       "id": "FX-LOCATOR-001",
@@ -146,7 +175,9 @@
       "difficulty": "Beginner",
       "component": "LocatorComparisons",
       "behavior": "Fourteen semantic, fallback, filtering, position, chaining and scoping topics pair accessible Good DOM with visibly marked Awkward DOM.",
-      "defaults": { "comparisonMode": "side-by-side" },
+      "defaults": {
+        "comparisonMode": "side-by-side"
+      },
       "controls": {},
       "seedVersion": "1.0.0",
       "intentionalDefects": [
@@ -161,18 +192,21 @@
         "examples/playwright-ts/locators.spec.ts"
       ],
       "guideLinks": ["https://testheon.com/playwright-locators/"],
-      "challengeLinks": []
+      "challengeLinks": [
+        "/practice/challenges/locate-primary-action-by-role/",
+        "/practice/challenges/debug-wrong-locator/"
+      ]
     },
     {
       "id": "FX-TABLE-001",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "url": "/practice/components/tables/",
       "anchor": "#fixture-tables",
       "title": "Table Lab",
       "area": "Tables",
       "difficulty": "Advanced",
       "component": "EmployeeTableFixtures",
-      "behavior": "API employee data powers static, sortable, searchable, filterable, client/server paginated, editable, dynamic, selectable, expandable, sticky, virtualized, asynchronous and nested table exercises.",
+      "behavior": "API employee data powers static, sortable, searchable, filterable, client/server paginated, editable, dynamic, selectable, expandable, sticky, virtualized, asynchronous and nested table exercises. A refreshable customer table exposes session-scoped API setup for API-to-UI tests.",
       "defaults": {
         "clientPageSize": 10,
         "serverPageSize": 10,
@@ -200,7 +234,12 @@
         "https://testheon.com/playwright-locators/",
         "https://testheon.com/playwright-api-testing/"
       ],
-      "challengeLinks": []
+      "challengeLinks": [
+        "/practice/challenges/find-employee-table-row/",
+        "/practice/challenges/sort-filter-employees/",
+        "/practice/challenges/create-customer-api-verify-table/",
+        "/practice/challenges/prove-sandbox-isolation-reset/"
+      ]
     },
     {
       "id": "FX-LIST-001",
@@ -245,7 +284,10 @@
       "difficulty": "Intermediate",
       "component": "DeterministicWaitFixtures",
       "behavior": "Bounded delay controls drive appearance, enabled, text, loading, progress, network, dropdown, lazy-content and infinite-scroll synchronization exercises.",
-      "defaults": { "delayMs": 1000, "seed": 4803 },
+      "defaults": {
+        "delayMs": 1000,
+        "seed": 4803
+      },
       "controls": {
         "delayOptions": [1000, 2000, 5000, 10000, "random"],
         "urlDelayRange": [0, 10000]
@@ -261,7 +303,11 @@
         "examples/playwright-ts/waits-dialogs.spec.ts"
       ],
       "guideLinks": ["https://testheon.com/playwright-e2e/"],
-      "challengeLinks": []
+      "challengeLinks": [
+        "/practice/challenges/wait-for-delayed-text/",
+        "/practice/challenges/synchronise-loading-indicator/",
+        "/practice/challenges/debug-hidden-race/"
+      ]
     },
     {
       "id": "FX-DOM-001",
@@ -273,8 +319,12 @@
       "difficulty": "Advanced",
       "component": "DynamicDomFixtures",
       "behavior": "A marked practice fixture deterministically rotates IDs, classes and order while preserving semantic contracts across duplicate, replacement and API-rendered DOM.",
-      "defaults": { "seed": 4803 },
-      "controls": { "urlSeed": true },
+      "defaults": {
+        "seed": 4803
+      },
+      "controls": {
+        "urlSeed": true
+      },
       "seedVersion": "1.0.0",
       "intentionalDefects": [
         "Generated IDs and classes change on each controlled render.",
@@ -298,7 +348,10 @@
       "difficulty": "Advanced",
       "component": "DialogModalToastFixtures",
       "behavior": "Native alerts, confirms and prompts pair with focus-contained application dialogs and role-correct configurable toast notifications.",
-      "defaults": { "dialogDelayMs": 0, "toastDismissMs": 0 },
+      "defaults": {
+        "dialogDelayMs": 0,
+        "toastDismissMs": 0
+      },
       "controls": {
         "delayOptions": [0, 1000],
         "dismissOptions": [0, 1000, 3000]
@@ -314,7 +367,11 @@
         "examples/playwright-ts/waits-dialogs.spec.ts"
       ],
       "guideLinks": ["https://testheon.com/playwright-e2e/"],
-      "challengeLinks": []
+      "challengeLinks": [
+        "/practice/challenges/accept-native-alert/",
+        "/practice/challenges/submit-browser-prompt/",
+        "/practice/challenges/debug-unhandled-dialog/"
+      ]
     },
     {
       "id": "FX-INTERACT-001",
@@ -326,8 +383,12 @@
       "difficulty": "Advanced",
       "component": "PointerKeyboardFixtures",
       "behavior": "Hover, tooltip, pointer gestures, scrolling, Enter, Tab, Escape, command shortcut, arrow navigation and autocomplete all append to one visible log.",
-      "defaults": { "listboxOption": "Chromium" },
-      "controls": { "commandShortcut": "ControlOrMeta+K" },
+      "defaults": {
+        "listboxOption": "Chromium"
+      },
+      "controls": {
+        "commandShortcut": "ControlOrMeta+K"
+      },
       "seedVersion": "1.0.0",
       "intentionalDefects": [],
       "expectedOutcomes": [
@@ -351,7 +412,10 @@
       "difficulty": "Advanced",
       "component": "DateTimeRangeFixtures",
       "behavior": "Native and custom calendar controls, ranges, fixed timezone output, sliders, linked numeric values, a stepper and async progress expose normalized results.",
-      "defaults": { "now": "2026-10-15T09:30:00+05:30", "jobDurationMs": 0 },
+      "defaults": {
+        "now": "2026-10-15T09:30:00+05:30",
+        "jobDurationMs": 0
+      },
       "controls": {
         "urlNowOverride": true,
         "jobDurationOptions": [0, 1000, 2000]
@@ -379,8 +443,12 @@
       "difficulty": "Advanced",
       "component": "SameOriginBrowsingContexts",
       "behavior": "Single, form, nested, multiple and dynamic same-origin frames pair with tabs, popups and validated postMessage parent updates.",
-      "defaults": { "dynamicDelayMs": 0 },
-      "controls": { "dynamicDelayOptions": [0, 500] },
+      "defaults": {
+        "dynamicDelayMs": 0
+      },
+      "controls": {
+        "dynamicDelayOptions": [0, 500]
+      },
       "seedVersion": "1.0.0",
       "intentionalDefects": [],
       "expectedOutcomes": [
@@ -392,7 +460,7 @@
         "examples/playwright-ts/frames-windows.spec.ts"
       ],
       "guideLinks": ["https://testheon.com/playwright-e2e/"],
-      "challengeLinks": []
+      "challengeLinks": ["/practice/challenges/submit-nested-frame-form/"]
     },
     {
       "id": "FX-FILE-001",
@@ -404,7 +472,10 @@
       "difficulty": "Expert",
       "component": "PrivateUploadDownloadFixtures",
       "behavior": "Native and dropzone uploads enforce extension, MIME, content, size, quota, private random storage and TTL controls; deterministic downloads expose attachment filenames.",
-      "defaults": { "downloadDelayMs": 0, "uploadTtlSeconds": 600 },
+      "defaults": {
+        "downloadDelayMs": 0,
+        "uploadTtlSeconds": 600
+      },
       "controls": {
         "allowedExtensions": ["png", "jpg", "jpeg", "csv", "txt", "pdf"],
         "maxFileBytes": 2097152,
@@ -424,7 +495,10 @@
         "examples/playwright-ts/files-drag.spec.ts"
       ],
       "guideLinks": ["https://testheon.com/playwright-e2e/"],
-      "challengeLinks": []
+      "challengeLinks": [
+        "/practice/challenges/upload-customer-csv/",
+        "/practice/challenges/reject-active-svg-upload/"
+      ]
     },
     {
       "id": "FX-DRAG-001",
@@ -436,8 +510,12 @@
       "difficulty": "Advanced",
       "component": "DragSortKanbanFixtures",
       "behavior": "Cards and sortable items support HTML5, pointer and keyboard movement; a shared file dropzone and tasks-API Kanban expose visible persisted outcomes.",
-      "defaults": { "kanbanTaskLimit": 6 },
-      "controls": { "kanbanStatuses": ["todo", "in-progress", "done"] },
+      "defaults": {
+        "kanbanTaskLimit": 6
+      },
+      "controls": {
+        "kanbanStatuses": ["todo", "in-progress", "done"]
+      },
       "seedVersion": "1.0.0",
       "intentionalDefects": [],
       "expectedOutcomes": [
@@ -462,7 +540,9 @@
       "difficulty": "Advanced",
       "component": "BrowserContextFixtures",
       "behavior": "Fixture cookies, storage, secure-context permissions, offline requests and fixed responsive breakpoints expose named visible states for BrowserContext automation.",
-      "defaults": { "fictionalLocation": "Pune QA Campus" },
+      "defaults": {
+        "fictionalLocation": "Pune QA Campus"
+      },
       "controls": {
         "breakpoints": {
           "mobileMax": 699,
@@ -485,14 +565,14 @@
     },
     {
       "id": "FX-AUTH-001",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "url": "/practice/apps/auth/",
       "anchor": "#login-panel",
       "title": "Practice Authentication Sandbox",
       "area": "Authentication",
       "difficulty": "Advanced",
       "component": "SandboxAuthenticationApplication",
-      "behavior": "Public synthetic accounts exercise registration, non-enumerating login and reset, HttpOnly sessions, deterministic lockout and expiry, roles, bearer tokens, refresh tokens and API keys without WordPress identity access.",
+      "behavior": "Public synthetic accounts exercise registration, non-enumerating login and reset, HttpOnly sessions, deterministic lockout and expiry, roles, bearer tokens, refresh tokens and API keys without WordPress identity access. Authenticated identities expose a stable Account dashboard heading.",
       "defaults": {
         "sharedDemoPassword": "Practice@123",
         "idleTtlSeconds": 300,
@@ -520,18 +600,24 @@
         "examples/playwright-ts/authentication.spec.ts"
       ],
       "guideLinks": ["https://testheon.com/playwright-authentication/"],
-      "challengeLinks": []
+      "challengeLinks": [
+        "/practice/challenges/login-standard-user-dashboard/",
+        "/practice/challenges/reuse-storage-state/",
+        "/practice/challenges/verify-forbidden-role/",
+        "/practice/challenges/checkout-and-verify-order-api/",
+        "/practice/challenges/api-auth-session-and-orders-500/"
+      ]
     },
     {
       "id": "FX-STORE-001",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "url": "/practice/apps/ecommerce/",
       "anchor": "#integration-scenarios",
       "title": "Testheon Store",
       "area": "Ecommerce",
       "difficulty": "Advanced",
       "component": "SandboxEcommerceApplication",
-      "behavior": "A session-scoped shop connects catalogue search and filters, product variants, guest cart, Chunk 8 login, deterministic coupons, fake checkout, order history, API setup and verification, one-shot network errors, and stable visual mode.",
+      "behavior": "A session-scoped shop connects catalogue search and filters, product variants, guest cart, Chunk 8 login, deterministic coupons, fake checkout, order history, API setup and verification, one-shot network errors, and stable visual mode. The seed includes Arka 14 Laptop at ₹49,999 for budget-search challenges.",
       "defaults": {
         "pageSize": 12,
         "currency": "INR",
@@ -575,7 +661,15 @@
         "https://testheon.com/playwright-authentication/",
         "https://testheon.com/playwright-visual-testing/"
       ],
-      "challengeLinks": []
+      "challengeLinks": [
+        "/practice/challenges/verify-product-stock/",
+        "/practice/challenges/buy-laptop-under-50000/",
+        "/practice/challenges/mock-empty-catalogue/",
+        "/practice/challenges/checkout-and-verify-order-api/",
+        "/practice/challenges/modify-product-response/",
+        "/practice/challenges/api-auth-session-and-orders-500/",
+        "/practice/challenges/recover-from-malformed-store-response/"
+      ]
     }
   ]
 }

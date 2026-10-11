@@ -60,6 +60,7 @@ function renderIdentity(user: JsonRecord, source: string): void {
   const username = String(user.username ?? 'unknown');
   const role = String(user.role ?? 'unknown');
   setResult('#signed-in-user', `Signed in as ${username} (${role}).`);
+  query<HTMLElement>('#account-dashboard-heading').hidden = false;
   query<HTMLElement>('#auth-cookie-state').textContent =
     source === 'cookie' ? 'Present and unreadable to JavaScript' : 'Not used';
   query<HTMLElement>('#auth-source').textContent = source;
@@ -76,6 +77,7 @@ function renderIdentity(user: JsonRecord, source: string): void {
 
 function renderSignedOut(): void {
   setResult('#signed-in-user', 'Signed out.');
+  query<HTMLElement>('#account-dashboard-heading').hidden = true;
   query<HTMLElement>('#auth-cookie-state').textContent = 'Absent or expired';
   query<HTMLElement>('#auth-source').textContent = 'None';
   query<HTMLElement>('#admin-action-card').hidden = true;

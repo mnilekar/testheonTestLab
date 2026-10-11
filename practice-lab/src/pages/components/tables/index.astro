@@ -593,8 +593,42 @@ expect(await page.locator('#virtual-body [role="row"]').count()).toBeLessThan(40
   </FixtureSection>
 
   <FixtureSection
+    id="customer-api-table"
+    title="13. Customer API table"
+    description="Refresh the current sandbox’s customer records after API setup, then verify created data through the UI."
+  >
+    <div class="button-row">
+      <button id="refresh-customer-table" class="fixture-button" type="button">
+        Refresh customer table
+      </button>
+      <p id="customer-table-result" class="result" role="status">
+        Customer rows have not loaded.
+      </p>
+    </div>
+    <div class="table-scroll">
+      <table id="customer-api-table-grid">
+        <caption>Customers in the current isolated API sandbox</caption>
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">City</th>
+            <th scope="col">Tier</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td colspan="5">Select Refresh customer table.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </FixtureSection>
+
+  <FixtureSection
     id="nested-tables"
-    title="13. Nested business tables"
+    title="14. Nested business tables"
     description="Customer orders expose line items, while departments expose employees and projects without losing the parent context."
   >
     <div class="nested-grid">

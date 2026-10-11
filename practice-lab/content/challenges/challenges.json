@@ -1,0 +1,1227 @@
+{
+  "catalogueVersion": "1.0.0",
+  "updatedAt": "2026-10-11",
+  "challenges": [
+    {
+      "id": "PW-AUTH-001",
+      "slug": "login-standard-user-dashboard",
+      "title": "Log in as standard_user and verify the dashboard",
+      "difficulty": "Beginner",
+      "skills": [
+        "authentication",
+        "assertions"
+      ],
+      "technology": "Playwright",
+      "feature": "Authentication",
+      "application": "Authentication sandbox",
+      "scenario": "A learner needs a reliable smoke test for the public synthetic account.",
+      "objective": "Log in as standard_user and verify the Account dashboard heading and signed-in identity.",
+      "preconditions": [
+        "Use a fresh isolated Practice Lab browser context.",
+        "Open the fixture identified by FX-AUTH-001."
+      ],
+      "testData": [
+        "standard_user",
+        "Practice@123"
+      ],
+      "expectedResult": "The Account dashboard heading is visible and the identity reads Signed in as Standard User (standard_user).",
+      "hints": [
+        "Use getByLabel for the username and password fields.",
+        "Submit with the Sign in to Practice button.",
+        "Assert the heading before checking the signed-in-user test id."
+      ],
+      "relatedGuide": {
+        "title": "Playwright authentication guide",
+        "url": "https://testheon.com/playwright-authentication/"
+      },
+      "relatedFixtures": [
+        "FX-AUTH-001"
+      ],
+      "solutionApproach": [
+        "Use getByLabel for the username and password fields.",
+        "Submit with the Sign in to Practice button.",
+        "Assert the heading before checking the signed-in-user test id."
+      ],
+      "estimatedMinutes": 15,
+      "version": "1.0.0"
+    },
+    {
+      "id": "PW-LOC-001",
+      "slug": "locate-primary-action-by-role",
+      "title": "Locate the primary action by role",
+      "difficulty": "Beginner",
+      "skills": [
+        "locators",
+        "accessibility"
+      ],
+      "technology": "Playwright",
+      "feature": "Locators",
+      "application": "Locator Lab",
+      "scenario": "A semantic button must remain findable after its CSS class changes.",
+      "objective": "Click the Good DOM primary action using its accessible role and name.",
+      "preconditions": [
+        "Use a fresh isolated Practice Lab browser context.",
+        "Open the fixture identified by FX-LOCATOR-001."
+      ],
+      "testData": [
+        "button name: Submit order"
+      ],
+      "expectedResult": "The Good DOM result reports that the order was submitted.",
+      "hints": [
+        "Start from the Good DOM region.",
+        "Prefer getByRole over a CSS class.",
+        "Scope the button name exactly inside the comparison card."
+      ],
+      "relatedGuide": {
+        "title": "Playwright locators guide",
+        "url": "https://testheon.com/playwright-locators/"
+      },
+      "relatedFixtures": [
+        "FX-LOCATOR-001"
+      ],
+      "solutionApproach": [
+        "Start from the Good DOM region.",
+        "Prefer getByRole over a CSS class.",
+        "Scope the button name exactly inside the comparison card."
+      ],
+      "estimatedMinutes": 15,
+      "version": "1.0.0"
+    },
+    {
+      "id": "PW-LOC-002",
+      "slug": "fill-labelled-profile-fields",
+      "title": "Fill a profile with label locators",
+      "difficulty": "Beginner",
+      "skills": [
+        "locators",
+        "forms"
+      ],
+      "technology": "Playwright",
+      "feature": "Inputs",
+      "application": "Component Lab",
+      "scenario": "A profile form exposes durable labels but implementation-specific ids may change.",
+      "objective": "Fill the labelled name and email fields and assert their values.",
+      "preconditions": [
+        "Use a fresh isolated Practice Lab browser context.",
+        "Open the fixture identified by FX-INPUT-001."
+      ],
+      "testData": [
+        "name: Asha Learner",
+        "email: asha.learner@example.test"
+      ],
+      "expectedResult": "Both inputs contain the supplied synthetic values.",
+      "hints": [
+        "Use getByLabel.",
+        "Avoid placeholder selectors.",
+        "Assert with toHaveValue after filling."
+      ],
+      "relatedGuide": {
+        "title": "Playwright locators guide",
+        "url": "https://testheon.com/playwright-locators/"
+      },
+      "relatedFixtures": [
+        "FX-INPUT-001"
+      ],
+      "solutionApproach": [
+        "Use getByLabel.",
+        "Avoid placeholder selectors.",
+        "Assert with toHaveValue after filling."
+      ],
+      "estimatedMinutes": 15,
+      "version": "1.0.0"
+    },
+    {
+      "id": "PW-FORM-001",
+      "slug": "assert-registration-validation",
+      "title": "Assert registration validation",
+      "difficulty": "Beginner",
+      "skills": [
+        "forms",
+        "validation"
+      ],
+      "technology": "Playwright",
+      "feature": "Forms",
+      "application": "Component Lab",
+      "scenario": "Registration must block an invalid email before a record is created.",
+      "objective": "Submit the customer form with an invalid synthetic email and verify its validation state.",
+      "preconditions": [
+        "Use a fresh isolated Practice Lab browser context.",
+        "Open the fixture identified by FX-FORM-001."
+      ],
+      "testData": [
+        "email: not-an-email"
+      ],
+      "expectedResult": "An accessible validation message is shown and no success ID appears.",
+      "hints": [
+        "Find the customer registration form first.",
+        "Use the Email label to clear and fill.",
+        "Assert the error summary or invalid field state."
+      ],
+      "relatedGuide": {
+        "title": "Playwright end-to-end testing guide",
+        "url": "https://testheon.com/playwright-e2e/"
+      },
+      "relatedFixtures": [
+        "FX-FORM-001"
+      ],
+      "solutionApproach": [
+        "Find the customer registration form first.",
+        "Use the Email label to clear and fill.",
+        "Assert the error summary or invalid field state."
+      ],
+      "estimatedMinutes": 15,
+      "version": "1.0.0"
+    },
+    {
+      "id": "PW-TBL-001",
+      "slug": "find-employee-table-row",
+      "title": "Find one employee row",
+      "difficulty": "Beginner",
+      "skills": [
+        "tables",
+        "locators"
+      ],
+      "technology": "Playwright",
+      "feature": "Tables",
+      "application": "Table Lab",
+      "scenario": "Several employees share a first name, so the row must be scoped by other visible cells.",
+      "objective": "Find Rahul Sharma in Engineering and assert the row contains Pune.",
+      "preconditions": [
+        "Use a fresh isolated Practice Lab browser context.",
+        "Open the fixture identified by FX-TABLE-001."
+      ],
+      "testData": [
+        "name: Rahul Sharma",
+        "department: Engineering",
+        "location: Pune"
+      ],
+      "expectedResult": "Exactly one matching row is found and it contains Pune.",
+      "hints": [
+        "Scope to the static employee table.",
+        "Use getByRole(row) with a name pattern.",
+        "Assert a cell inside the matched row."
+      ],
+      "relatedGuide": {
+        "title": "Playwright locators guide",
+        "url": "https://testheon.com/playwright-locators/"
+      },
+      "relatedFixtures": [
+        "FX-TABLE-001"
+      ],
+      "solutionApproach": [
+        "Scope to the static employee table.",
+        "Use getByRole(row) with a name pattern.",
+        "Assert a cell inside the matched row."
+      ],
+      "estimatedMinutes": 15,
+      "version": "1.0.0"
+    },
+    {
+      "id": "PW-ECOM-001",
+      "slug": "verify-product-stock",
+      "title": "Verify product stock",
+      "difficulty": "Beginner",
+      "skills": [
+        "ecommerce",
+        "assertions"
+      ],
+      "technology": "Playwright",
+      "feature": "Ecommerce",
+      "application": "Testheon Store",
+      "scenario": "A shopper opens one deterministic product and wants a basic stock assertion.",
+      "objective": "Open product prd-001 and verify its stock status is visible.",
+      "preconditions": [
+        "Use a fresh isolated Practice Lab browser context.",
+        "Open the fixture identified by FX-STORE-001."
+      ],
+      "testData": [
+        "productId: prd-001"
+      ],
+      "expectedResult": "The product detail displays a positive stock count matching the store API.",
+      "hints": [
+        "Open the product URL with its id query.",
+        "Wait for the product heading.",
+        "Compare the visible stock with GET store/products/prd-001."
+      ],
+      "relatedGuide": {
+        "title": "Playwright end-to-end testing guide",
+        "url": "https://testheon.com/playwright-e2e/"
+      },
+      "relatedFixtures": [
+        "FX-STORE-001"
+      ],
+      "solutionApproach": [
+        "Open the product URL with its id query.",
+        "Wait for the product heading.",
+        "Compare the visible stock with GET store/products/prd-001."
+      ],
+      "estimatedMinutes": 15,
+      "version": "1.0.0"
+    },
+    {
+      "id": "PW-DLG-001",
+      "slug": "accept-native-alert",
+      "title": "Accept a native alert",
+      "difficulty": "Beginner",
+      "skills": [
+        "dialogs",
+        "events"
+      ],
+      "technology": "Playwright",
+      "feature": "Dialogs",
+      "application": "Component Lab",
+      "scenario": "A native alert blocks the next browser action until it is handled.",
+      "objective": "Accept the alert and verify the visible alert result.",
+      "preconditions": [
+        "Use a fresh isolated Practice Lab browser context.",
+        "Open the fixture identified by FX-DIALOG-001."
+      ],
+      "testData": [
+        "dialog type: alert"
+      ],
+      "expectedResult": "The page reports that the alert was accepted.",
+      "hints": [
+        "Register the dialog handler before clicking.",
+        "Assert the dialog type or message in the handler.",
+        "Check the visible result after accept()."
+      ],
+      "relatedGuide": {
+        "title": "Playwright end-to-end testing guide",
+        "url": "https://testheon.com/playwright-e2e/"
+      },
+      "relatedFixtures": [
+        "FX-DIALOG-001"
+      ],
+      "solutionApproach": [
+        "Register the dialog handler before clicking.",
+        "Assert the dialog type or message in the handler.",
+        "Check the visible result after accept()."
+      ],
+      "estimatedMinutes": 15,
+      "version": "1.0.0"
+    },
+    {
+      "id": "PW-WAIT-001",
+      "slug": "wait-for-delayed-text",
+      "title": "Wait for delayed text",
+      "difficulty": "Beginner",
+      "skills": [
+        "waits",
+        "assertions"
+      ],
+      "technology": "Playwright",
+      "feature": "Waits",
+      "application": "Waits Lab",
+      "scenario": "Text changes after a controlled delay and fixed sleeps would make the test brittle.",
+      "objective": "Trigger the 1,000 ms delayed text and wait for the final assertion target.",
+      "preconditions": [
+        "Use a fresh isolated Practice Lab browser context.",
+        "Open the fixture identified by FX-WAIT-001."
+      ],
+      "testData": [
+        "delayMs: 1000"
+      ],
+      "expectedResult": "The final delayed message appears without waitForTimeout.",
+      "hints": [
+        "Select the deterministic 1 second delay.",
+        "Use a web-first text assertion.",
+        "Do not add a fixed timeout."
+      ],
+      "relatedGuide": {
+        "title": "Playwright end-to-end testing guide",
+        "url": "https://testheon.com/playwright-e2e/"
+      },
+      "relatedFixtures": [
+        "FX-WAIT-001"
+      ],
+      "solutionApproach": [
+        "Select the deterministic 1 second delay.",
+        "Use a web-first text assertion.",
+        "Do not add a fixed timeout."
+      ],
+      "estimatedMinutes": 15,
+      "version": "1.0.0"
+    },
+    {
+      "id": "PW-ECOM-002",
+      "slug": "buy-laptop-under-50000",
+      "title": "Add a laptop under ₹50,000 to the cart",
+      "difficulty": "Intermediate",
+      "skills": [
+        "ecommerce",
+        "filters",
+        "cart"
+      ],
+      "technology": "Playwright",
+      "feature": "Ecommerce",
+      "application": "Testheon Store",
+      "scenario": "A shopper needs a laptop within a strict budget.",
+      "objective": "Search for laptop, set maximum price to ₹50,000, add the matching item, and verify cart quantity one.",
+      "preconditions": [
+        "Use a fresh isolated Practice Lab browser context.",
+        "Open the fixture identified by FX-STORE-001."
+      ],
+      "testData": [
+        "query: laptop",
+        "maxPrice: 50000",
+        "quantity: 1"
+      ],
+      "expectedResult": "Arka 14 Laptop is added and the cart shows quantity 1.",
+      "hints": [
+        "Use the catalogue search and maximum price controls.",
+        "Scope Add to cart to the laptop card.",
+        "Assert the cart row quantity rather than only the header count."
+      ],
+      "relatedGuide": {
+        "title": "Playwright end-to-end testing guide",
+        "url": "https://testheon.com/playwright-e2e/"
+      },
+      "relatedFixtures": [
+        "FX-STORE-001"
+      ],
+      "solutionApproach": [
+        "Use the catalogue search and maximum price controls.",
+        "Scope Add to cart to the laptop card.",
+        "Assert the cart row quantity rather than only the header count."
+      ],
+      "estimatedMinutes": 25,
+      "version": "1.0.0"
+    },
+    {
+      "id": "PW-TBL-002",
+      "slug": "sort-filter-employees",
+      "title": "Sort and filter employees",
+      "difficulty": "Intermediate",
+      "skills": [
+        "tables",
+        "sorting",
+        "filters"
+      ],
+      "technology": "Playwright",
+      "feature": "Tables",
+      "application": "Table Lab",
+      "scenario": "A manager needs only active QA staff in Pune ordered by salary.",
+      "objective": "Filter Active employees in Pune, sort by salary, and assert the visible rows.",
+      "preconditions": [
+        "Use a fresh isolated Practice Lab browser context.",
+        "Open the fixture identified by FX-TABLE-001."
+      ],
+      "testData": [
+        "location: Pune",
+        "status: Active",
+        "sort: salary ascending"
+      ],
+      "expectedResult": "Every row is Active and Pune, and salaries are ascending.",
+      "hints": [
+        "Apply both select filters before reading rows.",
+        "Read the salary column as numbers.",
+        "Compare the values to a sorted copy."
+      ],
+      "relatedGuide": {
+        "title": "Playwright locators guide",
+        "url": "https://testheon.com/playwright-locators/"
+      },
+      "relatedFixtures": [
+        "FX-TABLE-001"
+      ],
+      "solutionApproach": [
+        "Apply both select filters before reading rows.",
+        "Read the salary column as numbers.",
+        "Compare the values to a sorted copy."
+      ],
+      "estimatedMinutes": 25,
+      "version": "1.0.0"
+    },
+    {
+      "id": "PW-WAIT-002",
+      "slug": "synchronise-loading-indicator",
+      "title": "Synchronise with a loading indicator",
+      "difficulty": "Intermediate",
+      "skills": [
+        "waits",
+        "network"
+      ],
+      "technology": "Playwright",
+      "feature": "Waits",
+      "application": "Waits Lab",
+      "scenario": "A request displays Loading before the final data is rendered.",
+      "objective": "Start the controlled request, observe Loading, then assert completion.",
+      "preconditions": [
+        "Use a fresh isolated Practice Lab browser context.",
+        "Open the fixture identified by FX-WAIT-001."
+      ],
+      "testData": [
+        "delayMs: 2000"
+      ],
+      "expectedResult": "The loading state appears and later disappears when final data is visible.",
+      "hints": [
+        "Assert the loading state immediately after the action.",
+        "Use toBeHidden for completion.",
+        "Assert the final result instead of network idle."
+      ],
+      "relatedGuide": {
+        "title": "Playwright end-to-end testing guide",
+        "url": "https://testheon.com/playwright-e2e/"
+      },
+      "relatedFixtures": [
+        "FX-WAIT-001"
+      ],
+      "solutionApproach": [
+        "Assert the loading state immediately after the action.",
+        "Use toBeHidden for completion.",
+        "Assert the final result instead of network idle."
+      ],
+      "estimatedMinutes": 25,
+      "version": "1.0.0"
+    },
+    {
+      "id": "PW-FRM-001",
+      "slug": "submit-nested-frame-form",
+      "title": "Submit a nested frame form",
+      "difficulty": "Intermediate",
+      "skills": [
+        "frames",
+        "locators"
+      ],
+      "technology": "Playwright",
+      "feature": "Frames and windows",
+      "application": "Component Lab",
+      "scenario": "A form lives inside a frame nested under another same-origin frame.",
+      "objective": "Use frameLocator to fill and submit the nested form, then verify its result.",
+      "preconditions": [
+        "Use a fresh isolated Practice Lab browser context.",
+        "Open the fixture identified by FX-FRAME-001."
+      ],
+      "testData": [
+        "message: Nested frame ready"
+      ],
+      "expectedResult": "The nested frame reports the submitted message.",
+      "hints": [
+        "Select the outer frame by title.",
+        "Chain a second frameLocator for the inner frame.",
+        "Keep the assertion scoped to the inner browsing context."
+      ],
+      "relatedGuide": {
+        "title": "Playwright end-to-end testing guide",
+        "url": "https://testheon.com/playwright-e2e/"
+      },
+      "relatedFixtures": [
+        "FX-FRAME-001"
+      ],
+      "solutionApproach": [
+        "Select the outer frame by title.",
+        "Chain a second frameLocator for the inner frame.",
+        "Keep the assertion scoped to the inner browsing context."
+      ],
+      "estimatedMinutes": 25,
+      "version": "1.0.0"
+    },
+    {
+      "id": "PW-FILE-001",
+      "slug": "upload-customer-csv",
+      "title": "Upload a valid CSV",
+      "difficulty": "Intermediate",
+      "skills": [
+        "files",
+        "forms"
+      ],
+      "technology": "Playwright",
+      "feature": "Files",
+      "application": "Component Lab",
+      "scenario": "A tester uploads synthetic customer data through the native file input.",
+      "objective": "Upload a valid CSV and verify its accepted filename and content classification.",
+      "preconditions": [
+        "Use a fresh isolated Practice Lab browser context.",
+        "Open the fixture identified by FX-FILE-001."
+      ],
+      "testData": [
+        "filename: customers.csv",
+        "content: name,email\\nAsha,asha@example.test"
+      ],
+      "expectedResult": "The upload is accepted and the filename customers.csv is displayed.",
+      "hints": [
+        "Create the file payload in memory.",
+        "Use setInputFiles on the native input.",
+        "Assert the accepted status and filename."
+      ],
+      "relatedGuide": {
+        "title": "Playwright end-to-end testing guide",
+        "url": "https://testheon.com/playwright-e2e/"
+      },
+      "relatedFixtures": [
+        "FX-FILE-001"
+      ],
+      "solutionApproach": [
+        "Create the file payload in memory.",
+        "Use setInputFiles on the native input.",
+        "Assert the accepted status and filename."
+      ],
+      "estimatedMinutes": 25,
+      "version": "1.0.0"
+    },
+    {
+      "id": "PW-AUTH-002",
+      "slug": "reuse-storage-state",
+      "title": "Reuse authenticated storage state",
+      "difficulty": "Intermediate",
+      "skills": [
+        "authentication",
+        "storage-state"
+      ],
+      "technology": "Playwright",
+      "feature": "Authentication",
+      "application": "Authentication sandbox",
+      "scenario": "Several specs need the same signed-in customer without repeating UI login.",
+      "objective": "Save standard_user browser state and reuse it in a fresh context.",
+      "preconditions": [
+        "Use a fresh isolated Practice Lab browser context.",
+        "Open the fixture identified by FX-AUTH-001."
+      ],
+      "testData": [
+        "standard_user",
+        "Practice@123",
+        "state file: playwright/.auth/customer.json"
+      ],
+      "expectedResult": "A new page starts authenticated as standard_user without submitting login.",
+      "hints": [
+        "Authenticate once in setup.",
+        "Call storageState after the signed-in assertion.",
+        "Create a new context from that state and inspect the session."
+      ],
+      "relatedGuide": {
+        "title": "Playwright authentication guide",
+        "url": "https://testheon.com/playwright-authentication/"
+      },
+      "relatedFixtures": [
+        "FX-AUTH-001"
+      ],
+      "solutionApproach": [
+        "Authenticate once in setup.",
+        "Call storageState after the signed-in assertion.",
+        "Create a new context from that state and inspect the session."
+      ],
+      "estimatedMinutes": 25,
+      "version": "1.0.0"
+    },
+    {
+      "id": "PW-API-001",
+      "slug": "create-and-fetch-user-api",
+      "title": "Create and fetch a user through the API",
+      "difficulty": "Intermediate",
+      "skills": [
+        "api",
+        "request-context"
+      ],
+      "technology": "Playwright",
+      "feature": "API",
+      "application": "Practice API",
+      "scenario": "A test needs a unique session-scoped user fixture.",
+      "objective": "Create a user, read it by returned ID, and compare the fields.",
+      "preconditions": [
+        "Use a fresh isolated Practice Lab browser context.",
+        "Open the fixture identified by FX-FORM-001."
+      ],
+      "testData": [
+        "name: API Learner",
+        "email: api.learner@example.test",
+        "role: learner"
+      ],
+      "expectedResult": "POST returns 201 and GET returns the same synthetic user.",
+      "hints": [
+        "Create a Lab session and retain its cookie/header.",
+        "Send the CSRF token for POST.",
+        "Read the Location or response id, then GET that record."
+      ],
+      "relatedGuide": {
+        "title": "Playwright API testing guide",
+        "url": "https://testheon.com/playwright-api-testing/"
+      },
+      "relatedFixtures": [
+        "FX-FORM-001"
+      ],
+      "solutionApproach": [
+        "Create a Lab session and retain its cookie/header.",
+        "Send the CSRF token for POST.",
+        "Read the Location or response id, then GET that record."
+      ],
+      "estimatedMinutes": 25,
+      "version": "1.0.0"
+    },
+    {
+      "id": "PW-NET-001",
+      "slug": "mock-empty-catalogue",
+      "title": "Mock an empty catalogue",
+      "difficulty": "Intermediate",
+      "skills": [
+        "network-mocking",
+        "ecommerce"
+      ],
+      "technology": "Playwright",
+      "feature": "Network mocking",
+      "application": "Testheon Store",
+      "scenario": "The catalogue must remain usable when the backend returns no products.",
+      "objective": "Fulfil the catalogue request with an empty data array and assert the empty state.",
+      "preconditions": [
+        "Use a fresh isolated Practice Lab browser context.",
+        "Open the fixture identified by FX-STORE-001."
+      ],
+      "testData": [
+        "response: { data: [], meta: { total: 0 } }"
+      ],
+      "expectedResult": "No product cards render and the explicit no-products state is visible.",
+      "hints": [
+        "Install page.route before navigation.",
+        "Match only the store catalogue endpoint.",
+        "Return valid JSON with an empty data array and total zero."
+      ],
+      "relatedGuide": {
+        "title": "Playwright API testing guide",
+        "url": "https://testheon.com/playwright-api-testing/"
+      },
+      "relatedFixtures": [
+        "FX-STORE-001"
+      ],
+      "solutionApproach": [
+        "Install page.route before navigation.",
+        "Match only the store catalogue endpoint.",
+        "Return valid JSON with an empty data array and total zero."
+      ],
+      "estimatedMinutes": 25,
+      "version": "1.0.0"
+    },
+    {
+      "id": "PW-DLG-002",
+      "slug": "submit-browser-prompt",
+      "title": "Submit a browser prompt",
+      "difficulty": "Intermediate",
+      "skills": [
+        "dialogs",
+        "events"
+      ],
+      "technology": "Playwright",
+      "feature": "Dialogs",
+      "application": "Component Lab",
+      "scenario": "A prompt captures a synthetic release label.",
+      "objective": "Fill the prompt and verify the page echoes the supplied value.",
+      "preconditions": [
+        "Use a fresh isolated Practice Lab browser context.",
+        "Open the fixture identified by FX-DIALOG-001."
+      ],
+      "testData": [
+        "prompt value: release-55"
+      ],
+      "expectedResult": "The visible prompt result contains release-55.",
+      "hints": [
+        "Register page.once(dialog) before the click.",
+        "Check dialog.type() is prompt.",
+        "Call accept with the supplied value."
+      ],
+      "relatedGuide": {
+        "title": "Playwright end-to-end testing guide",
+        "url": "https://testheon.com/playwright-e2e/"
+      },
+      "relatedFixtures": [
+        "FX-DIALOG-001"
+      ],
+      "solutionApproach": [
+        "Register page.once(dialog) before the click.",
+        "Check dialog.type() is prompt.",
+        "Call accept with the supplied value."
+      ],
+      "estimatedMinutes": 25,
+      "version": "1.0.0"
+    },
+    {
+      "id": "PW-APIUI-001",
+      "slug": "create-customer-api-verify-table",
+      "title": "Create a customer through API and verify the UI table",
+      "difficulty": "Advanced",
+      "skills": [
+        "api",
+        "tables",
+        "api-ui"
+      ],
+      "technology": "Playwright",
+      "feature": "API + UI",
+      "application": "Table Lab",
+      "scenario": "A test creates deterministic data cheaply through the API, then verifies the customer-facing UI.",
+      "objective": "POST a customer and verify it appears in the Customer API table.",
+      "preconditions": [
+        "Use a fresh isolated Practice Lab browser context.",
+        "Open the fixture identified by FX-TABLE-001, FX-FORM-001."
+      ],
+      "testData": [
+        "name: Mira Challenge",
+        "email: mira.challenge@example.test",
+        "city: Pune",
+        "tier: gold",
+        "active: true"
+      ],
+      "expectedResult": "The created customer ID and Mira Challenge appear in the UI customer table after refresh.",
+      "hints": [
+        "Start a Lab session and use its CSRF token.",
+        "Create the customer before opening the table page.",
+        "Click Refresh customer table and locate the row by returned ID."
+      ],
+      "relatedGuide": {
+        "title": "Playwright API testing guide",
+        "url": "https://testheon.com/playwright-api-testing/"
+      },
+      "relatedFixtures": [
+        "FX-TABLE-001",
+        "FX-FORM-001"
+      ],
+      "solutionApproach": [
+        "Start a Lab session and use its CSRF token.",
+        "Create the customer before opening the table page.",
+        "Click Refresh customer table and locate the row by returned ID."
+      ],
+      "estimatedMinutes": 40,
+      "version": "1.0.0"
+    },
+    {
+      "id": "PW-AUTH-003",
+      "slug": "verify-forbidden-role",
+      "title": "Verify a role-based 403",
+      "difficulty": "Advanced",
+      "skills": [
+        "authentication",
+        "api",
+        "authorization"
+      ],
+      "technology": "Playwright",
+      "feature": "Authentication",
+      "application": "Authentication sandbox",
+      "scenario": "An authenticated Customer must not use a Manager-only route.",
+      "objective": "Authenticate as standard_user, call the Manager-only API, and verify 403.",
+      "preconditions": [
+        "Use a fresh isolated Practice Lab browser context.",
+        "Open the fixture identified by FX-AUTH-001."
+      ],
+      "testData": [
+        "standard_user",
+        "Practice@123"
+      ],
+      "expectedResult": "The protected route returns 403 with an authorization error, not 401.",
+      "hints": [
+        "Authenticate before calling the protected route.",
+        "Retain the auth cookie or bearer token.",
+        "Assert both status 403 and the stable error code."
+      ],
+      "relatedGuide": {
+        "title": "Playwright authentication guide",
+        "url": "https://testheon.com/playwright-authentication/"
+      },
+      "relatedFixtures": [
+        "FX-AUTH-001"
+      ],
+      "solutionApproach": [
+        "Authenticate before calling the protected route.",
+        "Retain the auth cookie or bearer token.",
+        "Assert both status 403 and the stable error code."
+      ],
+      "estimatedMinutes": 40,
+      "version": "1.0.0"
+    },
+    {
+      "id": "PW-ECOM-003",
+      "slug": "checkout-and-verify-order-api",
+      "title": "Checkout and verify the order API",
+      "difficulty": "Advanced",
+      "skills": [
+        "ecommerce",
+        "api-ui",
+        "checkout"
+      ],
+      "technology": "Playwright",
+      "feature": "Ecommerce",
+      "application": "Testheon Store",
+      "scenario": "A complete purchase flow needs backend verification without any real payment.",
+      "objective": "Add a product, sign in, complete fake checkout, and verify the order through the API.",
+      "preconditions": [
+        "Use a fresh isolated Practice Lab browser context.",
+        "Open the fixture identified by FX-STORE-001, FX-AUTH-001."
+      ],
+      "testData": [
+        "standard_user",
+        "Practice@123",
+        "card: 4242424242424242",
+        "expiry: 12/30",
+        "cvv: 123"
+      ],
+      "expectedResult": "The UI confirms an order with charged=false and GET orders/{id} matches its total and items.",
+      "hints": [
+        "Capture the order ID from the confirmation page.",
+        "Use only the published fake card.",
+        "Fetch the order in the same authenticated session and compare key fields."
+      ],
+      "relatedGuide": {
+        "title": "Playwright API testing guide",
+        "url": "https://testheon.com/playwright-api-testing/"
+      },
+      "relatedFixtures": [
+        "FX-STORE-001",
+        "FX-AUTH-001"
+      ],
+      "solutionApproach": [
+        "Capture the order ID from the confirmation page.",
+        "Use only the published fake card.",
+        "Fetch the order in the same authenticated session and compare key fields."
+      ],
+      "estimatedMinutes": 40,
+      "version": "1.0.0"
+    },
+    {
+      "id": "PW-NET-002",
+      "slug": "modify-product-response",
+      "title": "Modify a product response",
+      "difficulty": "Advanced",
+      "skills": [
+        "network-mocking",
+        "api"
+      ],
+      "technology": "Playwright",
+      "feature": "Network mocking",
+      "application": "Testheon Store",
+      "scenario": "A UI assertion needs a controlled server response while preserving the real schema.",
+      "objective": "Fetch the real catalogue response, rename one product, and fulfil the request.",
+      "preconditions": [
+        "Use a fresh isolated Practice Lab browser context.",
+        "Open the fixture identified by FX-STORE-001."
+      ],
+      "testData": [
+        "replacement name: Mocked QA Laptop"
+      ],
+      "expectedResult": "The modified name is rendered and the server seed remains unchanged.",
+      "hints": [
+        "Use route.fetch for the original response.",
+        "Change one object without removing required fields.",
+        "Fulfil with the modified JSON, then query the API separately to prove isolation."
+      ],
+      "relatedGuide": {
+        "title": "Playwright API testing guide",
+        "url": "https://testheon.com/playwright-api-testing/"
+      },
+      "relatedFixtures": [
+        "FX-STORE-001"
+      ],
+      "solutionApproach": [
+        "Use route.fetch for the original response.",
+        "Change one object without removing required fields.",
+        "Fulfil with the modified JSON, then query the API separately to prove isolation."
+      ],
+      "estimatedMinutes": 40,
+      "version": "1.0.0"
+    },
+    {
+      "id": "PW-FILE-002",
+      "slug": "reject-active-svg-upload",
+      "title": "Reject active SVG content",
+      "difficulty": "Advanced",
+      "skills": [
+        "files",
+        "security"
+      ],
+      "technology": "Playwright",
+      "feature": "Files",
+      "application": "Component Lab",
+      "scenario": "An upload carrying active SVG content must never reach private storage.",
+      "objective": "Attempt to upload an SVG with a script and verify safe rejection.",
+      "preconditions": [
+        "Use a fresh isolated Practice Lab browser context.",
+        "Open the fixture identified by FX-FILE-001."
+      ],
+      "testData": [
+        "filename: unsafe.svg",
+        "content: <svg><script>alert(1)</script></svg>"
+      ],
+      "expectedResult": "The API rejects the file, reports the allowlist/content rule, and creates no download token.",
+      "hints": [
+        "Build the file payload in memory.",
+        "Assert the error code rather than browser wording alone.",
+        "Verify no accepted file row or token appears."
+      ],
+      "relatedGuide": {
+        "title": "Playwright end-to-end testing guide",
+        "url": "https://testheon.com/playwright-e2e/"
+      },
+      "relatedFixtures": [
+        "FX-FILE-001"
+      ],
+      "solutionApproach": [
+        "Build the file payload in memory.",
+        "Assert the error code rather than browser wording alone.",
+        "Verify no accepted file row or token appears."
+      ],
+      "estimatedMinutes": 40,
+      "version": "1.0.0"
+    },
+    {
+      "id": "PW-DBG-001",
+      "slug": "debug-hidden-race",
+      "title": "Debug a hidden race condition",
+      "difficulty": "Advanced",
+      "skills": [
+        "debugging",
+        "trace-viewer",
+        "waits"
+      ],
+      "technology": "Playwright",
+      "feature": "Debugging",
+      "application": "Waits Lab",
+      "scenario": "A provided test reads delayed text immediately and fails intermittently.",
+      "objective": "Run the failing test with trace, diagnose the race, and replace the eager read with a web-first assertion.",
+      "preconditions": [
+        "Use a fresh isolated Practice Lab browser context.",
+        "Open the fixture identified by FX-WAIT-001."
+      ],
+      "testData": [
+        "starter: examples/debugging/hidden-race.spec.ts"
+      ],
+      "expectedResult": "The trace proves the assertion ran before the delayed update; the repaired test waits on the final text.",
+      "hints": [
+        "Open the action timeline in Trace Viewer.",
+        "Compare the assertion timestamp with the DOM snapshot.",
+        "Use expect(locator).toHaveText instead of reading textContent immediately."
+      ],
+      "relatedGuide": {
+        "title": "Playwright end-to-end testing guide",
+        "url": "https://testheon.com/playwright-e2e/"
+      },
+      "relatedFixtures": [
+        "FX-WAIT-001"
+      ],
+      "starterCode": "examples/debugging/hidden-race.spec.ts",
+      "solutionApproach": [
+        "Open the action timeline in Trace Viewer.",
+        "Compare the assertion timestamp with the DOM snapshot.",
+        "Use expect(locator).toHaveText instead of reading textContent immediately."
+      ],
+      "estimatedMinutes": 40,
+      "version": "1.0.0"
+    },
+    {
+      "id": "PW-DBG-002",
+      "slug": "debug-wrong-locator",
+      "title": "Debug a wrong locator",
+      "difficulty": "Advanced",
+      "skills": [
+        "debugging",
+        "trace-viewer",
+        "locators"
+      ],
+      "technology": "Playwright",
+      "feature": "Debugging",
+      "application": "Locator Lab",
+      "scenario": "A broad text locator resolves to several repeated labels.",
+      "objective": "Use the trace DOM snapshot to diagnose strict-mode ambiguity and scope the locator.",
+      "preconditions": [
+        "Use a fresh isolated Practice Lab browser context.",
+        "Open the fixture identified by FX-LOCATOR-001."
+      ],
+      "testData": [
+        "starter: examples/debugging/wrong-locator.spec.ts"
+      ],
+      "expectedResult": "The diagnosis identifies repeated text; the repaired test scopes by region and role.",
+      "hints": [
+        "Inspect the strict-mode error and locator count.",
+        "Use the trace snapshot to find the intended card.",
+        "Scope to Good DOM, then use getByRole with the accessible name."
+      ],
+      "relatedGuide": {
+        "title": "Playwright locators guide",
+        "url": "https://testheon.com/playwright-locators/"
+      },
+      "relatedFixtures": [
+        "FX-LOCATOR-001"
+      ],
+      "starterCode": "examples/debugging/wrong-locator.spec.ts",
+      "solutionApproach": [
+        "Inspect the strict-mode error and locator count.",
+        "Use the trace snapshot to find the intended card.",
+        "Scope to Good DOM, then use getByRole with the accessible name."
+      ],
+      "estimatedMinutes": 40,
+      "version": "1.0.0"
+    },
+    {
+      "id": "PW-DBG-003",
+      "slug": "debug-unhandled-dialog",
+      "title": "Debug an unhandled dialog",
+      "difficulty": "Expert",
+      "skills": [
+        "debugging",
+        "trace-viewer",
+        "dialogs"
+      ],
+      "technology": "Playwright",
+      "feature": "Debugging",
+      "application": "Dialogs Lab",
+      "scenario": "A native confirm appears before the test registers its handler, leaving the flow in the wrong state.",
+      "objective": "Diagnose the event ordering with trace/video/console evidence and register the handler before the click.",
+      "preconditions": [
+        "Use a fresh isolated Practice Lab browser context.",
+        "Open the fixture identified by FX-DIALOG-001."
+      ],
+      "testData": [
+        "starter: examples/debugging/unhandled-dialog.spec.ts"
+      ],
+      "expectedResult": "The diagnosis identifies late handler registration; the repaired test handles the confirm before triggering it.",
+      "hints": [
+        "Inspect the trace action that triggered the dialog.",
+        "Check whether the dialog listener existed before click.",
+        "Register page.once(dialog) first, then click and assert the accepted result."
+      ],
+      "relatedGuide": {
+        "title": "Playwright end-to-end testing guide",
+        "url": "https://testheon.com/playwright-e2e/"
+      },
+      "relatedFixtures": [
+        "FX-DIALOG-001"
+      ],
+      "starterCode": "examples/debugging/unhandled-dialog.spec.ts",
+      "solutionApproach": [
+        "Inspect the trace action that triggered the dialog.",
+        "Check whether the dialog listener existed before click.",
+        "Register page.once(dialog) first, then click and assert the accepted result."
+      ],
+      "estimatedMinutes": 60,
+      "version": "1.0.0"
+    },
+    {
+      "id": "PW-AUTH-004",
+      "slug": "api-auth-session-and-orders-500",
+      "title": "Authenticate by API, reuse session, and handle orders 500",
+      "difficulty": "Expert",
+      "skills": [
+        "authentication",
+        "api",
+        "storage-state",
+        "network-mocking"
+      ],
+      "technology": "Playwright",
+      "feature": "Authentication + network",
+      "application": "Testheon Store",
+      "scenario": "An expert suite must skip UI login, preserve the customer session, and verify a resilient order-history error state.",
+      "objective": "Authenticate through the API, reuse the session in Playwright, intercept the orders API with HTTP 500, and verify the visible error state.",
+      "preconditions": [
+        "Use a fresh isolated Practice Lab browser context.",
+        "Open the fixture identified by FX-AUTH-001, FX-STORE-001."
+      ],
+      "testData": [
+        "standard_user",
+        "Practice@123",
+        "mock status: 500"
+      ],
+      "expectedResult": "The browser is authenticated without UI login and Order history renders its assertion-ready 500 error state.",
+      "hints": [
+        "Create the session and authenticate in APIRequestContext.",
+        "Export or transfer the resulting cookie into the browser context.",
+        "Route only the orders request and fulfil with the API error envelope plus status 500."
+      ],
+      "relatedGuide": {
+        "title": "Playwright authentication guide",
+        "url": "https://testheon.com/playwright-authentication/"
+      },
+      "relatedFixtures": [
+        "FX-AUTH-001",
+        "FX-STORE-001"
+      ],
+      "solutionApproach": [
+        "Create the session and authenticate in APIRequestContext.",
+        "Export or transfer the resulting cookie into the browser context.",
+        "Route only the orders request and fulfil with the API error envelope plus status 500."
+      ],
+      "estimatedMinutes": 60,
+      "version": "1.0.0"
+    },
+    {
+      "id": "PW-API-002",
+      "slug": "prove-sandbox-isolation-reset",
+      "title": "Prove API sandbox isolation and reset",
+      "difficulty": "Expert",
+      "skills": [
+        "api",
+        "isolation",
+        "reset"
+      ],
+      "technology": "Playwright",
+      "feature": "API",
+      "application": "Practice API",
+      "scenario": "Parallel workers must never see one another’s created records and reset must restore the seed.",
+      "objective": "Create independent sessions, mutate one, prove isolation, then reset and verify seed restoration.",
+      "preconditions": [
+        "Use a fresh isolated Practice Lab browser context.",
+        "Open the fixture identified by FX-FORM-001, FX-TABLE-001."
+      ],
+      "testData": [
+        "session A customer: isolated.a@example.test",
+        "session B"
+      ],
+      "expectedResult": "Session B never sees session A data; reset removes overlays and restores all seed records.",
+      "hints": [
+        "Use distinct header-mode session IDs.",
+        "Query the same collection from both sessions.",
+        "Send the reset CSRF token for session A and compare counts to seed metadata."
+      ],
+      "relatedGuide": {
+        "title": "Playwright API testing guide",
+        "url": "https://testheon.com/playwright-api-testing/"
+      },
+      "relatedFixtures": [
+        "FX-FORM-001",
+        "FX-TABLE-001"
+      ],
+      "solutionApproach": [
+        "Use distinct header-mode session IDs.",
+        "Query the same collection from both sessions.",
+        "Send the reset CSRF token for session A and compare counts to seed metadata."
+      ],
+      "estimatedMinutes": 60,
+      "version": "1.0.0"
+    },
+    {
+      "id": "PW-ECOM-004",
+      "slug": "recover-from-malformed-store-response",
+      "title": "Recover from malformed store data",
+      "difficulty": "Expert",
+      "skills": [
+        "ecommerce",
+        "network",
+        "error-recovery"
+      ],
+      "technology": "Playwright",
+      "feature": "Ecommerce",
+      "application": "Testheon Store",
+      "scenario": "The catalogue receives malformed JSON once and must recover on the next request.",
+      "objective": "Arm the malformed scenario, verify the explicit error, retry, and verify products return.",
+      "preconditions": [
+        "Use a fresh isolated Practice Lab browser context.",
+        "Open the fixture identified by FX-STORE-001."
+      ],
+      "testData": [
+        "scenario: malformed"
+      ],
+      "expectedResult": "The first request displays MALFORMED_JSON without an uncaught page error; the retry succeeds.",
+      "hints": [
+        "Arm the one-shot scenario from the Store overview.",
+        "Listen for pageerror and require none.",
+        "Retry the same request and assert a known product."
+      ],
+      "relatedGuide": {
+        "title": "Playwright end-to-end testing guide",
+        "url": "https://testheon.com/playwright-e2e/"
+      },
+      "relatedFixtures": [
+        "FX-STORE-001"
+      ],
+      "solutionApproach": [
+        "Arm the one-shot scenario from the Store overview.",
+        "Listen for pageerror and require none.",
+        "Retry the same request and assert a known product."
+      ],
+      "estimatedMinutes": 60,
+      "version": "1.0.0"
+    }
+  ]
+}

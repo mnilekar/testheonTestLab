@@ -1,0 +1,191 @@
+---
+import DifficultyBadge from '../../../components/DifficultyBadge.astro';
+import LabLayout from '../../../layouts/LabLayout.astro';
+import Solution from '../../../components/Solution.astro';
+import {
+  challenges,
+  fixtureById,
+  fixtureHref,
+  type Challenge,
+} from '../../../lib/challenges';
+
+export function getStaticPaths() {
+  return challenges.map((challenge) => ({
+    params: { slug: challenge.slug },
+    props: { challenge },
+  }));
+}
+
+interface Props {
+  challenge: Challenge;
+}
+const { challenge } = Astro.props;
+const practiceHref = fixtureHref(challenge);
+const isEcommerce = challenge.application === 'Testheon Store';
+---
+
+<LabLayout
+  title={challenge.title}
+  description={challenge.objective}
+  canonicalPath={`/challenges/${challenge.slug}/`}
+  robots="noindex,follow"
+  breadcrumbs={[
+    { label: 'Practice Lab', href: '/practice/' },
+    { label: 'Challenges', href: '/practice/challenges/' },
+    { label: challenge.title },
+  ]}
+>
+  <section class="hero challenge-detail-hero">
+    <div class="container">
+      <div class="challenge-card__meta">
+        <DifficultyBadge level={challenge.difficulty} />
+        <span>{challenge.id}</span>
+        <span>{challenge.estimatedMinutes} minutes</span>
+        <span>{challenge.technology}</span>
+      </div>
+      <h1>{challenge.title}</h1>
+      <p class="lede">{challenge.scenario}</p>
+      <ul class="tag-list" aria-label="Skills">
+        {challenge.skills.map((skill) => (
+          <li>{skill}</li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container challenge-detail">
+      <article>
+        <section aria-labelledby="objective">
+          <p class="eyebrow">Objective</p>
+          <h2 id="objective">What to automate</h2>
+          <p>{challenge.objective}</p>
+        </section>
+        <section aria-labelledby="preconditions">
+          <h2 id="preconditions">Preconditions and test data</h2>
+          <h3>Preconditions</h3>
+          <ul>
+            {challenge.preconditions.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+          <h3>Test data</h3>
+          <ul>
+            {challenge.testData.map((item) => (
+              <li>
+                <code>{item}</code>
+              </li>
+            ))}
+          </ul>
+        </section>
+        <section aria-labelledby="expected">
+          <h2 id="expected">Expected result</h2>
+          <p>{challenge.expectedResult}</p>
+        </section>
+
+        <div class="hero__actions">
+          <a class="button button--primary" href={practiceHref}>
+            Open practice page
+          </a>
+          <a class="button button--secondary" href={challenge.relatedGuide.url}>
+            Read related guide
+          </a>
+        </div>
+
+        {isEcommerce && (
+          <aside class="download-panel" aria-labelledby="test-pack-heading">
+            <h2 id="test-pack-heading">Ecommerce test-case pack</h2>
+            <p>Use the same 50 functional cases as JSON, CSV, or Markdown.</p>
+            <ul>
+              <li>
+                <a
+                  download
+                  href="/practice/downloads/test-cases/ecommerce.json"
+                >
+                  JSON test pack
+                </a>
+              </li>
+              <li>
+                <a download href="/practice/downloads/test-cases/ecommerce.csv">
+                  CSV test pack
+                </a>
+              </li>
+              <li>
+                <a download href="/practice/downloads/test-cases/ecommerce.md">
+                  Markdown test pack
+                </a>
+              </li>
+            </ul>
+          </aside>
+        )}
+
+        <section aria-labelledby="hints-heading">
+          <h2 id="hints-heading">Progressive hints</h2>
+          <div class="hint-stack">
+            {challenge.hints.map((hint, index) => (
+              <details>
+                <summary>Hint {index + 1}</summary>
+                <p>{hint}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+
+        <Solution summary="I’ve tried it — show solution">
+          <ol>
+            {challenge.solutionApproach.map((step) => (
+              <li>{step}</li>
+            ))}
+          </ol>
+          {challenge.starterCode && (
+            <p>
+              The deliberately failing starter is in{' '}
+              <code>{challenge.starterCode}</code> inside the TypeScript starter
+              ZIP.
+            </p>
+          )}
+        </Solution>
+      </article>
+
+      <aside class="challenge-facts" aria-labelledby="facts-heading">
+        <h2 id="facts-heading">Challenge facts</h2>
+        <dl>
+          <div>
+            <dt>Feature</dt>
+            <dd>{challenge.feature}</dd>
+          </div>
+          <div>
+            <dt>Application</dt>
+            <dd>{challenge.application}</dd>
+          </div>
+          <div>
+            <dt>Version</dt>
+            <dd>{challenge.version}</dd>
+          </div>
+        </dl>
+        <h3>Related fixtures</h3>
+        <ul>
+          {challenge.relatedFixtures.map((id) => {
+            const fixture = fixtureById.get(id);
+            return (
+              <li>
+                <a
+                  href={
+                    fixture
+                      ? `${fixture.url}${fixture.anchor ?? ''}`
+                      : '/practice/'
+                  }
+                >
+                  {id}: {fixture?.title ?? 'Fixture'}
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+        <a download href="/practice/downloads/playwright-ts-starter.zip">
+          Download the TypeScript starter
+        </a>
+      </aside>
+    </div>
+  </section>
+</LabLayout>
