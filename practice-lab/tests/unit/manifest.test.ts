@@ -8,7 +8,7 @@ async function loadJson(path: string): Promise<unknown> {
 }
 
 describe('fixture manifest', () => {
-  it('accepts the registered Chunk 9 fixtures and anchors', async () => {
+  it('accepts the frozen 1.0.0 contract and registered fixtures', async () => {
     const manifest = await loadJson('fixtures/manifest.json');
     const schema = (await loadJson('fixtures/manifest.schema.json')) as Record<
       string,
@@ -19,9 +19,12 @@ describe('fixture manifest', () => {
       valid: true,
       errors: [],
     });
+    expect((manifest as { contractVersion: string }).contractVersion).toBe(
+      '1.0.0',
+    );
     const fixtures = (manifest as { fixtures: Array<{ anchor: string }> })
       .fixtures;
-    expect(fixtures).toHaveLength(19);
+    expect(fixtures).toHaveLength(20);
     expect(fixtures.every((fixture) => fixture.anchor.startsWith('#'))).toBe(
       true,
     );
@@ -54,6 +57,7 @@ describe('fixture manifest', () => {
     const manifest = {
       $schema: './manifest.schema.json',
       manifestVersion: '1.0.0',
+      contractVersion: '1.0.0',
       updatedAt: '2026-09-27',
       fixtures: [fixture, fixture],
     };

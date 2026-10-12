@@ -68,6 +68,27 @@ const path = Astro.url.pathname;
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta name="theme-color" content="#6528f7" />
+    <link
+      rel="preload"
+      href="/practice/fonts/inter-latin-variable.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/practice/fonts/poppins-latin-600.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/practice/fonts/poppins-latin-700.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
     <link rel="icon" href="/practice/favicon.svg" type="image/svg+xml" />
     <title>{fullTitle}</title>
     <script type="application/ld+json" set:html={breadcrumbJson}></script>
@@ -140,7 +161,7 @@ const path = Astro.url.pathname;
         ))}
       </ol>
     </nav>
-    <main id="main-content">
+    <main id="main-content" tabindex="-1">
       <slot />
     </main>
     <footer class="site-footer">

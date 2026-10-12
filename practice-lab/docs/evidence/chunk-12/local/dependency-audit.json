@@ -1,0 +1,18 @@
+{
+  "generatedAt": "2026-10-12T10:08:00+05:30",
+  "command": "pnpm audit --audit-level high --json",
+  "pass": true,
+  "vulnerabilities": {
+    "info": 0,
+    "low": 0,
+    "moderate": 0,
+    "high": 0,
+    "critical": 0
+  },
+  "totalDependencies": 648,
+  "remediation": [
+    "http-cache-semantics overridden to 4.3.0",
+    "source-map-js overridden to 1.2.2",
+    "sharp overridden to 0.35.5"
+  ]
+}

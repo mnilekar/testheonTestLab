@@ -114,12 +114,12 @@ async function ensureSession(): Promise<void> {
     : 'Isolated sandbox ready · live deterministic mode';
 }
 
-function productCard(product: JsonRecord): string {
+function productCard(product: JsonRecord, index = 0): string {
   const images = product.images as JsonRecord[] | undefined;
   const image = images?.[0] ?? {};
   return `<article class="store-product-card" data-product-id="${escapeHtml(product.id)}">
     <a class="store-product-card__image" href="/practice/apps/ecommerce/product/?id=${encodeURIComponent(String(product.id))}">
-      <img src="${escapeHtml(image.src)}" alt="${escapeHtml(image.alt)}" width="480" height="320" />
+      <img src="${escapeHtml(image.src)}" alt="${escapeHtml(image.alt)}" width="480" height="320" loading="${index < 3 ? 'eager' : 'lazy'}" decoding="async" />
     </a>
     <div class="store-product-card__body">
       <p class="card__eyebrow">${escapeHtml(product.category)} · ${escapeHtml(product.rating)} ★</p>
@@ -343,7 +343,7 @@ async function initProduct(): Promise<void> {
     const images = product.images as JsonRecord[];
     const variants = product.variants as JsonRecord[];
     const reviews = product.reviews as JsonRecord[];
-    container.innerHTML = `<div class="store-gallery">${images.map((image, index) => `<img src="${escapeHtml(image.src)}" alt="${escapeHtml(image.alt)}" width="640" height="420" ${index === 0 ? 'data-primary-image="true"' : ''} />`).join('')}</div>
+    container.innerHTML = `<div class="store-gallery">${images.map((image, index) => `<img src="${escapeHtml(image.src)}" alt="${escapeHtml(image.alt)}" width="640" height="420" loading="${index === 0 ? 'eager' : 'lazy'}" decoding="async" ${index === 0 ? 'data-primary-image="true"' : ''} />`).join('')}</div>
       <div class="store-detail__content"><p class="eyebrow">${escapeHtml(product.category)} · ${escapeHtml(product.sku)}</p><h1>${escapeHtml(product.name)}</h1><p class="store-price">${money(product.price)}</p><p>${escapeHtml(product.summary)}</p><p class="store-stock">${Number(product.stock) > 0 ? `${escapeHtml(product.stock)} units in stock` : 'Out of stock'}</p>
       <form id="store-add-form" class="store-panel store-add-form"><div><label for="product-variant">Variant</label><select id="product-variant" name="variant">${(variants[0]?.values as string[]).map((value) => `<option>${escapeHtml(value)} / Single</option>`).join('')}</select></div><div><label for="product-quantity">Quantity</label><input id="product-quantity" name="quantity" type="number" min="1" max="20" value="1" /></div><button class="button button--primary" type="submit">Add to cart</button><p id="product-add-result" class="result" role="status">Not added yet.</p></form>
       <section aria-labelledby="reviews-title"><h2 id="reviews-title">Fictional sample reviews</h2><div class="store-reviews">${reviews.map((review) => `<article><h3>${escapeHtml(review.author)} · ${escapeHtml(review.rating)} ★</h3><p>${escapeHtml(review.text)}</p></article>`).join('')}</div></section></div>`;

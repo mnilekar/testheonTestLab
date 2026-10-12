@@ -18,6 +18,9 @@ const LAB_API_UPLOAD_MAX_FILES = 5;
 const LAB_API_UPLOAD_SESSION_BYTES = 6291456;
 const LAB_API_UPLOAD_TTL = 600;
 
+$GLOBALS['lab_api_request_started_ns'] = hrtime(true);
+$GLOBALS['lab_api_simulated'] = false;
+
 require_once __DIR__ . '/api-auth.php';
 require_once __DIR__ . '/api-store.php';
 
@@ -114,8 +117,54 @@ function lab_api_common_headers(string $requestId, string $contentType = 'applic
     header('Referrer-Policy: no-referrer');
 }
 
+function lab_api_is_simulated(?string $code = null): bool
+{
+    $path = (string) parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH);
+    return ($GLOBALS['lab_api_simulated'] ?? false) === true
+        || str_contains($path, '/v1/sim/')
+        || isset($_GET['simulate'])
+        || ($code !== null && str_contains($code, 'SIMULATED'));
+}
+
+function lab_api_record_metric(int $status): void
+{
+    $pdo = $GLOBALS['lab_api_metrics_pdo'] ?? null;
+    if (!$pdo instanceof PDO) {
+        return;
+    }
+    try {
+        $started = (int) ($GLOBALS['lab_api_request_started_ns'] ?? hrtime(true));
+        $durationMs = max(0.0, (hrtime(true) - $started) / 1000000);
+        $path = preg_replace('/[^A-Za-z0-9_\/-]/', '', (string) parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH));
+        $insert = $pdo->prepare('INSERT INTO lab_api_metrics(observed_at, route, duration_ms, status, simulated) VALUES (?, ?, ?, ?, ?)');
+        $insert->execute([time(), $path, round($durationMs, 3), $status, lab_api_is_simulated() ? 1 : 0]);
+        $pdo->exec('DELETE FROM lab_api_metrics WHERE id NOT IN (SELECT id FROM lab_api_metrics ORDER BY id DESC LIMIT 1000)');
+    } catch (Throwable) {
+        // Metrics must never alter a fixture response.
+    }
+}
+
+function lab_api_metric_summary(PDO $pdo): array
+{
+    $rows = $pdo->query('SELECT duration_ms, status, simulated FROM lab_api_metrics ORDER BY id DESC LIMIT 1000')->fetchAll();
+    $durations = array_map(static fn(array $row): float => (float) $row['duration_ms'], $rows);
+    sort($durations, SORT_NUMERIC);
+    $count = count($rows);
+    $p95 = $count === 0 ? 0.0 : $durations[(int) max(0, ceil($count * 0.95) - 1)];
+    $realErrors = count(array_filter($rows, static fn(array $row): bool => (int) $row['status'] >= 500 && (int) $row['simulated'] === 0));
+    $realRequests = count(array_filter($rows, static fn(array $row): bool => (int) $row['simulated'] === 0));
+    return [
+        'window' => 'last_1000_application_requests',
+        'requestCount' => $count,
+        'p95LatencyMs' => round($p95, 3),
+        'realErrorRate' => $realRequests === 0 ? 0.0 : round($realErrors / $realRequests, 6),
+        'simulatedErrorsExcluded' => true,
+    ];
+}
+
 function lab_api_send(array $payload, int $status, string $requestId, array $headers = []): never
 {
+    lab_api_record_metric($status);
     lab_api_common_headers($requestId);
     foreach ($headers as $name => $value) {
         header($name . ': ' . $value);
@@ -130,7 +179,18 @@ function lab_api_send(array $payload, int $status, string $requestId, array $hea
 function lab_api_error(string $requestId, int $status, string $code, string $message, array $details = [], array $headers = []): never
 {
     $route = preg_replace('/[^A-Za-z0-9_\/-]/', '', (string) parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH));
-    error_log(sprintf('[practice-lab] request=%s status=%d code=%s route=%s', $requestId, $status, $code, $route));
+    $simulated = lab_api_is_simulated($code);
+    if ($simulated) {
+        $GLOBALS['lab_api_simulated'] = true;
+    }
+    error_log('[practice-lab] ' . json_encode([
+        'event' => 'api_error',
+        'requestId' => $requestId,
+        'status' => $status,
+        'code' => $code,
+        'route' => $route,
+        'simulated' => $simulated,
+    ], JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR));
     lab_api_send([
         'error' => ['code' => $code, 'message' => $message, 'details' => array_values($details)],
         'requestId' => $requestId,
@@ -236,6 +296,14 @@ function lab_api_db(): PDO
         count INTEGER NOT NULL,
         PRIMARY KEY (scope, key_hash, window)
     )');
+    $pdo->exec('CREATE TABLE IF NOT EXISTS lab_api_metrics (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        observed_at INTEGER NOT NULL,
+        route TEXT NOT NULL,
+        duration_ms REAL NOT NULL,
+        status INTEGER NOT NULL,
+        simulated INTEGER NOT NULL DEFAULT 0
+    )');
     $pdo->exec('CREATE TABLE IF NOT EXISTS lab_uploads (
         session_hash TEXT NOT NULL,
         upload_id TEXT NOT NULL,
@@ -252,6 +320,7 @@ function lab_api_db(): PDO
     if (is_file($database)) {
         @chmod($database, 0600);
     }
+    $GLOBALS['lab_api_metrics_pdo'] = $pdo;
     return $pdo;
 }
 
@@ -1251,6 +1320,7 @@ function lab_api_dispatch(string $dataRoot): never
                 'version' => LAB_API_VERSION,
                 'fixtureVersion' => (string) $seed['metadata']['fixtureVersion'],
                 'storage' => ['status' => 'ok', 'driver' => 'sqlite', 'activeSessions' => $active, 'bytes' => lab_api_storage_bytes(lab_api_storage_root())],
+                'metrics' => lab_api_metric_summary($pdo),
                 'requestId' => $requestId,
             ], 200, $requestId);
         } catch (Throwable) {

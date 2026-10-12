@@ -1,0 +1,35 @@
+{
+  "generatedAt": "2026-10-12T04:25:34.920Z",
+  "results": [
+    {
+      "route": "/practice/",
+      "javascriptBytes": 1589,
+      "budgetBytes": 184320,
+      "pass": true
+    },
+    {
+      "route": "/practice/playwright/locators/",
+      "javascriptBytes": 6497,
+      "budgetBytes": 184320,
+      "pass": true
+    },
+    {
+      "route": "/practice/components/tables/",
+      "javascriptBytes": 19271,
+      "budgetBytes": 184320,
+      "pass": true
+    },
+    {
+      "route": "/practice/challenges/",
+      "javascriptBytes": 2859,
+      "budgetBytes": 184320,
+      "pass": true
+    },
+    {
+      "route": "/practice/apps/ecommerce/",
+      "javascriptBytes": 18160,
+      "budgetBytes": 184320,
+      "pass": true
+    }
+  ]
+}

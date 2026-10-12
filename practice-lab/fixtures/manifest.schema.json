@@ -4,12 +4,21 @@
   "title": "Testheon Practice Lab fixture manifest",
   "type": "object",
   "additionalProperties": false,
-  "required": ["$schema", "manifestVersion", "updatedAt", "fixtures"],
+  "required": [
+    "$schema",
+    "manifestVersion",
+    "contractVersion",
+    "updatedAt",
+    "fixtures"
+  ],
   "properties": {
     "$schema": { "const": "./manifest.schema.json" },
     "manifestVersion": {
       "type": "string",
       "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "contractVersion": {
+      "const": "1.0.0"
     },
     "updatedAt": {
       "type": "string",

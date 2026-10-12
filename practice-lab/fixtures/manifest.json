@@ -1,7 +1,8 @@
 {
   "$schema": "./manifest.schema.json",
-  "manifestVersion": "1.7.0",
-  "updatedAt": "2026-10-11",
+  "manifestVersion": "1.8.0",
+  "contractVersion": "1.0.0",
+  "updatedAt": "2026-10-12",
   "fixtures": [
     {
       "id": "FX-INPUT-001",
@@ -670,6 +671,40 @@
         "/practice/challenges/api-auth-session-and-orders-500/",
         "/practice/challenges/recover-from-malformed-store-response/"
       ]
+    },
+    {
+      "id": "FX-A11Y-001",
+      "version": "1.0.0",
+      "url": "/practice/components/accessibility/",
+      "anchor": "#fixture-accessibility",
+      "title": "Accessibility Practice Lab",
+      "area": "Accessibility",
+      "difficulty": "Intermediate",
+      "component": "AccessibleAndFlawedExamples",
+      "behavior": "An accessible labelled form and live status pair with a visibly marked, isolated anti-pattern region containing exact missing-name and low-contrast defects for automated accessibility practice.",
+      "defaults": {
+        "status": "No request submitted"
+      },
+      "controls": {
+        "keyboardOnly": true,
+        "axeExcludedSelector": "[data-a11y-exclude]"
+      },
+      "seedVersion": "1.0.0",
+      "intentionalDefects": [
+        "The flawed email input has no programmatic label.",
+        "The icon-only flawed action has no accessible name.",
+        "The flawed helper text uses deliberately insufficient contrast."
+      ],
+      "expectedOutcomes": [
+        "The accessible example is operable by keyboard and exposes its result through a polite live region.",
+        "The anti-pattern region is clearly marked, excluded from shell scans, and its exact defects are asserted separately."
+      ],
+      "tests": [
+        "tests/e2e/accessibility.spec.ts",
+        "tests/e2e/fixture-contract.spec.ts"
+      ],
+      "guideLinks": ["https://testheon.com/playwright-e2e/"],
+      "challengeLinks": []
     }
   ]
 }

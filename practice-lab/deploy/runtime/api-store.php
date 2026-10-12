@@ -208,6 +208,7 @@ function lab_store_apply_scenario(PDO $pdo, array $session, string $requestId): 
     if ($scenario === '') {
         return;
     }
+    $GLOBALS['lab_api_simulated'] = true;
     $delete = $pdo->prepare('DELETE FROM lab_store_scenarios WHERE session_hash = ?');
     $delete->execute([$session['hash']]);
     if ($scenario === 'timeout') {

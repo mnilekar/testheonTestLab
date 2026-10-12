@@ -1,0 +1,87 @@
+---
+import ComponentLabPage from '../../../components/ComponentLabPage.astro';
+import FixtureSection from '../../../components/FixtureSection.astro';
+---
+
+<ComponentLabPage
+  title="Accessibility Practice Lab"
+  eyebrow="Accessible and intentionally flawed examples"
+  intro="Compare a keyboard-ready, correctly named workflow with a clearly isolated anti-pattern region whose exact defects are safe to detect in tests."
+  canonicalPath="/practice/components/accessibility/"
+  fixtureId="FX-A11Y-001"
+  anchor="fixture-accessibility"
+  guideHref="https://testheon.com/playwright-e2e/"
+  guideLabel="Read the Playwright guide"
+  tasks={[
+    'Complete the accessible request using only the keyboard.',
+    'Assert the polite live-region update after submission.',
+    'Run axe against the accessible region and verify zero serious or critical issues.',
+    'Scope an audit to the marked anti-pattern and assert each documented defect.',
+  ]}
+  locatorHint="Prefer getByLabel('Work email') and getByRole('button', { name: 'Request access' }). Scope intentional defects to [data-a11y-exclude]."
+>
+  <FixtureSection
+    id="accessible-example"
+    title="Accessible request form"
+    description="Every control has a persistent name, focus is visible, and the outcome is announced without moving focus."
+  >
+    <form id="accessible-request" class="form-grid">
+      <label for="accessible-email">Work email</label>
+      <input
+        id="accessible-email"
+        name="email"
+        type="email"
+        autocomplete="email"
+        required
+      />
+      <button class="fixture-button" type="submit">
+        Request access
+      </button>
+      <p
+        id="accessible-result"
+        class="fixture-result"
+        role="status"
+        aria-live="polite"
+      >
+        No request submitted
+      </p>
+    </form>
+  </FixtureSection>
+
+  <FixtureSection
+    id="intentional-accessibility-defects"
+    title="Flawed accessibility example"
+    description="This practice-only region deliberately contains exactly three documented defects. It is not production UI."
+    antiPattern
+  >
+    <div data-intentional-defect="missing-input-label">
+      <span>Email address</span>
+      <input type="email" />
+    </div>
+    <button
+      class="fixture-button fixture-button--secondary"
+      type="button"
+      data-intentional-defect="unnamed-icon-button"
+    >
+      <span aria-hidden="true">★</span>
+    </button>
+    <p
+      class="a11y-low-contrast"
+      data-intentional-defect="insufficient-contrast"
+    >
+      Deliberately low-contrast helper text for an assertion exercise.
+    </p>
+  </FixtureSection>
+
+  <script>
+    const form = document.querySelector<HTMLFormElement>('#accessible-request');
+    const result = document.querySelector<HTMLElement>('#accessible-result');
+    form?.addEventListener('submit', (event) => {
+      event.preventDefault();
+      if (form.checkValidity() && result) {
+        result.textContent =
+          'Access request recorded for this practice session.';
+      }
+    });
+  </script>
+</ComponentLabPage>

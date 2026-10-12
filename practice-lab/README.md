@@ -17,7 +17,7 @@ Open `http://localhost:4321/practice/`.
 pnpm run verify
 ```
 
-The pipeline runs lint, formatting, strict type checks, unit/integration tests, deterministic API artifact validation, the static build, Playwright smoke tests against the built output, and fixture-manifest validation.
+The pipeline runs lint, formatting, strict type checks, unit/integration tests, deterministic API artifact validation, the frozen fixture-contract gate, static build, JavaScript and build-security budgets, Playwright E2E, Chromium/Firefox/WebKit critical smoke, and manifest validation. Run `pnpm audit:lighthouse` for the five mobile Lighthouse audits and `pnpm audit --audit-level high` for the dependency gate.
 
 Component Lab A provides grouped fixture pages at:
 
@@ -36,6 +36,7 @@ Component Lab A provides grouped fixture pages at:
 - `/practice/components/files/`
 - `/practice/components/drag-and-drop/`
 - `/practice/components/browser-context/`
+- `/practice/components/accessibility/`
 - `/practice/playwright/locators/`
 - `/practice/playwright/waits/`
 - `/practice/apps/auth/`
@@ -50,6 +51,8 @@ Component Lab A provides grouped fixture pages at:
 - `/practice/apps/ecommerce/profile/`
 
 Every page has a stable manifest ID and anchor. Its executable TypeScript examples live in `examples/playwright-ts/` and run as part of the normal Playwright suite.
+
+The complete observable fixture contract is frozen at version `1.0.0` in `fixtures/contract-v1.0.0.json`. Follow [CONTRIBUTING.md](./CONTRIBUTING.md) for version bumps and [RUNBOOK.md](./RUNBOOK.md) for deploy, rollback, cache, reset, seed, and challenge operations. The security boundary is documented in [docs/SECURITY.md](./docs/SECURITY.md), and health/log/metric handling is in [docs/OBSERVABILITY.md](./docs/OBSERVABILITY.md).
 
 The Practice API is a standalone PHP 8.3/PDO SQLite runtime under `/practice/api/v1/`. It does not bootstrap WordPress or use WordPress data or credentials. Its versioned synthetic seed and OpenAPI contract are generated and checked with:
 

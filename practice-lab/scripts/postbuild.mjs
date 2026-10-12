@@ -42,7 +42,11 @@ const securityHeaders = [
         '  Header always set X-Robots-Tag "noindex, nofollow"',
         '  Header always set Cache-Control "no-store, private"',
       ]
-    : []),
+    : [
+        '  <FilesMatch "\\.[A-Za-z0-9_-]{8,}\\.(css|js|woff2|svg|webp|avif)$">',
+        '    Header always set Cache-Control "public, max-age=31536000, immutable"',
+        '  </FilesMatch>',
+      ]),
   '  <FilesMatch "\\.(zip|csv|md|json|xml)$">',
   '    Header always set X-Robots-Tag "noindex, nofollow"',
   '  </FilesMatch>',

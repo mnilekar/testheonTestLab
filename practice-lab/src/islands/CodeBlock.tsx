@@ -31,7 +31,7 @@ export default function CodeBlock({
           {copyLabel}
         </button>
       </div>
-      <pre>
+      <pre tabIndex={0} aria-label={`${label} scrollable code`}>
         <code class={`language-${language}`}>{code}</code>
       </pre>
     </div>

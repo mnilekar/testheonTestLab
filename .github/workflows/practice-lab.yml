@@ -22,6 +22,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
@@ -58,6 +60,12 @@ jobs:
       - name: Unit and release integration tests
         run: pnpm unit
 
+      - name: Freeze fixture contract
+        run: pnpm fixtures:contract -- --base "${{ github.event.pull_request.base.sha || github.event.before }}"
+
+      - name: Audit dependencies
+        run: pnpm audit --audit-level high
+
       - name: Validate generated API artifacts
         run: pnpm api:validate
 
@@ -67,13 +75,22 @@ jobs:
       - name: Build static site
         run: pnpm build
 
-      - name: Install Playwright Chromium
-        run: pnpm exec playwright install --with-deps chromium
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps chromium firefox webkit
 
       - name: Run built-site E2E smoke
         env:
           PW_CHANNEL: ''
         run: pnpm e2e
+
+      - name: Run cross-browser critical smoke
+        run: pnpm e2e:cross-browser
+
+      - name: Audit JavaScript budget and build security
+        run: pnpm audit:js && pnpm audit:security
+
+      - name: Run mobile Lighthouse audits
+        run: pnpm audit:lighthouse
 
       - name: Validate fixture manifest
         run: pnpm manifest:validate

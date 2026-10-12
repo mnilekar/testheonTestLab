@@ -113,7 +113,7 @@ expect(await page.locator('#virtual-body [role="row"]').count()).toBeLessThan(40
     title="1. Simple static employee table"
     description="A stable semantic baseline exposes every required employee column before interactive behavior is added."
   >
-    <div class="table-scroll">
+    <div tabindex="0" class="table-scroll">
       <table id="static-employee-table">
         <caption>Five deterministic employees</caption>
         <thead>
@@ -163,7 +163,7 @@ expect(await page.locator('#virtual-body [role="row"]').count()).toBeLessThan(40
         No columns sorted.
       </p>
     </div>
-    <div class="table-scroll">
+    <div tabindex="0" class="table-scroll">
       <table id="sortable-employee-table">
         <caption>Sortable API employees</caption>
         <thead>
@@ -218,7 +218,7 @@ expect(await page.locator('#virtual-body [role="row"]').count()).toBeLessThan(40
     <p id="table-search-result" class="result" role="status">
       Search is ready.
     </p>
-    <div class="table-scroll compact-table">
+    <div tabindex="0" class="table-scroll compact-table">
       <table id="search-employee-table">
         <caption>Search results</caption>
         <thead>
@@ -264,7 +264,7 @@ expect(await page.locator('#virtual-body [role="row"]').count()).toBeLessThan(40
     <p id="filter-result" class="result" role="status">
       All employees shown.
     </p>
-    <div class="table-scroll compact-table">
+    <div tabindex="0" class="table-scroll compact-table">
       <table id="filter-table">
         <caption>Filtered employees</caption>
         <thead>
@@ -297,7 +297,7 @@ expect(await page.locator('#virtual-body [role="row"]').count()).toBeLessThan(40
             <option>20</option>
           </select>
         </div>
-        <div class="table-scroll compact-table">
+        <div tabindex="0" class="table-scroll compact-table">
           <table id="client-page-table">
             <caption>Client page</caption>
             <thead>
@@ -338,7 +338,7 @@ expect(await page.locator('#virtual-body [role="row"]').count()).toBeLessThan(40
             <option>20</option>
           </select>
         </div>
-        <div class="table-scroll compact-table">
+        <div tabindex="0" class="table-scroll compact-table">
           <table id="server-page-table">
             <caption>Server page</caption>
             <thead>
@@ -380,7 +380,7 @@ expect(await page.locator('#virtual-body [role="row"]').count()).toBeLessThan(40
     <p id="edit-result" class="result" role="status">
       Choose an employee to edit.
     </p>
-    <div class="table-scroll">
+    <div tabindex="0" class="table-scroll">
       <table id="editable-employee-table">
         <caption>Editable employees</caption>
         <thead>
@@ -408,7 +408,7 @@ expect(await page.locator('#virtual-body [role="row"]').count()).toBeLessThan(40
         Add deterministic employee
       </button>
       <p id="dynamic-row-count" class="result" role="status"></p>
-      <div class="table-scroll compact-table">
+      <div tabindex="0" class="table-scroll compact-table">
         <table id="dynamic-row-table">
           <caption>Dynamic employees</caption>
           <thead>
@@ -443,7 +443,7 @@ expect(await page.locator('#virtual-body [role="row"]').count()).toBeLessThan(40
       <p id="selection-result" class="result" role="status">
         0 employees selected.
       </p>
-      <div class="table-scroll compact-table">
+      <div tabindex="0" class="table-scroll compact-table">
         <table id="selectable-table">
           <caption>Selectable employees</caption>
           <thead>
@@ -476,7 +476,7 @@ expect(await page.locator('#virtual-body [role="row"]').count()).toBeLessThan(40
     </div>
     <div class="table-panel">
       <h3>Expandable row details</h3>
-      <div class="table-scroll compact-table">
+      <div tabindex="0" class="table-scroll compact-table">
         <table id="expandable-table">
           <caption>Employee details</caption>
           <thead>
@@ -577,7 +577,7 @@ expect(await page.locator('#virtual-body [role="row"]').count()).toBeLessThan(40
     <p id="async-result" class="result" role="status">
       Employee emp-009 is Pending.
     </p>
-    <div class="table-scroll compact-table">
+    <div tabindex="0" class="table-scroll compact-table">
       <table>
         <caption>Async employee</caption>
         <thead>
@@ -611,7 +611,7 @@ expect(await page.locator('#virtual-body [role="row"]').count()).toBeLessThan(40
         Customer rows have not loaded.
       </p>
     </div>
-    <div class="table-scroll">
+    <div tabindex="0" class="table-scroll">
       <table id="customer-api-table-grid">
         <caption>Customers in the current isolated API sandbox</caption>
         <thead>
@@ -640,7 +640,7 @@ expect(await page.locator('#virtual-body [role="row"]').count()).toBeLessThan(40
     <div class="nested-grid">
       <section class="table-panel" aria-labelledby="customer-orders-heading">
         <h3 id="customer-orders-heading">Customer → Orders → Order Items</h3>
-        <div class="table-scroll">
+        <div tabindex="0" class="table-scroll">
           <table>
             <caption>Synthetic customer orders</caption>
             <thead>
@@ -718,7 +718,7 @@ expect(await page.locator('#virtual-body [role="row"]').count()).toBeLessThan(40
         <h3 id="department-projects-heading">
           Department → Employees → Projects
         </h3>
-        <div class="table-scroll">
+        <div tabindex="0" class="table-scroll">
           <table>
             <caption>Department projects</caption>
             <thead>

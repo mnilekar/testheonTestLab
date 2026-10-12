@@ -25,6 +25,7 @@ const pages = [
   ['/practice/components/browser-context/', 'FX-CONTEXT-001'] as const,
   ['/practice/apps/auth/', 'FX-AUTH-001'] as const,
   ['/practice/apps/ecommerce/', 'FX-STORE-001'] as const,
+  ['/practice/components/accessibility/', 'FX-A11Y-001'] as const,
 ];
 
 test('component hub links and every registered fixture page render', async ({

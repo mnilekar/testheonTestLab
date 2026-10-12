@@ -1,0 +1,8 @@
+{
+  "javascriptBytesPerPage": 184320,
+  "lighthouse": {
+    "landingPerformance": 0.9,
+    "landingCumulativeLayoutShift": 0.1,
+    "landingLargestContentfulPaintMs": 2500
+  }
+}

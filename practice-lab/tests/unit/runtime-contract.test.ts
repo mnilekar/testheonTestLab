@@ -44,6 +44,10 @@ describe('staging runtime contract', () => {
     expect(runtime).toContain("'ACTIVE_CONTENT_REJECTED'");
     expect(runtime).not.toContain('readfile(');
     expect(runtime).toContain('X-LiteSpeed-Cache-Control');
+    expect(runtime).toContain("'event' => 'api_error'");
+    expect(runtime).toContain("'simulated' => $simulated");
+    expect(runtime).toContain('lab_api_metrics');
+    expect(runtime).toContain('simulatedErrorsExcluded');
     expect(runtime).toContain("'[practice-lab]");
     expect(runtime).not.toMatch(/wp-config|wpdb|wp-load|wp-admin/i);
     expect(index).toContain("'/releases/' . $release . '/_api'");
