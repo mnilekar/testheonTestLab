@@ -1,5 +1,15 @@
 ---
+import {
+  resolveDeployTarget,
+  resolveRobotsPolicy,
+} from '../../../../config/site';
+
 const title = 'Nested parent frame';
+const robots = resolveRobotsPolicy(
+  'noindex,follow',
+  resolveDeployTarget(import.meta.env.PUBLIC_DEPLOY_TARGET),
+  import.meta.env.PUBLIC_ROBOTS_POLICY,
+);
 ---
 
 <!doctype html>
@@ -7,7 +17,7 @@ const title = 'Nested parent frame';
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <meta name="robots" content="noindex,nofollow" />
+    <meta name="robots" content={robots} />
     <title>{title}</title>
     <style>
       body {

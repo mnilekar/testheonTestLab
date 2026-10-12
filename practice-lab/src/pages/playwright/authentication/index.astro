@@ -1,8 +1,12 @@
 ---
 import Button from '../../../components/Button.astro';
 import Callout from '../../../components/Callout.astro';
+import SeoLearningLinks from '../../../components/SeoLearningLinks.astro';
 import CodeBlock from '../../../islands/CodeBlock';
 import LabLayout from '../../../layouts/LabLayout.astro';
+import { getIndexPage } from '../../../config/seo';
+
+const seo = getIndexPage('/playwright/authentication/');
 
 const globalSetup = `// auth.setup.ts
 import { test as setup, expect } from '@playwright/test';
@@ -44,9 +48,9 @@ await expect(page.locator('#session-result')).toContainText('AUTH_SESSION_EXPIRE
 ---
 
 <LabLayout
-  title="Playwright Authentication Testing"
-  description="Learn global setup, storageState, per-role projects, API login, logout and deterministic expiry testing with the Testheon Practice Authentication Sandbox."
-  canonicalPath="/playwright/authentication/"
+  title={seo.title}
+  description={seo.description}
+  canonicalPath={seo.path}
   robots="index,follow"
   breadcrumbs={[
     { label: 'Practice Lab', href: '/practice/' },
@@ -207,4 +211,5 @@ await expect(page.locator('#session-result')).toContainText('AUTH_SESSION_EXPIRE
       </section>
     </div>
   </article>
+  <SeoLearningLinks page={seo} />
 </LabLayout>

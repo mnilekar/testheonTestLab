@@ -11,7 +11,7 @@
   "scripts": {
     "fonts:sync": "node scripts/sync-font-assets.mjs",
     "dev": "pnpm fonts:sync && cross-env NAPI_RS_FORCE_WASI=1 ASTRO_TELEMETRY_DISABLED=1 astro dev",
-    "build": "pnpm fonts:sync && pnpm testcases:generate && pnpm challenges:generate && pnpm challenges:validate && pnpm downloads:build && pnpm manifest:validate && cross-env NAPI_RS_FORCE_WASI=1 ASTRO_TELEMETRY_DISABLED=1 astro build && node scripts/postbuild.mjs",
+    "build": "pnpm fonts:sync && pnpm testcases:generate && pnpm challenges:generate && pnpm challenges:validate && pnpm downloads:build && pnpm manifest:validate && cross-env NAPI_RS_FORCE_WASI=1 ASTRO_TELEMETRY_DISABLED=1 astro build && node scripts/postbuild.mjs && pnpm seo:audit",
     "build:staging": "node scripts/build-target.mjs staging",
     "preview": "node scripts/serve-dist.mjs",
     "lint": "cross-env NAPI_RS_FORCE_WASI=1 ASTRO_TELEMETRY_DISABLED=1 eslint . --max-warnings=0",
@@ -35,7 +35,9 @@
     "staging:credentials": "node scripts/create-staging-credentials.mjs",
     "challenges:generate": "node scripts/generate-challenges.mjs",
     "challenges:validate": "node scripts/validate-challenges.mjs",
-    "downloads:build": "node scripts/build-downloads.mjs"
+    "downloads:build": "node scripts/build-downloads.mjs",
+    "seo:audit": "node scripts/audit-seo.mjs",
+    "seo:report": "node scripts/report-seo.mjs"
   },
   "dependencies": {
     "@astrojs/preact": "6.0.5",

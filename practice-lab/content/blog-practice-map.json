@@ -1,0 +1,246 @@
+{
+  "version": "1.0.0",
+  "lastVerified": "2026-10-11",
+  "mappings": [
+    {
+      "postId": 183,
+      "blogUrl": "https://testheon.com/playwright-tutorial/",
+      "blogTitle": "Playwright Tutorial for Beginners: Write Your First Test",
+      "matches": [
+        {
+          "practiceUrl": "https://testheon.com/practice/challenges/locate-primary-action-by-role/",
+          "kind": "challenge",
+          "relevanceScore": 0.96,
+          "reason": "A short Beginner challenge turns the first-test concepts into a role-locator action against a stable fixture."
+        },
+        {
+          "practiceUrl": "https://testheon.com/practice/playwright/",
+          "kind": "page",
+          "relevanceScore": 0.86,
+          "reason": "The track gives beginners the next ordered practice route after their first test."
+        }
+      ],
+      "ctaPlacement": {
+        "afterHeading": "Write Your First Playwright Test",
+        "ctaText": "Practice your first resilient Playwright action in Testheon Lab",
+        "targetUrl": "https://testheon.com/practice/challenges/locate-primary-action-by-role/#ref=blog&source_post=playwright-tutorial"
+      }
+    },
+    {
+      "postId": 205,
+      "blogUrl": "https://testheon.com/playwright-locators/",
+      "blogTitle": "Playwright Locators: Complete Guide & Best Practices",
+      "matches": [
+        {
+          "practiceUrl": "https://testheon.com/practice/playwright/locators/",
+          "kind": "page",
+          "relevanceScore": 1,
+          "reason": "The Locator Lab directly exercises the article's locator priority, scoping, filtering, strictness, and fallback choices."
+        },
+        {
+          "practiceUrl": "https://testheon.com/practice/challenges/fill-labelled-profile-fields/",
+          "kind": "challenge",
+          "relevanceScore": 0.94,
+          "reason": "The Beginner challenge applies label locators to a realistic profile form."
+        },
+        {
+          "practiceUrl": "https://testheon.com/practice/components/tables/",
+          "kind": "page",
+          "relevanceScore": 0.84,
+          "reason": "The Table Lab extends row scoping and filtering into repeated business data."
+        }
+      ],
+      "ctaPlacement": {
+        "afterHeading": "Use getByRole for Interactive Elements",
+        "ctaText": "Compare resilient and brittle locators in Testheon Lab",
+        "targetUrl": "https://testheon.com/practice/playwright/locators/#ref=blog&source_post=playwright-locators"
+      }
+    },
+    {
+      "postId": 220,
+      "blogUrl": "https://testheon.com/playwright-e2e/",
+      "blogTitle": "Playwright E2E Testing: Real-World Workflow Guide",
+      "matches": [
+        {
+          "practiceUrl": "https://testheon.com/practice/apps/ecommerce/",
+          "kind": "page",
+          "relevanceScore": 0.98,
+          "reason": "The synthetic store combines UI, API, authentication, network, cart, and checkout behavior in one owned workflow."
+        },
+        {
+          "practiceUrl": "https://testheon.com/practice/challenges/checkout-and-verify-order-api/",
+          "kind": "challenge",
+          "relevanceScore": 0.97,
+          "reason": "The Advanced challenge follows the article's UI action plus backend assertion pattern."
+        }
+      ],
+      "ctaPlacement": {
+        "afterHeading": "Write the complete UI-plus-API E2E test",
+        "ctaText": "Automate a complete synthetic ecommerce flow in Testheon Lab",
+        "targetUrl": "https://testheon.com/practice/apps/ecommerce/#ref=blog&source_post=playwright-e2e"
+      }
+    },
+    {
+      "postId": 217,
+      "blogUrl": "https://testheon.com/playwright-authentication/",
+      "blogTitle": "Playwright Authentication: Login, Storage State & Sessions",
+      "matches": [
+        {
+          "practiceUrl": "https://testheon.com/practice/playwright/authentication/",
+          "kind": "page",
+          "relevanceScore": 1,
+          "reason": "The teaching page covers setup projects, storageState, API login, roles, logout, and deterministic expiry with public synthetic users."
+        },
+        {
+          "practiceUrl": "https://testheon.com/practice/challenges/reuse-storage-state/",
+          "kind": "challenge",
+          "relevanceScore": 0.98,
+          "reason": "The Intermediate challenge asks learners to reuse authenticated state and verify the resulting identity."
+        }
+      ],
+      "ctaPlacement": {
+        "afterHeading": "Reuse UI login with a setup project",
+        "ctaText": "Build and verify reusable auth state in Testheon Lab",
+        "targetUrl": "https://testheon.com/practice/playwright/authentication/#ref=blog&source_post=playwright-authentication"
+      }
+    },
+    {
+      "postId": 214,
+      "blogUrl": "https://testheon.com/playwright-api-testing/",
+      "blogTitle": "Playwright API Testing: Complete Guide",
+      "matches": [
+        {
+          "practiceUrl": "https://testheon.com/practice/playwright/api-testing/",
+          "kind": "page",
+          "relevanceScore": 1,
+          "reason": "The teaching page explains request-context ownership, contract assertions, API-to-UI verification, and sandbox cleanup."
+        },
+        {
+          "practiceUrl": "https://testheon.com/practice/challenges/create-customer-api-verify-table/",
+          "kind": "challenge",
+          "relevanceScore": 0.98,
+          "reason": "The Advanced challenge creates data by API and verifies the same customer through the UI table."
+        },
+        {
+          "practiceUrl": "https://testheon.com/practice/challenges/prove-sandbox-isolation-reset/",
+          "kind": "challenge",
+          "relevanceScore": 0.95,
+          "reason": "The Expert challenge proves session ownership and caller-only reset rather than assuming isolation."
+        }
+      ],
+      "ctaPlacement": {
+        "afterHeading": "Combine UI and API without hiding the user journey",
+        "ctaText": "Run an isolated API-to-UI workflow in Testheon Lab",
+        "targetUrl": "https://testheon.com/practice/playwright/api-testing/#ref=blog&source_post=playwright-api-testing"
+      }
+    },
+    {
+      "postId": 208,
+      "blogUrl": "https://testheon.com/playwright-framework/",
+      "blogTitle": "Playwright Automation Framework From Scratch",
+      "matches": [
+        {
+          "practiceUrl": "https://testheon.com/practice/challenges/",
+          "kind": "page",
+          "relevanceScore": 0.9,
+          "reason": "The catalogue supplies versioned scenarios and a TypeScript starter that can be organized under a learner's framework."
+        },
+        {
+          "practiceUrl": "https://testheon.com/practice/playwright/authentication/",
+          "kind": "page",
+          "relevanceScore": 0.87,
+          "reason": "Authentication state ownership is a concrete framework fixture and project-dependency concern."
+        }
+      ],
+      "ctaPlacement": {
+        "afterHeading": "Step 4: Expose One Typed Fixture API",
+        "ctaText": "Apply your framework to versioned Testheon Lab challenges",
+        "targetUrl": "https://testheon.com/practice/challenges/#ref=blog&source_post=playwright-framework"
+      }
+    },
+    {
+      "postId": 235,
+      "blogUrl": "https://testheon.com/playwright-fixtures/",
+      "blogTitle": "Playwright Fixtures: Complete Guide",
+      "matches": [
+        {
+          "practiceUrl": "https://testheon.com/practice/components/",
+          "kind": "page",
+          "relevanceScore": 0.91,
+          "reason": "The Component Lab offers stable, versioned targets for building typed setup and cleanup fixtures."
+        },
+        {
+          "practiceUrl": "https://testheon.com/practice/challenges/prove-sandbox-isolation-reset/",
+          "kind": "challenge",
+          "relevanceScore": 0.89,
+          "reason": "The isolation challenge exercises fixture ownership and failure-safe cleanup across separate sessions."
+        }
+      ],
+      "ctaPlacement": {
+        "afterHeading": "Create a type-safe custom fixture with test.extend()",
+        "ctaText": "Build a fixture against stable Testheon Lab contracts",
+        "targetUrl": "https://testheon.com/practice/components/#ref=blog&source_post=playwright-fixtures"
+      }
+    },
+    {
+      "postId": 245,
+      "blogUrl": "https://testheon.com/playwright-visual-testing/",
+      "blogTitle": "Playwright Visual Testing: Screenshot & Regression Guide",
+      "matches": [
+        {
+          "practiceUrl": "https://testheon.com/practice/apps/ecommerce/",
+          "kind": "page",
+          "relevanceScore": 0.93,
+          "reason": "The store documents a deterministic visual mode with fixed dates, motion, and presentation for screenshot practice."
+        }
+      ],
+      "ctaPlacement": {
+        "afterHeading": "Make screenshot assertions deterministic",
+        "ctaText": "Open the Testheon Store visual testing workflow",
+        "targetUrl": "https://testheon.com/practice/apps/ecommerce/#ref=blog&source_post=playwright-visual-testing"
+      }
+    },
+    {
+      "postId": 240,
+      "blogUrl": "https://testheon.com/playwright-trace-viewer/",
+      "blogTitle": "Playwright Trace Viewer: Debug Failed Tests Faster",
+      "matches": [
+        {
+          "practiceUrl": "https://testheon.com/practice/challenges/debug-hidden-race/",
+          "kind": "challenge",
+          "relevanceScore": 0.97,
+          "reason": "The deliberately failing race exercise gives learners a bounded failure to inspect through trace evidence."
+        },
+        {
+          "practiceUrl": "https://testheon.com/practice/challenges/debug-wrong-locator/",
+          "kind": "challenge",
+          "relevanceScore": 0.94,
+          "reason": "The wrong-locator exercise exposes action, DOM, and locator evidence suited to Trace Viewer diagnosis."
+        }
+      ],
+      "ctaPlacement": {
+        "afterHeading": "A trace-based CI failure investigation workflow",
+        "ctaText": "Debug a deliberate Playwright failure in Testheon Lab",
+        "targetUrl": "https://testheon.com/practice/challenges/debug-hidden-race/#ref=blog&source_post=playwright-trace-viewer"
+      }
+    },
+    {
+      "postId": 223,
+      "blogUrl": "https://testheon.com/playwright-interview-questions/",
+      "blogTitle": "Playwright Interview Questions and Answers",
+      "matches": [
+        {
+          "practiceUrl": "https://testheon.com/practice/challenges/",
+          "kind": "page",
+          "relevanceScore": 0.98,
+          "reason": "The 28-challenge catalogue turns locator, wait, API, auth, debugging, and scenario questions into demonstrable work."
+        }
+      ],
+      "ctaPlacement": {
+        "afterHeading": "Scenario-based Playwright interview questions",
+        "ctaText": "Practise interview-ready Playwright scenarios in Testheon Lab",
+        "targetUrl": "https://testheon.com/practice/challenges/#ref=blog&source_post=playwright-interview-questions"
+      }
+    }
+  ]
+}

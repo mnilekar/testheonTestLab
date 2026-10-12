@@ -150,7 +150,7 @@ test('auth UI covers login, registration, reset, roles, tokens, API key, and tab
   await page.goto('/practice/apps/auth/?delay=0');
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute(
     'content',
-    'noindex,nofollow',
+    'noindex,follow',
   );
   await expect(page.locator('[data-fixture-id="FX-AUTH-001"]')).toBeVisible();
   await expect(

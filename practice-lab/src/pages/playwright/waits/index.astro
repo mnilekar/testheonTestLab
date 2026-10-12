@@ -1,7 +1,11 @@
 ---
 import ComponentLabPage from '../../../components/ComponentLabPage.astro';
 import FixtureSection from '../../../components/FixtureSection.astro';
+import SeoLearningLinks from '../../../components/SeoLearningLinks.astro';
 import CodeBlock from '../../../islands/CodeBlock';
+import { getIndexPage } from '../../../config/seo';
+
+const seo = getIndexPage('/playwright/waits/');
 
 const visibleExample = `await page.getByRole('button', { name: 'Start appearance wait' }).click();
 await expect(page.getByTestId('appeared-element')).toBeVisible({ timeout: 11_000 });`;
@@ -14,10 +18,11 @@ await expect(page.getByTestId('network-counter')).toHaveText('1');`;
 ---
 
 <ComponentLabPage
-  title="Playwright Waits Lab"
+  title={seo.title}
   eyebrow="Playwright foundations · Synchronization"
-  intro="Practise Playwright auto-waiting, web-first assertions, network synchronization, and deterministic delayed UI without fixed sleeps."
-  canonicalPath="/playwright/waits/"
+  intro={seo.description}
+  canonicalPath={seo.path}
+  robots="index,follow"
   fixtureId="FX-WAIT-001"
   anchor="fixture-waits"
   guideHref="https://testheon.com/playwright-e2e/"
@@ -291,6 +296,7 @@ await expect(page.getByTestId('network-counter')).toHaveText('1');`;
       label="Wait for a specific response"
     />
   </div>
+  <SeoLearningLinks slot="seo" page={seo} />
 </ComponentLabPage>
 
 <script>

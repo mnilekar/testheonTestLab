@@ -1,6 +1,8 @@
 ---
 import DifficultyBadge from '../../components/DifficultyBadge.astro';
 import LabLayout from '../../layouts/LabLayout.astro';
+import SeoLearningLinks from '../../components/SeoLearningLinks.astro';
+import { getIndexPage } from '../../config/seo';
 import {
   allSkills,
   challenges,
@@ -11,12 +13,14 @@ const difficulties = ['Beginner', 'Intermediate', 'Advanced', 'Expert'];
 const features = uniqueChallengeValues('feature');
 const applications = uniqueChallengeValues('application');
 const technologies = uniqueChallengeValues('technology');
+const seo = getIndexPage('/challenges/');
 ---
 
 <LabLayout
-  title="Playwright challenges"
-  description="Choose from 28 real Playwright challenges covering locators, UI workflows, APIs, authentication, network mocking, debugging, and ecommerce."
-  canonicalPath="/challenges/"
+  title={seo.title}
+  description={seo.description}
+  canonicalPath={seo.path}
+  robots="index,follow"
   breadcrumbs={[
     { label: 'Practice Lab', href: '/practice/' },
     { label: 'Challenges' },
@@ -122,7 +126,11 @@ const technologies = uniqueChallengeValues('technology');
                 <span>{challenge.estimatedMinutes} min</span>
               </div>
               <h2>
-                <a href={`/practice/challenges/${challenge.slug}/`}>
+                <a
+                  href={`/practice/challenges/${challenge.slug}/`}
+                  data-analytics-event="challenge_opened"
+                  data-analytics-content={challenge.id}
+                >
                   {challenge.title}
                 </a>
               </h2>
@@ -148,6 +156,8 @@ const technologies = uniqueChallengeValues('technology');
               class="button button--primary"
               download
               href="/practice/downloads/playwright-ts-starter.zip"
+              data-analytics-event="starter_downloaded"
+              data-analytics-content="playwright-ts-starter.zip"
             >
               TypeScript starter ZIP
             </a>
@@ -155,6 +165,8 @@ const technologies = uniqueChallengeValues('technology');
               class="button button--secondary"
               download
               href="/practice/downloads/playwright-python-starter.zip"
+              data-analytics-event="starter_downloaded"
+              data-analytics-content="playwright-python-starter.zip"
             >
               Python examples ZIP
             </a>
@@ -162,6 +174,8 @@ const technologies = uniqueChallengeValues('technology');
               class="button button--secondary"
               download
               href="/practice/downloads/playwright-java-starter.zip"
+              data-analytics-event="starter_downloaded"
+              data-analytics-content="playwright-java-starter.zip"
             >
               Java examples ZIP
             </a>
@@ -170,6 +184,7 @@ const technologies = uniqueChallengeValues('technology');
       </div>
     </div>
   </section>
+  <SeoLearningLinks page={seo} />
 </LabLayout>
 
 <script>

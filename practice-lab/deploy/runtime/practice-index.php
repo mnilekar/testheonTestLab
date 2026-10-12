@@ -50,6 +50,7 @@ $contentTypes = [
     'svg' => 'image/svg+xml; charset=utf-8',
     'txt' => 'text/plain; charset=utf-8',
     'woff2' => 'font/woff2',
+    'xml' => 'application/xml; charset=utf-8',
 ];
 header('Content-Type: ' . ($contentTypes[$extension] ?? 'application/octet-stream'));
 header('Content-Length: ' . (string) filesize($candidate));

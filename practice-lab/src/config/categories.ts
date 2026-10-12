@@ -8,7 +8,7 @@ export const categories: readonly Category[] = [
   {
     name: 'UI Elements',
     description: 'Stable controls for locator and interaction practice.',
-    href: '/practice/components/inputs/',
+    href: '/practice/components/',
   },
   {
     name: 'Forms',
@@ -38,6 +38,7 @@ export const categories: readonly Category[] = [
   {
     name: 'API Testing',
     description: 'Real HTTP contracts backed by isolated synthetic data.',
+    href: '/practice/playwright/api-testing/',
   },
   {
     name: 'Network Testing',
@@ -60,5 +61,6 @@ export const categories: readonly Category[] = [
     name: 'Challenges',
     description:
       'Scenario-led tasks with starter tests and advanced extensions.',
+    href: '/practice/challenges/',
   },
 ] as const;

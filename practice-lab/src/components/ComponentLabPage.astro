@@ -3,6 +3,7 @@ import Button from './Button.astro';
 import FixtureMarker from './FixtureMarker.astro';
 import Solution from './Solution.astro';
 import LabLayout from '../layouts/LabLayout.astro';
+import type { RobotsPolicy } from '../config/site';
 
 interface Props {
   title: string;
@@ -15,6 +16,7 @@ interface Props {
   guideLabel: string;
   tasks: string[];
   locatorHint: string;
+  robots?: RobotsPolicy;
 }
 
 const {
@@ -28,6 +30,7 @@ const {
   guideLabel,
   tasks,
   locatorHint,
+  robots = 'noindex,follow',
 } = Astro.props;
 ---
 
@@ -35,6 +38,7 @@ const {
   title={title}
   description={intro}
   canonicalPath={canonicalPath}
+  robots={robots}
   breadcrumbs={[
     { label: 'Practice Lab', href: '/practice/' },
     { label: 'Components', href: '/practice/playwright/' },
@@ -105,4 +109,6 @@ const {
       <slot name="examples" />
     </div>
   </section>
+
+  <slot name="seo" />
 </LabLayout>

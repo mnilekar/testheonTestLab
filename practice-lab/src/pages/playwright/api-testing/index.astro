@@ -1,0 +1,136 @@
+---
+import Button from '../../../components/Button.astro';
+import Card from '../../../components/Card.astro';
+import SeoLearningLinks from '../../../components/SeoLearningLinks.astro';
+import LabLayout from '../../../layouts/LabLayout.astro';
+import { getIndexPage } from '../../../config/seo';
+
+const seo = getIndexPage('/playwright/api-testing/');
+const lifecycle = [
+  [
+    'Create isolated state',
+    'POST a synthetic customer, product, order, task, ticket, booking, employee, or user in your current Lab session.',
+    '/practice/challenges/create-and-fetch-user-api/',
+  ],
+  [
+    'Assert the contract',
+    'Check status, headers, identifiers, types, error shape, and the business value that should change.',
+    '/practice/api/',
+  ],
+  [
+    'Connect API and UI',
+    'Use API setup to reach the user journey faster, then verify the visible behavior without hiding the action under test.',
+    '/practice/challenges/create-customer-api-verify-table/',
+  ],
+  [
+    'Reset deliberately',
+    'POST to the caller-only reset route and prove another browser context keeps its independent data.',
+    '/practice/challenges/prove-sandbox-isolation-reset/',
+  ],
+] as const;
+---
+
+<LabLayout
+  title={seo.title}
+  description={seo.description}
+  canonicalPath={seo.path}
+  robots="index,follow"
+  breadcrumbs={[
+    { label: 'Practice Lab', href: '/practice/' },
+    { label: 'Playwright', href: '/practice/playwright/' },
+    { label: 'API testing' },
+  ]}
+>
+  <section class="hero hero--compact">
+    <div class="container hero__grid">
+      <div>
+        <p class="eyebrow">APIRequestContext · Synthetic data</p>
+        <h1>Playwright API testing practice</h1>
+        <p class="lede">
+          Exercise request lifecycles, negative responses, authentication, and
+          API-assisted UI workflows against a versioned sandbox that is isolated
+          from WordPress and from other learners.
+        </p>
+        <div class="hero__actions">
+          <Button
+            href="/practice/challenges/create-and-fetch-user-api/"
+            analyticsEvent="practice_started"
+            analyticsContent="PW-API-001"
+          >
+            Start an API challenge
+          </Button>
+          <Button href="/practice/api/" variant="secondary">
+            Open the API reference
+          </Button>
+        </div>
+      </div>
+      <aside class="hero-note" aria-label="API practice boundary">
+        <strong>API docs are a noindex utility</strong>
+        <p>
+          This page teaches the testing decisions. The OpenAPI reference and all
+          JSON endpoints remain noindex, no-store practice infrastructure.
+        </p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="api-lifecycle-heading">
+    <div class="container">
+      <div class="section__heading">
+        <p class="eyebrow">Owned test data</p>
+        <h2 id="api-lifecycle-heading">Build one complete request lifecycle</h2>
+        <p>
+          A useful API test owns its setup and cleanup, asserts more than a 200
+          response, and makes cookie sharing with the browser explicit.
+        </p>
+      </div>
+      <div class="grid">
+        {lifecycle.map(([title, description, href]) => (
+          <Card title={title} description={description} href={href} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--soft" aria-labelledby="api-routes-heading">
+    <div class="container store-split">
+      <div>
+        <p class="eyebrow">Stable practice surface</p>
+        <h2 id="api-routes-heading">Choose the right request context</h2>
+        <p>
+          Use Playwright’s isolated <code>request</code> fixture when the API
+          test must own its own cookies. Use <code>page.request</code> only when
+          the API call is meant to share the browser context’s session.
+          Whichever path you choose, assert the expected identity boundary.
+        </p>
+        <ul>
+          <li>
+            <code>/practice/api/v1/users</code> for basic CRUD and validation
+          </li>
+          <li>
+            <code>/practice/api/v1/auth/token</code> for synthetic bearer flows
+          </li>
+          <li>
+            <code>/practice/api/v1/store/*</code> for API-to-UI ecommerce work
+          </li>
+          <li>
+            <code>/practice/api/v1/lab/reset</code> for caller-only cleanup
+          </li>
+        </ul>
+      </div>
+      <aside class="task-card">
+        <h2>Negative paths stay deterministic</h2>
+        <p>
+          Arm an allowlisted status, timeout, malformed response, or empty
+          result for the next eligible request. Delays remain bounded to ten
+          seconds and no simulation creates a real vulnerability.
+        </p>
+        <a href="/practice/challenges/prove-sandbox-isolation-reset/">
+          Prove isolation and reset →
+        </a>
+      </aside>
+    </div>
+  </section>
+
+  <SeoLearningLinks page={seo} />
+</LabLayout>

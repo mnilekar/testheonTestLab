@@ -19,6 +19,7 @@ interface Props {
   canonicalPath: string;
   robots?: RobotsPolicy;
   breadcrumbs?: Breadcrumb[];
+  analytics?: boolean;
 }
 
 const {
@@ -27,7 +28,9 @@ const {
   canonicalPath,
   robots = 'index,follow',
   breadcrumbs = [{ label: 'Practice Lab' }],
+  analytics: analyticsPreference,
 } = Astro.props;
+const analyticsEnabled = analyticsPreference ?? robots === 'index,follow';
 const origin = import.meta.env.PUBLIC_SITE_ORIGIN ?? 'https://testheon.com';
 const target = resolveDeployTarget(import.meta.env.PUBLIC_DEPLOY_TARGET);
 const resolvedRobots = resolveRobotsPolicy(
@@ -36,7 +39,7 @@ const resolvedRobots = resolveRobotsPolicy(
   import.meta.env.PUBLIC_ROBOTS_POLICY,
 );
 const canonical = canonicalUrl(origin, canonicalPath);
-const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
+const fullTitle = title === siteName ? title : `${title} | Testheon Lab`;
 const breadcrumbItems = breadcrumbs.map((crumb, index) => ({
   '@type': 'ListItem',
   position: index + 1,
@@ -156,5 +159,8 @@ const path = Astro.url.pathname;
         </ul>
       </div>
     </footer>
+    {analyticsEnabled && <script>
+      import '../scripts/analytics';
+    </script>}
   </body>
 </html>

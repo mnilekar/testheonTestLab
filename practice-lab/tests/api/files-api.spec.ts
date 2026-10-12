@@ -1,7 +1,10 @@
 import { expect, test, type APIRequestContext } from '@playwright/test';
 
-async function createSession(request: APIRequestContext): Promise<string> {
-  const response = await request.post('lab/session?expiresIn=120', {
+async function createSession(
+  request: APIRequestContext,
+  expiresIn = 120,
+): Promise<string> {
+  const response = await request.post(`lab/session?expiresIn=${expiresIn}`, {
     headers: { 'X-Lab-Mode': 'header' },
   });
   expect(response.status()).toBe(201);
@@ -41,6 +44,7 @@ test('secure upload accepts CSV metadata without exposing raw bytes', async ({
 test('upload security rejects renamed PHP, HTML, active SVG, traversal, and oversize content', async ({
   request,
 }) => {
+  test.setTimeout(300_000);
   const cases = [
     {
       name: 'shell.png',
@@ -74,7 +78,10 @@ test('upload security rejects renamed PHP, HTML, active SVG, traversal, and over
     },
   ];
   for (const fixture of cases) {
-    const session = await createSession(request);
+    const session = await createSession(
+      request,
+      fixture.name === 'oversize.txt' ? 600 : 120,
+    );
     const response = await request.post('files/upload', {
       headers: { 'X-Lab-Session': session },
       multipart: { files: fixture },

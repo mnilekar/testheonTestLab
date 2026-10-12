@@ -1,12 +1,13 @@
 ---
 import LabLayout from '../layouts/LabLayout.astro';
+import type { RobotsPolicy } from '../config/site';
 
 interface Props {
   title: string;
   description: string;
   canonicalPath: string;
   page: string;
-  robots?: 'index,follow' | 'noindex,nofollow';
+  robots?: RobotsPolicy;
 }
 
 const {
@@ -14,7 +15,7 @@ const {
   description,
   canonicalPath,
   page,
-  robots = 'noindex,nofollow',
+  robots = 'noindex,follow',
 } = Astro.props;
 const links = [
   ['home', 'Store home', '/practice/apps/ecommerce/'],

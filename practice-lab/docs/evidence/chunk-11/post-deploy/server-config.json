@@ -1,0 +1,47 @@
+{
+  "capturedAt": "2026-10-12T03:42:03.2540946Z",
+  "account": "u652010987",
+  "observation": "Fresh signed-in Hostinger File Manager byte-for-byte verification after CRE-56 activation",
+  "pass": true,
+  "production": {
+    "domain": "testheon.com",
+    "rootHtaccessBytes": 1466,
+    "rootHtaccessSha256": "3f9689ed4759a5a35a33c4f7ccfb40613310fbc1b0f98387bfdc76f21ce00d24",
+    "matchesPreDeploy": true,
+    "wordpressMarkersPresent": true
+  },
+  "staging": {
+    "domain": "practice-staging.testheon.com",
+    "rootHtaccessBytes": 413,
+    "rootHtaccessSha256": "9186269b669a6a1ab7bc26d52b66c633e1ae616460974cd60ff394c45bcacaf6",
+    "rootHtaccessMatchesPreDeploy": true,
+    "activeRelease": "20261011T184029Z-cre56r1",
+    "activeReleasePointerBytes": 25,
+    "activeReleasePointerSha256": "ce6b55a4f5dbc1a714ea684bfc3710667381305b2ab0be9d9f6acf200036e4b3",
+    "activeReleaseDirectoryPresent": true,
+    "releaseControllerBytes": 3086,
+    "releaseControllerSha256": "00ebe9d6888c27d4d5e57bce22ad5fa36e13333ee96f49089e5cafc0aab67416",
+    "releaseControllerRestored": true,
+    "practiceFrontControllerBytes": 2196,
+    "practiceFrontControllerSha256": "04639a464616049b8eb2124ce9d53357f4dd1489f5e2cbc5331bc0090c7e5b6c",
+    "practiceFrontControllerMatchesReviewedSource": true,
+    "sitemapContentType": "application/xml; charset=utf-8",
+    "sitemapStatus": 200,
+    "sitemapXRobotsTag": "noindex, nofollow",
+    "release": {
+      "releaseId": "20261011T184029Z-cre56r1",
+      "packageFileCount": 126,
+      "packageBytes": 1612633,
+      "packageSha256": "3a1118c7ca2aad20547ba0eff25e8624e28168271d387658a7b263eab9f2ed82",
+      "archiveBytes": 478072,
+      "archiveEntries": 200,
+      "archiveSha256": "6ffcbd3aa95f927c67465657f134fd7780264d73d311b191d1fe8a4885c6bbac"
+    }
+  },
+  "wordpress": {
+    "filesChanged": false,
+    "databaseChanged": false,
+    "settingsChanged": false,
+    "status": "PASS"
+  }
+}

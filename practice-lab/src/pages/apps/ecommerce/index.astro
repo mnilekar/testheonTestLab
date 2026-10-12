@@ -1,6 +1,10 @@
 ---
 import Button from '../../../components/Button.astro';
+import SeoLearningLinks from '../../../components/SeoLearningLinks.astro';
 import StoreShell from '../../../components/StoreShell.astro';
+import { getIndexPage } from '../../../config/seo';
+
+const seo = getIndexPage('/apps/ecommerce/');
 
 const categories = [
   'Electronics',
@@ -26,9 +30,9 @@ const endpoints = [
 ---
 
 <StoreShell
-  title="Testheon Store"
-  description="A deterministic ecommerce application for realistic Playwright UI, API, authentication, network, and visual testing practice."
-  canonicalPath="/apps/ecommerce/"
+  title={seo.title}
+  description={seo.description}
+  canonicalPath={seo.path}
   page="home"
   robots="index,follow"
 >
@@ -76,7 +80,13 @@ const endpoints = [
             and network assertions.
           </p>
         </div>
-        <button id="store-reset" class="button button--secondary" type="button">
+        <button
+          id="store-reset"
+          class="button button--secondary"
+          type="button"
+          data-analytics-event="reset_lab_data"
+          data-analytics-content="store"
+        >
           Reset store data
         </button>
       </div>
@@ -310,6 +320,8 @@ const endpoints = [
             class="button button--primary"
             download
             href="/practice/downloads/test-cases/ecommerce.json"
+            data-analytics-event="starter_downloaded"
+            data-analytics-content="ecommerce.json"
           >
             JSON
           </a>
@@ -317,6 +329,8 @@ const endpoints = [
             class="button button--secondary"
             download
             href="/practice/downloads/test-cases/ecommerce.csv"
+            data-analytics-event="starter_downloaded"
+            data-analytics-content="ecommerce.csv"
           >
             CSV
           </a>
@@ -324,6 +338,8 @@ const endpoints = [
             class="button button--secondary"
             download
             href="/practice/downloads/test-cases/ecommerce.md"
+            data-analytics-event="starter_downloaded"
+            data-analytics-content="ecommerce.md"
           >
             Markdown
           </a>
@@ -341,4 +357,5 @@ const endpoints = [
       </aside>
     </div>
   </section>
+  <SeoLearningLinks page={seo} />
 </StoreShell>

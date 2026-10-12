@@ -43,10 +43,14 @@ const securityHeaders = [
         '  Header always set Cache-Control "no-store, private"',
       ]
     : []),
-  '  <FilesMatch "\\.(zip|csv|md|json)$">',
+  '  <FilesMatch "\\.(zip|csv|md|json|xml)$">',
   '    Header always set X-Robots-Tag "noindex, nofollow"',
   '  </FilesMatch>',
   '</IfModule>',
+  '',
+  '<Files "sitemap.xml">',
+  '  ForceType application/xml',
+  '</Files>',
   '',
 ].join('\n');
 

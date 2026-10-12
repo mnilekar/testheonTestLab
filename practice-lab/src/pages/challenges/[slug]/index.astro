@@ -22,6 +22,10 @@ interface Props {
 const { challenge } = Astro.props;
 const practiceHref = fixtureHref(challenge);
 const isEcommerce = challenge.application === 'Testheon Store';
+const relatedGuideSlug = new URL(challenge.relatedGuide.url).pathname.replace(
+  /^\/+|\/+$/g,
+  '',
+);
 ---
 
 <LabLayout
@@ -29,6 +33,7 @@ const isEcommerce = challenge.application === 'Testheon Store';
   description={challenge.objective}
   canonicalPath={`/challenges/${challenge.slug}/`}
   robots="noindex,follow"
+  analytics={true}
   breadcrumbs={[
     { label: 'Practice Lab', href: '/practice/' },
     { label: 'Challenges', href: '/practice/challenges/' },
@@ -84,10 +89,20 @@ const isEcommerce = challenge.application === 'Testheon Store';
         </section>
 
         <div class="hero__actions">
-          <a class="button button--primary" href={practiceHref}>
+          <a
+            class="button button--primary"
+            href={practiceHref}
+            data-analytics-event="practice_started"
+            data-analytics-content={challenge.id}
+          >
             Open practice page
           </a>
-          <a class="button button--secondary" href={challenge.relatedGuide.url}>
+          <a
+            class="button button--secondary"
+            href={challenge.relatedGuide.url}
+            data-analytics-event="practice_to_blog_click"
+            data-analytics-content={relatedGuideSlug}
+          >
             Read related guide
           </a>
         </div>
@@ -101,17 +116,29 @@ const isEcommerce = challenge.application === 'Testheon Store';
                 <a
                   download
                   href="/practice/downloads/test-cases/ecommerce.json"
+                  data-analytics-event="starter_downloaded"
+                  data-analytics-content="ecommerce.json"
                 >
                   JSON test pack
                 </a>
               </li>
               <li>
-                <a download href="/practice/downloads/test-cases/ecommerce.csv">
+                <a
+                  download
+                  href="/practice/downloads/test-cases/ecommerce.csv"
+                  data-analytics-event="starter_downloaded"
+                  data-analytics-content="ecommerce.csv"
+                >
                   CSV test pack
                 </a>
               </li>
               <li>
-                <a download href="/practice/downloads/test-cases/ecommerce.md">
+                <a
+                  download
+                  href="/practice/downloads/test-cases/ecommerce.md"
+                  data-analytics-event="starter_downloaded"
+                  data-analytics-content="ecommerce.md"
+                >
                   Markdown test pack
                 </a>
               </li>
@@ -123,7 +150,11 @@ const isEcommerce = challenge.application === 'Testheon Store';
           <h2 id="hints-heading">Progressive hints</h2>
           <div class="hint-stack">
             {challenge.hints.map((hint, index) => (
-              <details>
+              <details
+                data-analytics-event="hint_used"
+                data-analytics-content={challenge.id}
+                data-analytics-hint={index + 1}
+              >
                 <summary>Hint {index + 1}</summary>
                 <p>{hint}</p>
               </details>
@@ -131,7 +162,11 @@ const isEcommerce = challenge.application === 'Testheon Store';
           </div>
         </section>
 
-        <Solution summary="I’ve tried it — show solution">
+        <Solution
+          summary="I’ve tried it — show solution"
+          analyticsEvent="solution_opened"
+          analyticsContent={challenge.id}
+        >
           <ol>
             {challenge.solutionApproach.map((step) => (
               <li>{step}</li>
@@ -182,7 +217,12 @@ const isEcommerce = challenge.application === 'Testheon Store';
             );
           })}
         </ul>
-        <a download href="/practice/downloads/playwright-ts-starter.zip">
+        <a
+          download
+          href="/practice/downloads/playwright-ts-starter.zip"
+          data-analytics-event="starter_downloaded"
+          data-analytics-content="playwright-ts-starter.zip"
+        >
           Download the TypeScript starter
         </a>
       </aside>

@@ -1,0 +1,44 @@
+{
+  "capturedAt": "2026-10-11T18:13:27.3000430Z",
+  "account": "u652010987",
+  "observation": "Fresh signed-in Hostinger File Manager inspection plus local immutable package verification",
+  "production": {
+    "domain": "testheon.com",
+    "rootHtaccessBytes": 1466,
+    "rootHtaccessSha256": "3f9689ed4759a5a35a33c4f7ccfb40613310fbc1b0f98387bfdc76f21ce00d24",
+    "wordpressMarkersPresent": true,
+    "verification": "Fresh File Manager metadata remained 1.43 KiB with its existing two-month modification time; the fresh 11-route HTTP baseline passed. The SHA-256 is the carried-forward cryptographic baseline for those unchanged bytes."
+  },
+  "staging": {
+    "domain": "practice-staging.testheon.com",
+    "rootHtaccessBytes": 413,
+    "rootHtaccessSha256": "9186269b669a6a1ab7bc26d52b66c633e1ae616460974cd60ff394c45bcacaf6",
+    "activeRelease": "20261011T070625Z-1f178f",
+    "retainedReleaseDirectories": [
+      "20260929T074907Z-006072",
+      "20260929T085840Z-00d783",
+      "20260929T090841Z-b53810",
+      "20261011T070625Z-1f178f"
+    ],
+    "releaseControllerBytes": 3086,
+    "releaseControllerSha256": "00ebe9d6888c27d4d5e57bce22ad5fa36e13333ee96f49089e5cafc0aab67416",
+    "preparedRelease": {
+      "releaseId": "20261011T181207Z-cre56",
+      "packageFileCount": 126,
+      "packageBytes": 1612571,
+      "packageSha256": "2d0cadafce6692bc79870a04f422330c4d19f50b6e5f914af277f83e96618568",
+      "archiveBytes": 478038,
+      "archiveSha256": "c3c22c7a649c4dd898f7a647ae4c7cde6615f67c05441311f3704abdec42de72",
+      "archiveEntries": 200,
+      "manifestVersion": "1.7.0",
+      "audit": "67 HTML routes, 10 INDEX candidates, 0 staging sitemap URLs; every page noindex,nofollow"
+    },
+    "preparedRuntimeSha256": "edecb79f17bc6e44589b19bbdf295354e83a169675172775292d51f0c5eb2d00",
+    "preparedPracticeHtaccessSha256": "c5d30d9405a292cc9eba1d41b512a5aa5e1176addfe30b0834b7cb800fe68141",
+    "preparedReleaseControllerSha256": "00ebe9d6888c27d4d5e57bce22ad5fa36e13333ee96f49089e5cafc0aab67416",
+    "preparedApiRuntimeSha256": "41595b879fcd3c52e257f168b6d679b13a12228e6d5ea5d367bcae307d418b23",
+    "preparedApiAuthSha256": "068e61b338cade1c14e9ece01857e14d2e666f8d02f6c9b62ead91e5d2e3d486",
+    "preparedApiStoreSha256": "29eb95f62cd3d8fb0e7ed216332eff1a2b57deeb966de27556d69b7ff060716c",
+    "preparedApiHtaccessSha256": "0995ee3c123f1d609e10868b7f54f0a7243e9d87f1632e25d2f8d04db8e4513d"
+  }
+}

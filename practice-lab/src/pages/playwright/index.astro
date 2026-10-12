@@ -5,20 +5,22 @@ import Card from '../../components/Card.astro';
 import DifficultyBadge from '../../components/DifficultyBadge.astro';
 import FixtureMarker from '../../components/FixtureMarker.astro';
 import Solution from '../../components/Solution.astro';
+import SeoLearningLinks from '../../components/SeoLearningLinks.astro';
 import CodeBlock from '../../islands/CodeBlock';
 import Tabs from '../../islands/Tabs';
 import LabLayout from '../../layouts/LabLayout.astro';
+import { getIndexPage } from '../../config/seo';
 
-const description =
-  'Explore the Testheon Playwright practice track: a TypeScript-first path from reliable locators to realistic end-to-end QA workflows.';
+const seo = getIndexPage('/playwright/');
 const exampleCode =
   "import { test, expect } from '@playwright/test';\n\ntest('opens the practice hub', async ({ page }) => {\n  await page.goto('/practice/');\n  await expect(page.getByRole('heading', { name: 'Testheon Practice Lab' })).toBeVisible();\n});";
 ---
 
 <LabLayout
-  title="Playwright Practice Track"
-  description={description}
-  canonicalPath="/playwright/"
+  title={seo.title}
+  description={seo.description}
+  canonicalPath={seo.path}
+  robots="index,follow"
   breadcrumbs={[
     { label: 'Practice Lab', href: '/practice/' },
     { label: 'Playwright' },
@@ -34,8 +36,18 @@ const exampleCode =
           waits to API-aware, session-safe, production-minded browser tests.
         </p>
         <div class="hero__actions">
-          <Button href="/practice/challenges/">Start a challenge</Button>
-          <Button href="https://testheon.com/playwright-e2e/">
+          <Button
+            href="/practice/challenges/"
+            analyticsEvent="practice_started"
+            analyticsContent="challenge-catalogue"
+          >
+            Start a challenge
+          </Button>
+          <Button
+            href="https://testheon.com/playwright-e2e/"
+            analyticsEvent="practice_to_blog_click"
+            analyticsContent="playwright-e2e"
+          >
             Read the E2E guide
           </Button>
           <Button href="/practice/" variant="secondary">
@@ -278,4 +290,5 @@ const exampleCode =
       </div>
     </div>
   </section>
+  <SeoLearningLinks page={seo} />
 </LabLayout>

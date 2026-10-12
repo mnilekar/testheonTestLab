@@ -2530,9 +2530,38 @@ html[data-visual-mode='stable'] *::after {
   margin: 0.25rem 0 0;
 }
 
+.seo-learning-links {
+  border-top: 1px solid var(--color-border);
+  background: color-mix(in srgb, var(--color-brand) 4%, var(--color-surface));
+}
+
+.seo-learning-links__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-7);
+}
+
+.seo-learning-links h2 {
+  margin-block: var(--space-2) var(--space-3);
+}
+
+.seo-learning-links ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-5);
+  margin: var(--space-3) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.seo-learning-links a {
+  font-weight: 700;
+}
+
 @media (max-width: 54rem) {
   .challenge-layout,
-  .challenge-detail {
+  .challenge-detail,
+  .seo-learning-links__grid {
     grid-template-columns: 1fr;
   }
 

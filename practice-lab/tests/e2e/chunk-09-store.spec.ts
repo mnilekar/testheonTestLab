@@ -379,7 +379,7 @@ test('internal store screens remain noindex', async ({ request }) => {
     const response = await request.get(`/practice/apps/ecommerce/${route}/`);
     expect(response.status(), route).toBe(200);
     expect(await response.text(), route).toContain(
-      'name="robots" content="noindex,nofollow"',
+      'name="robots" content="noindex,follow"',
     );
   }
 });

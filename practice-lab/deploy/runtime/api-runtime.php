@@ -1170,7 +1170,7 @@ function lab_api_docs(string $requestId): never
         array_keys(lab_api_contracts())
     ));
     echo '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
-        . '<meta name="robots" content="noindex,nofollow"><title>Testheon Practice API documentation</title>'
+        . '<meta name="robots" content="noindex,follow"><title>Testheon Practice API documentation</title>'
         . '<style>body{font:16px/1.6 Inter,system-ui,sans-serif;color:#111827;margin:0;background:#f7f6ff}main{max-width:900px;margin:auto;padding:3rem 1.25rem}h1,h2{font-family:Poppins,system-ui,sans-serif;line-height:1.2}code,pre{background:#ede9fe;border-radius:.35rem;padding:.15rem .35rem}pre{padding:1rem;overflow:auto}.card{background:white;border:1px solid #ddd6fe;border-radius:1rem;padding:1.25rem;margin:1rem 0}a{color:#6d28d9}</style>'
         . '</head><body><main><p><a href="/practice/">← Practice Lab</a></p><h1>Testheon Practice API</h1>'
         . '<p>Synthetic, deterministic REST practice data with isolated sandboxes. All responses are noindex and private/no-store.</p>'

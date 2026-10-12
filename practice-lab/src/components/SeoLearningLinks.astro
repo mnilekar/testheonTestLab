@@ -1,0 +1,40 @@
+---
+import type { IndexPageDefinition } from '../config/seo';
+
+interface Props {
+  page: IndexPageDefinition;
+}
+
+const { page } = Astro.props;
+const guideSlug = new URL(page.guide.href).pathname.replace(/^\/+|\/+$/g, '');
+---
+
+<section class="section seo-learning-links" data-seo-learning-links>
+  <div class="container seo-learning-links__grid">
+    <div data-seo-objective>
+      <p class="eyebrow">Learning objective</p>
+      <h2>What you will be able to do</h2>
+      <p>{page.objective}</p>
+    </div>
+    <div>
+      <p class="eyebrow">Continue learning</p>
+      <h2>Guide and related practice</h2>
+      <p data-seo-guide>
+        <a
+          href={page.guide.href}
+          data-analytics-event="practice_to_blog_click"
+          data-analytics-content={guideSlug}
+        >
+          {page.guide.label} →
+        </a>
+      </p>
+      <ul data-seo-siblings>
+        {page.siblings.map((sibling) => (
+          <li>
+            <a href={sibling.href}>{sibling.label}</a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,175 @@
+---
+import Card from '../../components/Card.astro';
+import SeoLearningLinks from '../../components/SeoLearningLinks.astro';
+import LabLayout from '../../layouts/LabLayout.astro';
+import { getIndexPage } from '../../config/seo';
+
+const seo = getIndexPage('/components/');
+const labs = [
+  [
+    'Inputs',
+    'Native, masked, validated, debounced and suggested fields.',
+    '/practice/components/inputs/',
+  ],
+  [
+    'Buttons',
+    'Clicks, delays, replacement, gestures and scoped duplicate labels.',
+    '/practice/components/buttons/',
+  ],
+  [
+    'Choices',
+    'Checkbox, radio, hierarchy, generated and conditional states.',
+    '/practice/components/checkboxes-radios/',
+  ],
+  [
+    'Dropdowns',
+    'Native and ARIA selection with dependent and paged options.',
+    '/practice/components/dropdowns/',
+  ],
+  [
+    'Forms',
+    'Six realistic workflows with client and API validation.',
+    '/practice/components/forms/',
+  ],
+  [
+    'Tables',
+    'Sorting, filtering, pagination, editing and virtualized rows.',
+    '/practice/components/tables/',
+  ],
+  [
+    'Search and lists',
+    'Debounce, autocomplete, pagination and infinite scroll.',
+    '/practice/components/search-and-lists/',
+  ],
+  [
+    'Dynamic DOM',
+    'Generated selectors, reordering, duplicates and replacement.',
+    '/practice/components/dynamic-dom/',
+  ],
+  [
+    'Dialogs',
+    'Browser dialogs, accessible modals and semantic toasts.',
+    '/practice/components/dialogs/',
+  ],
+  [
+    'Interactions',
+    'Hover, gestures, scroll, focus, shortcuts and listboxes.',
+    '/practice/components/interactions/',
+  ],
+  [
+    'Date, time and ranges',
+    'Calendars, timezones, sliders and async progress.',
+    '/practice/components/date-time-and-ranges/',
+  ],
+  [
+    'Frames and windows',
+    'Same-origin frames, nested documents, tabs and popups.',
+    '/practice/components/frames-and-windows/',
+  ],
+  [
+    'Files',
+    'Safe uploads, previews, rejection paths and downloads.',
+    '/practice/components/files/',
+  ],
+  [
+    'Drag and drop',
+    'Cards, sorting, safe file drops and a Kanban board.',
+    '/practice/components/drag-and-drop/',
+  ],
+  [
+    'Browser context',
+    'Cookies, storage, permissions, offline and responsive states.',
+    '/practice/components/browser-context/',
+  ],
+] as const;
+---
+
+<LabLayout
+  title={seo.title}
+  description={seo.description}
+  canonicalPath={seo.path}
+  robots="index,follow"
+  breadcrumbs={[
+    { label: 'Practice Lab', href: '/practice/' },
+    { label: 'Components' },
+  ]}
+>
+  <section class="hero hero--compact">
+    <div class="container hero__grid">
+      <div>
+        <p class="eyebrow">Component Lab · Stable contracts</p>
+        <h1>Component Lab for Playwright</h1>
+        <p class="lede">
+          Learn one browser interaction at a time against deterministic,
+          documented fixtures, then carry the same contract into a realistic
+          application or challenge.
+        </p>
+      </div>
+      <aside class="hero-note" aria-label="Indexing boundary">
+        <strong>One useful catalogue, focused runtime fixtures</strong>
+        <p>
+          This teaching hub is indexable. The individual widget pages remain
+          noindex practice targets so search results do not fill with thin
+          utilities.
+        </p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="component-catalogue-heading">
+    <div class="container">
+      <div class="section__heading">
+        <p class="eyebrow">Choose a focused contract</p>
+        <h2 id="component-catalogue-heading">Practice by component family</h2>
+        <p>
+          Each page names its fixture ID, intended behavior, automation tasks,
+          locator guidance, and passing examples. Intentionally awkward states
+          are isolated and labelled.
+        </p>
+      </div>
+      <div class="grid">
+        {labs.map(([title, description, href]) => (
+          <Card
+            title={title}
+            description={description}
+            href={href}
+            eyebrow="Practice fixture"
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section
+    class="section section--soft"
+    aria-labelledby="component-method-heading"
+  >
+    <div class="container store-split">
+      <div>
+        <p class="eyebrow">A repeatable method</p>
+        <h2 id="component-method-heading">Observe, locate, act, assert</h2>
+        <ol>
+          <li>
+            Read the fixture contract and identify the user-visible state.
+          </li>
+          <li>Choose a role, label, text, or documented technical locator.</li>
+          <li>Perform the smallest action that produces the target outcome.</li>
+          <li>
+            Assert the observable result and the exact intended edge case.
+          </li>
+        </ol>
+      </div>
+      <aside class="task-card">
+        <h2>Move beyond the isolated control</h2>
+        <p>
+          Use the Playwright track to connect these component skills to
+          authentication, API setup, ecommerce workflows, and progressive
+          challenges.
+        </p>
+        <a href="/practice/playwright/">Open the Playwright track →</a>
+      </aside>
+    </div>
+  </section>
+
+  <SeoLearningLinks page={seo} />
+</LabLayout>

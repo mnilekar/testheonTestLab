@@ -1,11 +1,21 @@
 ---
 interface Props {
   summary?: string;
+  analyticsEvent?: 'solution_opened';
+  analyticsContent?: string;
 }
-const { summary = 'Show solution' } = Astro.props;
+const {
+  summary = 'Show solution',
+  analyticsEvent,
+  analyticsContent,
+} = Astro.props;
 ---
 
-<details class="solution">
+<details
+  class="solution"
+  data-analytics-event={analyticsEvent}
+  data-analytics-content={analyticsContent}
+>
   <summary>{summary}</summary>
   <div class="solution__body">
     <slot />

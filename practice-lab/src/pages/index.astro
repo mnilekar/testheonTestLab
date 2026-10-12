@@ -1,18 +1,20 @@
 ---
 import Button from '../components/Button.astro';
 import Card from '../components/Card.astro';
+import SeoLearningLinks from '../components/SeoLearningLinks.astro';
 import LabLayout from '../layouts/LabLayout.astro';
 import { categories } from '../config/categories';
-import { siteName, tagline } from '../config/site';
+import { getIndexPage } from '../config/seo';
+import { tagline } from '../config/site';
 
-const description =
-  'Testheon Practice Lab is a realistic QA automation playground for learning Playwright through stable components, real workflows, and progressive challenges.';
+const seo = getIndexPage('/');
 ---
 
 <LabLayout
-  title={siteName}
-  description={description}
-  canonicalPath="/"
+  title={seo.title}
+  description={seo.description}
+  canonicalPath={seo.path}
+  robots="index,follow"
   breadcrumbs={[{ label: 'Practice Lab' }]}
 >
   <section class="hero">
@@ -26,11 +28,27 @@ const description =
           guided workflows, and interview-ready challenges.
         </p>
         <div class="hero__actions">
-          <Button href="/practice/playwright/">Explore Playwright</Button>
-          <Button href="/practice/challenges/" variant="secondary">
+          <Button
+            href="/practice/playwright/"
+            analyticsEvent="practice_started"
+            analyticsContent="playwright-track"
+          >
+            Explore Playwright
+          </Button>
+          <Button
+            href="/practice/challenges/"
+            variant="secondary"
+            analyticsEvent="practice_started"
+            analyticsContent="challenge-catalogue"
+          >
             Browse challenges
           </Button>
-          <Button href="https://testheon.com/blog/" variant="secondary">
+          <Button
+            href="https://testheon.com/blog/"
+            variant="secondary"
+            analyticsEvent="practice_to_blog_click"
+            analyticsContent="blog-index"
+          >
             Read the guides
           </Button>
         </div>
@@ -103,4 +121,6 @@ const description =
       </div>
     </div>
   </section>
+
+  <SeoLearningLinks page={seo} />
 </LabLayout>

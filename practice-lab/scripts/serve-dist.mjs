@@ -19,6 +19,7 @@ const mime = new Map([
   ['.json', 'application/json; charset=utf-8'],
   ['.csv', 'text/csv; charset=utf-8'],
   ['.md', 'text/markdown; charset=utf-8'],
+  ['.xml', 'application/xml; charset=utf-8'],
   ['.svg', 'image/svg+xml'],
   ['.txt', 'text/plain; charset=utf-8'],
   ['.woff2', 'font/woff2'],

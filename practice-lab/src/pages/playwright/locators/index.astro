@@ -1,7 +1,11 @@
 ---
 import ComponentLabPage from '../../../components/ComponentLabPage.astro';
 import LocatorComparison from '../../../components/LocatorComparison.astro';
+import SeoLearningLinks from '../../../components/SeoLearningLinks.astro';
 import CodeBlock from '../../../islands/CodeBlock';
+import { getIndexPage } from '../../../config/seo';
+
+const seo = getIndexPage('/playwright/locators/');
 
 const comparisons = [
   {
@@ -145,10 +149,11 @@ await billing.getByRole('button', { name: 'Edit' }).click();`;
 ---
 
 <ComponentLabPage
-  title="Playwright Locator Lab"
+  title={seo.title}
   eyebrow="Playwright foundations · Locator index"
-  intro="Choose locators from the user-visible contract, then use scoping, filtering, and position only when the product behavior makes them necessary."
-  canonicalPath="/playwright/locators/"
+  intro={seo.description}
+  canonicalPath={seo.path}
+  robots="index,follow"
   fixtureId="FX-LOCATOR-001"
   anchor="fixture-locators"
   guideHref="https://testheon.com/playwright-locators/"
@@ -206,4 +211,5 @@ await billing.getByRole('button', { name: 'Edit' }).click();`;
     <CodeBlock client:idle code={positionCode} label="Position helpers" />
     <CodeBlock client:idle code={scopeCode} label="Frame-free region scope" />
   </div>
+  <SeoLearningLinks slot="seo" page={seo} />
 </ComponentLabPage>

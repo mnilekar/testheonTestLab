@@ -4,6 +4,8 @@ interface Props {
   variant?: 'primary' | 'secondary' | 'quiet';
   type?: 'button' | 'submit' | 'reset';
   class?: string;
+  analyticsEvent?: string;
+  analyticsContent?: string;
 }
 
 const {
@@ -11,6 +13,8 @@ const {
   variant = 'primary',
   type = 'button',
   class: className = '',
+  analyticsEvent,
+  analyticsContent,
 } = Astro.props;
 const classes = ['button', `button--${variant}`, className]
   .filter(Boolean)
@@ -18,11 +22,21 @@ const classes = ['button', `button--${variant}`, className]
 ---
 
 {href ? (
-  <a class={classes} href={href}>
+  <a
+    class={classes}
+    href={href}
+    data-analytics-event={analyticsEvent}
+    data-analytics-content={analyticsContent}
+  >
     <slot />
   </a>
 ) : (
-  <button class={classes} type={type}>
+  <button
+    class={classes}
+    type={type}
+    data-analytics-event={analyticsEvent}
+    data-analytics-content={analyticsContent}
+  >
     <slot />
   </button>
 )}

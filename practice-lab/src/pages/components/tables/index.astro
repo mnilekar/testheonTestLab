@@ -1,7 +1,9 @@
 ---
 import ComponentLabPage from '../../../components/ComponentLabPage.astro';
 import FixtureSection from '../../../components/FixtureSection.astro';
+import SeoLearningLinks from '../../../components/SeoLearningLinks.astro';
 import CodeBlock from '../../../islands/CodeBlock';
+import { getIndexPage } from '../../../config/seo';
 import {
   enrichEmployee,
   formatSalary,
@@ -9,6 +11,7 @@ import {
 } from '../../../lib/table-data';
 
 const staticRows = seedEmployees.slice(0, 5).map(enrichEmployee);
+const seo = getIndexPage('/components/tables/');
 
 const rowExample = `const engineering = page.getByRole('row', {
   name: /Rahul Sharma Engineering/,
@@ -33,10 +36,11 @@ expect(await page.locator('#virtual-body [role="row"]').count()).toBeLessThan(40
 ---
 
 <ComponentLabPage
-  title="Table Lab"
+  title={seo.title}
   eyebrow="Component Lab B · Data grids"
-  intro="Practice resilient Playwright strategies across realistic employee tables: sorting, search, filtering, two pagination models, sandboxed editing, row operations, virtualization, async state, and nested business data."
-  canonicalPath="/components/tables/"
+  intro={seo.description}
+  canonicalPath={seo.path}
+  robots="index,follow"
   fixtureId="FX-TABLE-001"
   anchor="fixture-tables"
   guideHref="https://testheon.com/playwright-locators/"
@@ -65,6 +69,8 @@ expect(await page.locator('#virtual-body [role="row"]').count()).toBeLessThan(40
       id="reset-table-sandbox"
       class="fixture-button fixture-button--secondary"
       type="button"
+      data-analytics-event="reset_lab_data"
+      data-analytics-content="employee-table"
     >
       Reset employee sandbox
     </button>
@@ -782,6 +788,7 @@ expect(await page.locator('#virtual-body [role="row"]').count()).toBeLessThan(40
       label="Handle virtualization"
     />
   </div>
+  <SeoLearningLinks slot="seo" page={seo} />
 </ComponentLabPage>
 
 <script>
