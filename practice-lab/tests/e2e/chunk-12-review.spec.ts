@@ -1,7 +1,9 @@
 import { mkdir } from 'node:fs/promises';
 import { expect, test } from './test-fixture';
 
-test('save Chunk 12 accessibility review screenshot', async ({ page }, testInfo) => {
+test('save Chunk 12 accessibility review screenshot', async ({
+  page,
+}, testInfo) => {
   const device = testInfo.project.name.startsWith('mobile')
     ? 'mobile'
     : 'desktop';
