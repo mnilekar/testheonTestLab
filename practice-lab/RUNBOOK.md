@@ -24,9 +24,19 @@ Production is locked until the separately authorized Chunk 13. In that chunk onl
 
 ```powershell
 pnpm deploy:production -- --i-approve-production
+pnpm status:production
 ```
 
-Then rerun health, smoke, canonical, robots, cache, rollback-retention, and R4 comparisons. Never use that flag during CRE-57.
+The production mapping is restricted in code to `public_html/practice/**`; it rejects root `.htaccess`, root `index.php`, and every other path outside that directory. It uses its own atomic release pointer and never changes WordPress configuration. Then rerun health, smoke, canonical, robots, cache, rollback-retention, and R4 comparisons. Never use that flag during CRE-57.
+
+## Roll back production
+
+```powershell
+pnpm rollback:production -- --i-approve-production
+pnpm status:production
+```
+
+The rollback atomically selects the previous complete Practice Lab release. It does not alter WordPress or any file outside `public_html/practice/`.
 
 ## Roll back staging
 

@@ -1,0 +1,17 @@
+Options -Indexes
+DirectoryIndex index.php
+
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "no-referrer"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(self), clipboard-read=(self), clipboard-write=(self)"
+  Header always set Content-Security-Policy "default-src 'self'; base-uri 'none'; frame-ancestors 'self'; form-action 'self'; img-src 'self' blob: data:; font-src 'self'; style-src 'self'; script-src 'self' 'unsafe-inline'; connect-src 'self'"
+</IfModule>
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteRule ^(?:\.gate\.php|_runtime\.php|_api-maintenance|\.current|releases)(?:/|$) - [F,L,NC]
+  RewriteRule ^api(?:/|$) - [L,NC]
+  RewriteRule ^(?:index\.php|__release-control\.php)$ - [L,NC]
+  RewriteRule ^ index.php [L]
+</IfModule>

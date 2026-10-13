@@ -7,6 +7,10 @@ import {
   createReleaseId,
   hashDirectory,
 } from './deploy-lib.mjs';
+import {
+  assertDeploymentDestination,
+  runtimeMappings,
+} from './deploy-targets.mjs';
 
 function option(name) {
   const index = process.argv.indexOf(name);
@@ -45,29 +49,53 @@ function stagingConfig({ upload = false } = {}) {
   return config;
 }
 
+function productionConfig({ upload = false } = {}) {
+  const config = {
+    origin: required('PRACTICE_LAB_PRODUCTION_ORIGIN'),
+    controlToken: required('PRACTICE_LAB_PRODUCTION_RELEASE_CONTROL_TOKEN'),
+  };
+  if (upload) {
+    Object.assign(config, {
+      uploadUrl: required('PRACTICE_LAB_PRODUCTION_UPLOAD_URL'),
+      uploadAuthKey: required('PRACTICE_LAB_PRODUCTION_UPLOAD_AUTH_KEY'),
+      uploadRestAuthKey: required(
+        'PRACTICE_LAB_PRODUCTION_UPLOAD_REST_AUTH_KEY',
+      ),
+    });
+  }
+  return config;
+}
+
 function phpString(value) {
   return `'${value.replaceAll('\\', '\\\\').replaceAll("'", "\\'")}'`;
 }
 
 function gateConfig(config) {
-  const passwordSalt = randomBytes(24).toString('hex');
   const controlSalt = randomBytes(24).toString('hex');
   const apiSecret = randomBytes(32).toString('hex');
-  const passwordHash = createHash('sha256')
-    .update(passwordSalt + config.password)
-    .digest('hex');
   const controlHash = createHash('sha256')
     .update(controlSalt + config.controlToken)
     .digest('hex');
+  const hasBasicGate = Boolean(config.user && config.password);
+  const passwordSalt = hasBasicGate ? randomBytes(24).toString('hex') : null;
+  const passwordHash = hasBasicGate
+    ? createHash('sha256')
+        .update(passwordSalt + config.password)
+        .digest('hex')
+    : null;
   return Buffer.from(
     [
       '<?php',
       'declare(strict_types=1);',
       '',
       'return [',
-      `    'username' => ${phpString(config.user)},`,
-      `    'password_salt' => ${phpString(passwordSalt)},`,
-      `    'password_hash' => ${phpString(passwordHash)},`,
+      ...(hasBasicGate
+        ? [
+            `    'username' => ${phpString(config.user)},`,
+            `    'password_salt' => ${phpString(passwordSalt)},`,
+            `    'password_hash' => ${phpString(passwordHash)},`,
+          ]
+        : []),
       `    'control_salt' => ${phpString(controlSalt)},`,
       `    'control_hash' => ${phpString(controlHash)},`,
       `    'api_secret' => ${phpString(apiSecret)},`,
@@ -160,6 +188,11 @@ async function uploadFile(config, source, destination) {
 }
 
 function basicAuthorization(config) {
+  if (!config.user || !config.password) {
+    throw new Error(
+      'This deployment target does not use Basic authentication.',
+    );
+  }
   return `Basic ${Buffer.from(`${config.user}:${config.password}`).toString('base64')}`;
 }
 
@@ -167,13 +200,16 @@ async function releaseControl(config, action, release) {
   const body = new URLSearchParams({ action });
   if (release) body.set('release', release);
   const url = new URL('/practice/__release-control.php', config.origin);
+  const headers = {
+    'X-Practice-Release-Control': config.controlToken,
+    'Content-Type': 'application/x-www-form-urlencoded',
+  };
+  if (config.user && config.password) {
+    headers.Authorization = basicAuthorization(config);
+  }
   const response = await fetch(url, {
     method: 'POST',
-    headers: {
-      Authorization: basicAuthorization(config),
-      'X-Practice-Release-Control': config.controlToken,
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
+    headers,
     body,
     redirect: 'manual',
   });
@@ -249,12 +285,61 @@ async function verifyStaging(config, expectedRelease) {
   return status;
 }
 
-async function deploy(config) {
+async function verifyProduction(config, expectedRelease) {
+  const url = new URL('/practice/', config.origin);
+  const response = await fetch(url, { redirect: 'follow' });
+  const html = await response.text();
+  if (response.status !== 200)
+    throw new Error(`Production Practice Lab returned ${response.status}.`);
+  if (!html.includes('Testheon Practice Lab'))
+    throw new Error('Production content marker is missing.');
+  if (!/name=["']robots["'][^>]+index,follow/i.test(html))
+    throw new Error('Production HTML index,follow policy is missing.');
+  if ((response.headers.get('x-robots-tag') ?? '').includes('noindex'))
+    throw new Error('Production landing page was incorrectly marked noindex.');
+  if (!html.includes(`${new URL(config.origin).origin}/practice/`)) {
+    throw new Error('Production canonical origin is incorrect.');
+  }
+  const docsResponse = await fetch(new URL('/practice/api/', config.origin), {
+    redirect: 'follow',
+  });
+  const docs = await docsResponse.text();
+  if (
+    docsResponse.status !== 200 ||
+    !docs.includes('Testheon Practice API') ||
+    !(docsResponse.headers.get('x-robots-tag') ?? '').includes('noindex')
+  ) {
+    throw new Error('Production API documentation verification failed.');
+  }
+  const healthResponse = await fetch(
+    new URL('/practice/api/v1/health', config.origin),
+    { redirect: 'follow' },
+  );
+  const health = await healthResponse.json().catch(() => null);
+  if (
+    healthResponse.status !== 200 ||
+    health?.status !== 'ok' ||
+    health?.fixtureVersion !== '1.0.0' ||
+    health?.storage?.status !== 'ok' ||
+    !(healthResponse.headers.get('cache-control') ?? '').includes('no-store')
+  ) {
+    throw new Error('Production API health verification failed.');
+  }
+  const status = await releaseControl(config, 'status');
+  if (expectedRelease && status.current !== expectedRelease) {
+    throw new Error(
+      `Production release mismatch: expected ${expectedRelease}, received ${status.current}.`,
+    );
+  }
+  return status;
+}
+
+async function deploy(config, target) {
   const releaseId = `${createReleaseId()}-${randomBytes(3).toString('hex')}`;
   assertReleaseId(releaseId);
   const built = spawnSync(
     process.execPath,
-    ['scripts/build-target.mjs', 'staging'],
+    ['scripts/build-target.mjs', target],
     {
       cwd: process.cwd(),
       env: { ...process.env, PRACTICE_LAB_RELEASE_ID: releaseId },
@@ -289,24 +374,20 @@ async function deploy(config) {
   }
 
   const runtime = resolve('deploy/runtime');
-  const mappings = [
-    ['root.htaccess', '.htaccess'],
-    ['root-index.php', 'index.php'],
-    ['practice.htaccess', 'practice/.htaccess'],
-    ['runtime.php', 'practice/_runtime.php'],
-    ['practice-index.php', 'practice/index.php'],
-    ['release-control.php', 'practice/__release-control.php'],
-    ['api-index.php', 'practice/api/index.php'],
-    ['api.htaccess', 'practice/api/.htaccess'],
-    ['api-cleanup.php', 'practice/_api-maintenance/cleanup.php'],
-  ];
+  const mappings = runtimeMappings(target);
+  for (const [, destination] of mappings) {
+    assertDeploymentDestination(target, destination);
+  }
   await uploadBytes(config, 'practice/.gate.php', gateConfig(config));
   for (const [source, destination] of mappings) {
     await uploadFile(config, join(runtime, source), destination);
   }
 
   const activated = await releaseControl(config, 'activate', releaseId);
-  const verified = await verifyStaging(config, releaseId);
+  const verified =
+    target === 'staging'
+      ? await verifyStaging(config, releaseId)
+      : await verifyProduction(config, releaseId);
   return {
     releaseId,
     artifactSha256: await hashDirectory(dist),
@@ -324,26 +405,27 @@ if (!['deploy', 'rollback', 'activate', 'status'].includes(action)) {
 }
 if (target !== 'staging' && target !== 'production')
   throw new Error('Target must be staging or production.');
-if (target === 'production') {
+if (target === 'production' && action !== 'status') {
   if (!hasFlag('--i-approve-production')) {
     throw new Error(
       'Production deployment refused: pass --i-approve-production in the authorized production chunk.',
     );
   }
-  throw new Error(
-    'Production transport is intentionally unavailable before Chunk 13.',
-  );
 }
 
-const config = stagingConfig({ upload: action === 'deploy' });
+const config =
+  target === 'production'
+    ? productionConfig({ upload: action === 'deploy' })
+    : stagingConfig({ upload: action === 'deploy' });
 if (action === 'deploy') {
-  const result = await deploy(config);
+  const result = await deploy(config, target);
   console.log(
     `Release ${result.releaseId} verified (SHA-256 ${result.artifactSha256}); retained: ${result.releases.join(', ')}.`,
   );
 } else if (action === 'rollback') {
   const result = await releaseControl(config, 'rollback');
-  await verifyStaging(config, result.current);
+  if (target === 'staging') await verifyStaging(config, result.current);
+  else await verifyProduction(config, result.current);
   console.log(
     `Rollback verified at ${config.origin}/practice/ (${result.current}).`,
   );
@@ -352,11 +434,16 @@ if (action === 'deploy') {
   if (!release) throw new Error('--release is required for activate.');
   assertReleaseId(release);
   const result = await releaseControl(config, 'activate', release);
-  await verifyStaging(config, result.current);
+  if (target === 'staging') await verifyStaging(config, result.current);
+  else await verifyProduction(config, result.current);
   console.log(`Release ${result.current} reactivated and verified.`);
 } else {
-  const result = await verifyStaging(config);
+  const result =
+    target === 'staging'
+      ? await verifyStaging(config)
+      : await verifyProduction(config);
+  const label = target === 'staging' ? 'Staging' : 'Production';
   console.log(
-    `Staging verified at ${config.origin}/practice/ (${result.current}); retained: ${result.releases.join(', ')}.`,
+    `${label} verified at ${config.origin}/practice/ (${result.current}); retained: ${result.releases.join(', ')}.`,
   );
 }

@@ -1,0 +1,18 @@
+{
+  "capturedAt": "2026-10-13T15:40:46.8446636Z",
+  "source": "Hostinger hosting_files_website-content read-only API; SHA-256 is calculated from the returned text content.",
+  "domain": "testheon.com",
+  "files": {
+    ".htaccess": {
+      "sizeBytes": 714,
+      "sha256": "c6c357f7b87efa4bc48decfb540fbac84102cf35fe6eaea3b4f9676e1aa8c2f1",
+      "assertion": "standard WordPress rewrite configuration"
+    },
+    "index.php": {
+      "sizeBytes": 266,
+      "sha256": "f28abf68c57cde4c6f496240ce93a5d113b0a55363cde7b67e55313fef9ce981",
+      "assertion": "standard WordPress front controller loading wp-blog-header.php"
+    }
+  },
+  "targetDirectoryAbsent": true
+}
