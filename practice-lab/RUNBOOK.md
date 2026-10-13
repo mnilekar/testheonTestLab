@@ -5,7 +5,7 @@ Run commands from `practice-lab/`. Preserve the R4 public-site baseline before a
 ## Deploy to staging
 
 ```powershell
-node scripts/capture-r4-http.mjs --chunk 12 --label pre-deploy
+node scripts/capture-r4-http.mjs pre-deploy 12
 pnpm verify
 pnpm audit:lighthouse
 pnpm build:staging
@@ -13,7 +13,7 @@ pnpm deploy:staging
 pnpm status:staging
 pnpm api:test:staging
 pnpm ui:test:staging
-node scripts/capture-r4-http.mjs --chunk 12 --label post-deploy
+node scripts/capture-r4-http.mjs post-deploy 12
 ```
 
 The ignored `.env` holds the staging gate and release-control values. The ignored `.deploy.env` may hold short-lived upload values and must be removed immediately after deployment. Activation is an atomic `.current` pointer rename.
