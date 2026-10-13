@@ -361,6 +361,7 @@ for (const button of document.querySelectorAll<HTMLButtonElement>(
 }
 
 async function issueToken(scenario?: 'expired'): Promise<void> {
+  if (!csrfToken) await ensureLabSession();
   const fast = new URLSearchParams(location.search).get('delay') === '0';
   const username = query<HTMLInputElement>('#token-username').value;
   const suffix = username === 'slow_user' && fast ? '?delay=0' : '';
