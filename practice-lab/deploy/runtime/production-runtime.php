@@ -42,6 +42,15 @@ function lab_current_release(): ?string
     return preg_match(lab_release_pattern(), $release) === 1 ? $release : null;
 }
 
+function lab_release_is_complete(string $release): bool
+{
+    $releasePath = __DIR__ . '/releases/' . $release;
+    return is_file($releasePath . '/index.html')
+        && is_file($releasePath . '/_api/api-runtime.php')
+        && is_file($releasePath . '/_api/fixtures-v1.json')
+        && is_file($releasePath . '/_api/openapi.json');
+}
+
 function lab_list_releases(): array
 {
     $root = __DIR__ . '/releases';
@@ -51,7 +60,7 @@ function lab_list_releases(): array
     $releases = array_values(array_filter(
         scandir($root) ?: [],
         static fn (string $name): bool => preg_match(lab_release_pattern(), $name) === 1
-            && is_file($root . '/' . $name . '/index.html')
+            && lab_release_is_complete($name)
     ));
     sort($releases, SORT_STRING);
     return $releases;

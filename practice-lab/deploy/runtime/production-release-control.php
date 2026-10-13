@@ -34,11 +34,7 @@ function activate_release(string $release): void
     if (preg_match(lab_release_pattern(), $release) !== 1) {
         lab_json(['error' => 'Invalid release identifier.'], 400);
     }
-    $releasePath = __DIR__ . '/releases/' . $release;
-    if (!is_file($releasePath . '/index.html')
-        || !is_file($releasePath . '/_api/api-runtime.php')
-        || !is_file($releasePath . '/_api/fixtures-v1.json')
-        || !is_file($releasePath . '/_api/openapi.json')) {
+    if (!lab_release_is_complete($release)) {
         lab_json(['error' => 'Release is incomplete.'], 404);
     }
     $temporary = __DIR__ . '/.current.' . bin2hex(random_bytes(6));

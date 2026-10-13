@@ -1,3 +1,4 @@
+import { readFile } from 'node:fs/promises';
 import { describe, expect, it } from 'vitest';
 import {
   assertDeploymentDestination,
@@ -33,5 +34,17 @@ describe('production deployment boundary', () => {
     expect(() =>
       assertDeploymentDestination('production', 'practice/index.php'),
     ).not.toThrow();
+  });
+
+  it('keeps incomplete upload attempts out of the production rollback set', async () => {
+    const runtime = await readFile(
+      new URL('../../deploy/runtime/production-runtime.php', import.meta.url),
+      'utf8',
+    );
+    expect(runtime).toContain('function lab_release_is_complete');
+    expect(runtime).toContain('/_api/api-runtime.php');
+    expect(runtime).toContain('/_api/fixtures-v1.json');
+    expect(runtime).toContain('/_api/openapi.json');
+    expect(runtime).toContain('&& lab_release_is_complete($name)');
   });
 });
