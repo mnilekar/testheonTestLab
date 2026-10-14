@@ -1,0 +1,127 @@
+{
+  "checkedAtUtc": "2026-10-13T19:13:08.6286216Z",
+  "release": "20261013T190710Z-47516d",
+  "notes": [
+    "The root sitemap_index.xml response is an existing WordPress behavior; the root index.php and .htaccess hash checks and 11-route R4 capture passed after deployment."
+  ],
+  "results": [
+    {
+      "name": "landing",
+      "url": "https://testheon.com/practice/",
+      "expectedStatus": 200,
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "cacheControl": "no-cache",
+      "xRobotsTag": "",
+      "xLiteSpeedCacheControl": "",
+      "canonical": "https://testheon.com/practice/",
+      "contentLength": 11253,
+      "practiceSitemapUrlCount": null
+    },
+    {
+      "name": "components",
+      "url": "https://testheon.com/practice/components/",
+      "expectedStatus": 200,
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "cacheControl": "no-cache",
+      "xRobotsTag": "",
+      "xLiteSpeedCacheControl": "",
+      "canonical": "https://testheon.com/practice/components/",
+      "contentLength": 12158,
+      "practiceSitemapUrlCount": null
+    },
+    {
+      "name": "challenges",
+      "url": "https://testheon.com/practice/challenges/",
+      "expectedStatus": 200,
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "cacheControl": "no-cache",
+      "xRobotsTag": "",
+      "xLiteSpeedCacheControl": "",
+      "canonical": "https://testheon.com/practice/challenges/",
+      "contentLength": 30484,
+      "practiceSitemapUrlCount": null
+    },
+    {
+      "name": "ecommerce",
+      "url": "https://testheon.com/practice/apps/ecommerce/",
+      "expectedStatus": 200,
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "cacheControl": "no-cache",
+      "xRobotsTag": "",
+      "xLiteSpeedCacheControl": "",
+      "canonical": "https://testheon.com/practice/apps/ecommerce/",
+      "contentLength": 15812,
+      "practiceSitemapUrlCount": null
+    },
+    {
+      "name": "practice-sitemap",
+      "url": "https://testheon.com/practice/sitemap.xml",
+      "expectedStatus": 200,
+      "status": 200,
+      "contentType": "application/xml; charset=utf-8",
+      "cacheControl": "no-cache",
+      "xRobotsTag": "",
+      "xLiteSpeedCacheControl": "",
+      "canonical": "",
+      "contentLength": 1232,
+      "practiceSitemapUrlCount": 10
+    },
+    {
+      "name": "api-health",
+      "url": "https://testheon.com/practice/api/v1/health",
+      "expectedStatus": 200,
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "cacheControl": "no-store, private",
+      "xRobotsTag": "noindex, nofollow",
+      "xLiteSpeedCacheControl": "no-cache",
+      "canonical": "",
+      "contentLength": 312,
+      "practiceSitemapUrlCount": null
+    },
+    {
+      "name": "api-openapi",
+      "url": "https://testheon.com/practice/api/v1/openapi.json",
+      "expectedStatus": 200,
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "cacheControl": "no-store, private",
+      "xRobotsTag": "noindex, nofollow",
+      "xLiteSpeedCacheControl": "no-cache",
+      "canonical": "",
+      "contentLength": 193716,
+      "practiceSitemapUrlCount": null
+    },
+    {
+      "name": "root-robots",
+      "url": "https://testheon.com/robots.txt",
+      "expectedStatus": 200,
+      "status": 200,
+      "contentType": "text/plain; charset=utf-8",
+      "cacheControl": "public, max-age=604800",
+      "xRobotsTag": "",
+      "xLiteSpeedCacheControl": "public,max-age=604800",
+      "canonical": "",
+      "contentLength": 116,
+      "practiceSitemapUrlCount": null
+    },
+    {
+      "name": "root-sitemap-index-existing",
+      "url": "https://testheon.com/sitemap_index.xml",
+      "expectedStatus": 404,
+      "status": 404,
+      "contentType": "text/html; charset=UTF-8",
+      "cacheControl": "no-store, must-revalidate, no-cache, max-age=0, private",
+      "xRobotsTag": "",
+      "xLiteSpeedCacheControl": "",
+      "canonical": "",
+      "contentLength": 106994,
+      "practiceSitemapUrlCount": null
+    }
+  ],
+  "pass": true
+}

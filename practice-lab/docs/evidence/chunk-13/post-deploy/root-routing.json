@@ -1,0 +1,12 @@
+{
+  "capturedAt": "2026-10-13T16:18:12.086Z",
+  "expected": {
+    "htaccess": "c6c357f7b87efa4bc48decfb540fbac84102cf35fe6eaea3b4f9676e1aa8c2f1",
+    "index": "f28abf68c57cde4c6f496240ce93a5d113b0a55363cde7b67e55313fef9ce981"
+  },
+  "actual": {
+    "htaccess": "c6c357f7b87efa4bc48decfb540fbac84102cf35fe6eaea3b4f9676e1aa8c2f1",
+    "index": "f28abf68c57cde4c6f496240ce93a5d113b0a55363cde7b67e55313fef9ce981"
+  },
+  "pass": true
+}

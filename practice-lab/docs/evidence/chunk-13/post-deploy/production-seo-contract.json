@@ -1,0 +1,271 @@
+{
+  "checkedAtUtc": "2026-10-13T19:17:43.005Z",
+  "release": "20261013T190710Z-47516d",
+  "origin": "https://testheon.com",
+  "indexRoutes": [
+    {
+      "route": "/practice/",
+      "status": 200,
+      "title": "Testheon Practice Lab",
+      "canonical": "https://testheon.com/practice/",
+      "robots": "index,follow",
+      "h1Count": 1,
+      "rawLinkCount": 25,
+      "checks": {
+        "status": true,
+        "title": true,
+        "description": true,
+        "canonical": true,
+        "robots": true,
+        "h1": true,
+        "breadcrumbs": true,
+        "seoAttributes": true,
+        "rawLinks": true,
+        "titleUnique": true,
+        "descriptionUnique": true
+      }
+    },
+    {
+      "route": "/practice/playwright/",
+      "status": 200,
+      "title": "Playwright Practice Track | Testheon Lab",
+      "canonical": "https://testheon.com/practice/playwright/",
+      "robots": "index,follow",
+      "h1Count": 1,
+      "rawLinkCount": 37,
+      "checks": {
+        "status": true,
+        "title": true,
+        "description": true,
+        "canonical": true,
+        "robots": true,
+        "h1": true,
+        "breadcrumbs": true,
+        "seoAttributes": true,
+        "rawLinks": true,
+        "titleUnique": true,
+        "descriptionUnique": true
+      }
+    },
+    {
+      "route": "/practice/playwright/locators/",
+      "status": 200,
+      "title": "Playwright Locator Lab | Testheon Lab",
+      "canonical": "https://testheon.com/practice/playwright/locators/",
+      "robots": "index,follow",
+      "h1Count": 1,
+      "rawLinkCount": 14,
+      "checks": {
+        "status": true,
+        "title": true,
+        "description": true,
+        "canonical": true,
+        "robots": true,
+        "h1": true,
+        "breadcrumbs": true,
+        "seoAttributes": true,
+        "rawLinks": true,
+        "titleUnique": true,
+        "descriptionUnique": true
+      }
+    },
+    {
+      "route": "/practice/playwright/waits/",
+      "status": 200,
+      "title": "Playwright Waits Lab | Testheon Lab",
+      "canonical": "https://testheon.com/practice/playwright/waits/",
+      "robots": "index,follow",
+      "h1Count": 1,
+      "rawLinkCount": 14,
+      "checks": {
+        "status": true,
+        "title": true,
+        "description": true,
+        "canonical": true,
+        "robots": true,
+        "h1": true,
+        "breadcrumbs": true,
+        "seoAttributes": true,
+        "rawLinks": true,
+        "titleUnique": true,
+        "descriptionUnique": true
+      }
+    },
+    {
+      "route": "/practice/playwright/authentication/",
+      "status": 200,
+      "title": "Playwright Authentication Testing | Testheon Lab",
+      "canonical": "https://testheon.com/practice/playwright/authentication/",
+      "robots": "index,follow",
+      "h1Count": 1,
+      "rawLinkCount": 15,
+      "checks": {
+        "status": true,
+        "title": true,
+        "description": true,
+        "canonical": true,
+        "robots": true,
+        "h1": true,
+        "breadcrumbs": true,
+        "seoAttributes": true,
+        "rawLinks": true,
+        "titleUnique": true,
+        "descriptionUnique": true
+      }
+    },
+    {
+      "route": "/practice/playwright/api-testing/",
+      "status": 200,
+      "title": "Playwright API Testing Practice | Testheon Lab",
+      "canonical": "https://testheon.com/practice/playwright/api-testing/",
+      "robots": "index,follow",
+      "h1Count": 1,
+      "rawLinkCount": 21,
+      "checks": {
+        "status": true,
+        "title": true,
+        "description": true,
+        "canonical": true,
+        "robots": true,
+        "h1": true,
+        "breadcrumbs": true,
+        "seoAttributes": true,
+        "rawLinks": true,
+        "titleUnique": true,
+        "descriptionUnique": true
+      }
+    },
+    {
+      "route": "/practice/components/",
+      "status": 200,
+      "title": "Component Lab for Playwright | Testheon Lab",
+      "canonical": "https://testheon.com/practice/components/",
+      "robots": "index,follow",
+      "h1Count": 1,
+      "rawLinkCount": 30,
+      "checks": {
+        "status": true,
+        "title": true,
+        "description": true,
+        "canonical": true,
+        "robots": true,
+        "h1": true,
+        "breadcrumbs": true,
+        "seoAttributes": true,
+        "rawLinks": true,
+        "titleUnique": true,
+        "descriptionUnique": true
+      }
+    },
+    {
+      "route": "/practice/components/tables/",
+      "status": 200,
+      "title": "Playwright Table Lab | Testheon Lab",
+      "canonical": "https://testheon.com/practice/components/tables/",
+      "robots": "index,follow",
+      "h1Count": 1,
+      "rawLinkCount": 14,
+      "checks": {
+        "status": true,
+        "title": true,
+        "description": true,
+        "canonical": true,
+        "robots": true,
+        "h1": true,
+        "breadcrumbs": true,
+        "seoAttributes": true,
+        "rawLinks": true,
+        "titleUnique": true,
+        "descriptionUnique": true
+      }
+    },
+    {
+      "route": "/practice/apps/ecommerce/",
+      "status": 200,
+      "title": "Testheon Store | Testheon Lab",
+      "canonical": "https://testheon.com/practice/apps/ecommerce/",
+      "robots": "index,follow",
+      "h1Count": 1,
+      "rawLinkCount": 39,
+      "checks": {
+        "status": true,
+        "title": true,
+        "description": true,
+        "canonical": true,
+        "robots": true,
+        "h1": true,
+        "breadcrumbs": true,
+        "seoAttributes": true,
+        "rawLinks": true,
+        "titleUnique": true,
+        "descriptionUnique": true
+      }
+    },
+    {
+      "route": "/practice/challenges/",
+      "status": 200,
+      "title": "Playwright Challenges | Testheon Lab",
+      "canonical": "https://testheon.com/practice/challenges/",
+      "robots": "index,follow",
+      "h1Count": 1,
+      "rawLinkCount": 44,
+      "checks": {
+        "status": true,
+        "title": true,
+        "description": true,
+        "canonical": true,
+        "robots": true,
+        "h1": true,
+        "breadcrumbs": true,
+        "seoAttributes": true,
+        "rawLinks": true,
+        "titleUnique": true,
+        "descriptionUnique": true
+      }
+    }
+  ],
+  "sitemap": {
+    "status": 200,
+    "locations": [
+      "https://testheon.com/practice/",
+      "https://testheon.com/practice/playwright/",
+      "https://testheon.com/practice/playwright/locators/",
+      "https://testheon.com/practice/playwright/waits/",
+      "https://testheon.com/practice/playwright/authentication/",
+      "https://testheon.com/practice/playwright/api-testing/",
+      "https://testheon.com/practice/components/",
+      "https://testheon.com/practice/components/tables/",
+      "https://testheon.com/practice/apps/ecommerce/",
+      "https://testheon.com/practice/challenges/"
+    ],
+    "checks": {
+      "status": true,
+      "xml": true,
+      "count": true,
+      "exact": true
+    }
+  },
+  "rawHtmlLinkChecks": [
+    {
+      "route": "/practice/components/",
+      "expectedHref": "/practice/components/tables/",
+      "pass": true
+    },
+    {
+      "route": "/practice/challenges/",
+      "expectedHref": "/practice/challenges/login-standard-user-dashboard/",
+      "pass": true
+    }
+  ],
+  "apiHealth": {
+    "status": 200,
+    "checks": {
+      "status": true,
+      "noStore": true,
+      "noIndex": true,
+      "liteSpeedNoCache": true
+    }
+  },
+  "pass": true,
+  "failures": []
+}
